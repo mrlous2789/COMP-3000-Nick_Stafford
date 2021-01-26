@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <iostream>
 
+
 bool InitSDL()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) //if SDL fails to initalise output to console
