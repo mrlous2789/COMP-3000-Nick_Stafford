@@ -145,14 +145,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMapController.cpp" />
+    <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Reader.cpp" />
+    <ClCompile Include="River.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="TestState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shaders\cells.frag" />
+    <None Include="Shaders\cells.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="Culture.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameData.h" />
+    <ClInclude Include="GameMapController.h" />
+    <ClInclude Include="LoadShaders.h" />
+    <ClInclude Include="Nation.h" />
+    <ClInclude Include="Reader.h" />
+    <ClInclude Include="Religion.h" />
+    <ClInclude Include="River.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="TestState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

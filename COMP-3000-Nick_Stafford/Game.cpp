@@ -1,36 +1,66 @@
 #include "Game.h"
+#include "TestState.h"
 namespace Mer
 {
 	Game::Game()
 	{
 		if (Init())
 		{
+			this->_data->machine.AddState(StateRef(new TestState(_data)));
 			Run();
 		}
 	}
 	
-	bool Game::Init()
+	bool Game::Init()//Initialise glfw and glew Setup window
 	{
-		if (!glfwInit())
-		{
-			return false;
-		}
+		glfwInit();
+
+
+
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-		window = glfwCreateWindow(1920, 1080, "Comp-3000", NULL, NULL);
-		glfwMakeContextCurrent(window);
+		this->_data->window = glfwCreateWindow(1920, 1080, "Comp-3000", NULL, NULL);
+		glfwMakeContextCurrent(this->_data->window);
 
 		glewInit();
+
+
+
 
 		return true;
 	}
 
 	void Game::Run()
 	{
-		while (!glfwWindowShouldClose(window))
+		UINT32 newTime, frameTime, interpolation;//used for timing Update and HandleInput calls
+
+		UINT32 currentTime = glfwGetTime();//Time since glfw was initialised
+
+		UINT32 accumaltor = 0;//accumalation of time
+
+		while (!glfwWindowShouldClose(this->_data->window))
 		{
-			glfwPollEvents();
-			glfwSwapBuffers(window);
+			this->_data->machine.ProcessStateChanges();
+
+			newTime = glfwGetTime();
+			frameTime = newTime - currentTime;
+
+			if (frameTime > 250)
+				frameTime = 250;
+
+			currentTime = newTime;//change current time to new time
+			accumaltor += frameTime;
+
+
+			this->_data->machine.GetActiveState()->HandleInput();
+			this->_data->machine.GetActiveState()->Update(frameTime);
+
+
+
+			interpolation = accumaltor / dt;
+			this->_data->machine.GetActiveState()->Draw(interpolation);
+
+
 		}
 
 		CleanUp();
@@ -38,8 +68,8 @@ namespace Mer
 
 	void Game::CleanUp()
 	{
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(this->_data->window);
 
-		glfwTerminate();
+		glfwTerminate();	
 	}
 }
