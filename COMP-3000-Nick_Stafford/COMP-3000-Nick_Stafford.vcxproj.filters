@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{27040ee3-80c4-47f8-9d21-ac046dfb9104}</UniqueIdentifier>
     </Filter>
+    <Filter Include="STB">
+      <UniqueIdentifier>{0884df7b-3abc-479a-9ae5-e80c6fa09d17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +48,12 @@
     <ClCompile Include="River.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -52,6 +61,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\cells.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\menu.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\menu.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -93,6 +108,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="River.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>STB</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

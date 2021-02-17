@@ -9,6 +9,7 @@
 #include <glm/ext/matrix_transform.hpp> // GLM: translate, rotate
 #include <glm/ext/matrix_clip_space.hpp> // GLM: perspective and ortho 
 #include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
+#include "GUIManager.h"
 
 namespace Mer
 {
@@ -26,20 +27,23 @@ namespace Mer
 		GameDataRef _data;//global data used by program
 
 		enum VAO_IDs { Cells, NumVAOs = 2 };
-		enum Buffer_Counts { NumCells = 12000, NumRivers = 200};
+		enum Buffer_Counts { NumCells = 12000, NumRivers = 200, NumMenus = 10};
 
+		GLuint VAO;
 		GLuint VAOs[NumVAOs];
 		GLuint cellBuffers[NumCells];		
 		GLuint riverBuffers[NumRivers];
+		GLuint menuBuffers[NumMenus];
 
 		//MAP VARIABLES
 		GameMapController GMC;
+		GUIManager gui;
 		std::string location = ".\\Map_Files\\";
 		std::string mapname = "dibenay";
 
-		GLuint shader;
-
-	
+		GLuint cellShader;
+		GLuint menuShader;
+		
 
 		//CELL SELECTION VARIABLES
 		double xpos = 0, ypos = 0;
@@ -87,6 +91,22 @@ namespace Mer
 		//COLOUR FOR CELLS SHADER
 		GLfloat color[3] = { 0.0f,0.0f,1.0f };
 
+
+		//MENU VARIABLES
+		GLfloat vertices[4][3] =
+		{
+			{-0.5f,0.1f,0.0f},
+			{0.5f,0.1f,0.0f},
+			{0.5f,-0.1f,0.0f},
+			{-0.5f,-0.1f,0.0f},
+		};
+		GLfloat texVertices[4][2] =
+		{
+			{0.0f,1.0f},//top left
+			{1.0f,1.0f},//top right
+			{1.0f,0.0f},//bottom right
+			{0.0f,0.0f}//bottom left
+		};
 	};
 }
 

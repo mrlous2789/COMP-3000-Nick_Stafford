@@ -20,9 +20,12 @@ namespace Mer
 	}
 	void TestState::Init()
 	{
-		glGenVertexArrays(NumVAOs, VAOs);
+		glGenVertexArrays(1, &VAO);
 		glGenBuffers(NumCells, cellBuffers);
 		glGenBuffers(NumRivers, riverBuffers);
+		glGenBuffers(NumMenus, menuBuffers);
+
+		
 
 		GMC.LoadFromFile(location, mapname);
 
@@ -41,16 +44,23 @@ namespace Mer
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		}
 
-		ShaderInfo  shaders[] =
+		ShaderInfo  cellShaders[] =
 		{
 			{ GL_VERTEX_SHADER, "Shaders/cells.vert" },
 			{ GL_FRAGMENT_SHADER, "Shaders/cells.frag" },
 			{ GL_NONE, NULL }
 		};
 
-		shader = LoadShaders(shaders);
 
-		glUseProgram(shader);
+		cellShader = LoadShaders(cellShaders);
+
+		glUseProgram(cellShader);
+
+
+		_data->assets.LoadTexture("singleplayerB", "Assets\\Main_Menu\\singleplayer_button.tga");
+		_data->assets.LoadTexture("exitB", "Assets\\Main_Menu\\exit_button.tga");
+
+
 
 		// creating the model matrix
 		model = glm::mat4(1.0f);
@@ -70,8 +80,10 @@ namespace Mer
 		mvp = projection * view * model;
 
 		//adding the Uniform to the shader
-		int mvpLoc = glGetUniformLocation(shader, "mvp");
+		int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
+
+		gui.InitialiseGUI();
 
 		glfwGetWindowSize(_data->window, &windowW, &windowH);
 		glfwSetScrollCallback(_data->window, scroll_callback);
@@ -154,7 +166,7 @@ namespace Mer
 
 		glEnableVertexAttribArray(0);
 
-		glUseProgram(shader);
+		glUseProgram(cellShader);
 
 		for (int  i = 0; i < GMC.cells.size(); i++)
 		{
@@ -201,10 +213,10 @@ namespace Mer
 				color[2] = 1.0f;
 			}
 
-			GLint myLoc = glGetUniformLocation(shader, "color");
-			glProgramUniform3fv(shader, myLoc, 1, color);
+			GLint myLoc = glGetUniformLocation(cellShader, "color");
+			glProgramUniform3fv(cellShader, myLoc, 1, color);
 
-			int mvpLoc = glGetUniformLocation(shader, "mvp");
+			int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 
 			//draw cells
@@ -221,10 +233,10 @@ namespace Mer
 		for (int i = 0; i < GMC.rivers.size(); i++)
 		{
 			glLineWidth(GMC.rivers[i].width * zoomLevel * 2.0f);
-			GLint myLoc = glGetUniformLocation(shader, "color");
-			glProgramUniform3fv(shader, myLoc, 1, color);
+			GLint myLoc = glGetUniformLocation(cellShader, "color");
+			glProgramUniform3fv(cellShader, myLoc, 1, color);
 
-			int mvpLoc = glGetUniformLocation(shader, "mvp");
+			int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 
 			glBindBuffer(GL_ARRAY_BUFFER, riverBuffers[i]);
@@ -232,9 +244,17 @@ namespace Mer
 
 			glDrawArrays(GL_LINE_STRIP, 0, GMC.rivers[i].coords.size());
 		}
-
-		//std::cout << glGetError() << std::endl;
 		glDisableVertexAttribArray(0);
+
+
+		gui.NewFrame();
+		gui.Button(700, 300, 500, 100, _data->assets.getTexture("singleplayerB"), "singleplayer");
+		gui.Button(800, 900, 500, 100, _data->assets.getTexture("exitB"), "exit");
+		gui.EndFrame();
+		
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+
 		glfwSwapBuffers(_data->window);
 		
 

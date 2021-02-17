@@ -1,5 +1,8 @@
 #include "Game.h"
 #include "TestState.h"
+
+
+#include "stb_image.h"
 namespace Mer
 {
 	Game::Game()
@@ -13,16 +16,25 @@ namespace Mer
 	
 	bool Game::Init()//Initialise glfw and glew Setup window
 	{
-		glfwInit();
 
+
+		glfwInit();
 
 
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 		this->_data->window = glfwCreateWindow(1920, 1080, "Comp-3000", NULL, NULL);
 		glfwMakeContextCurrent(this->_data->window);
-
+		
 		glewInit();
+		
+		this->_data->assets.LoadAnIcon("32x32", icon32x32Filename);
+		
+
+		//icons[0].pixels = stbi_load(icon16x16Filename, &icons[0].width, &icons[0].height, 0, 4);
+		//icons[1].pixels = stbi_load(icon32x32Filename, &icons[1].width, &icons[1].height, 0, 4);
+
+		glfwSetWindowIcon(_data->window, 1, this->_data->assets.getIcon("32x32"));
 
 
 
@@ -58,9 +70,7 @@ namespace Mer
 
 
 			interpolation = accumaltor / dt;
-			this->_data->machine.GetActiveState()->Draw(interpolation);
-
-
+			this->_data->machine.GetActiveState()->Draw(interpolation);		
 		}
 
 		CleanUp();

@@ -1,7 +1,7 @@
 #pragma once
 #include "GL/glew.h"
-#include "GL/freeglut.h"
 
+#include "GL/freeglut.h"
 
 #include "GameData.h"
 
@@ -22,6 +22,11 @@ namespace Mer
 		void Run();
 
 		void CleanUp();
+
+		GLFWimage icons[2];
+		char icon16x16Filename[128] = "Assets\\Icons\\icon16x16.png";//icon file paths
+		char icon32x32Filename[128] = "Assets\\Icons\\icon32x32.png";
+		
 
 		GameDataRef _data = std::make_shared<GameData>();
 	};

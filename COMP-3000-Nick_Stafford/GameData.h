@@ -2,6 +2,7 @@
 
 #include "StateMachine.h"
 #include <GLFW/glfw3.h>
+#include "AssetManager.h"
 
 namespace Mer
 {
@@ -9,6 +10,7 @@ namespace Mer
 	{
 		StateMachine machine;
 		GLFWwindow* window;
+		AssetManager assets;
 	};
 
 	typedef std::shared_ptr<GameData> GameDataRef;
