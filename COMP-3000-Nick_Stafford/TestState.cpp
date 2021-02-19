@@ -249,7 +249,7 @@ namespace Mer
 
 		gui.NewFrame();
 		gui.Button(700, 300, 500, 100, _data->assets.getTexture("singleplayerB"), "singleplayer");
-		gui.Button(800, 900, 500, 100, _data->assets.getTexture("exitB"), "exit");
+		gui.Button(700, 400, 500, 100, _data->assets.getTexture("exitB"), "exit");
 		gui.EndFrame();
 		
 		glBindTexture(GL_TEXTURE_2D, 0);

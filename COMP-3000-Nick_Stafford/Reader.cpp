@@ -93,7 +93,9 @@ namespace Mer
 				}
 				else if (line == "}," || line == "]}")//save to cells vector
 				{
-					cells.push_back(Cell(coords, id, height, biome, type, population, state, province, culture, religion, neighbors));//add cell to cells vector
+					Cell temp;
+					temp = { coords,id,(float)height,biome,type,population,state,province,culture,religion,neighbors };
+					cells.push_back(temp);//add cell to cells vector
 					neighbors.clear();
 					coords.clear();
 				}
@@ -174,7 +176,9 @@ namespace Mer
 				else if (line.find("\"increment\":") != std::string::npos) { increment = ConvertToFloat(GetProperty(line)); }
 				else if (line == "}," || line == "]}")//save to rivers vector
 				{
-					rivers.push_back(River(coords, id, width, increment));//add river to rivers vector
+					River temp;
+					temp = { coords, id, width, increment };
+					rivers.push_back(temp);//add river to rivers vector
 					coords.clear();
 				}
 			}
@@ -266,7 +270,11 @@ namespace Mer
 
 		for (int i = 0; i < cells->size(); i++)
 		{
-			cells->at(i).NormaliseCoords(xDiff, yDiff, xEdge, yEdge);
+			for (int i = 0; i < cells->at(i).coords.size(); i++)
+			{
+				cells->at(i).coords[i].x = ((cells->at(i).coords[i].x - xDiff) / xEdge) * -1;//all cells are scaled using the same numbers
+				cells->at(i).coords[i].y = ((cells->at(i).coords[i].y - yDiff) / yEdge) * -1;//the diff variables are used to centre the map														   //the edge variables are used to scale down the coords to all fit in -1 -> 1	
+			}
 		}
 	}
 	void Reader::NormaliseRivers(std::vector<River>* rivers)
@@ -294,7 +302,11 @@ namespace Mer
 		}
 		for (int i = 0; i < rivers->size(); i++)
 		{
-			rivers->at(i).NormaliseCoords(xDiff, yDiff, xEdge, yEdge);
+			for (int i = 0; i < rivers->at(i).coords.size(); i++)
+			{
+				rivers->at(i).coords[i].x = ((rivers->at(i).coords[i].x - xDiff) / xEdge) * -1;//all cells are scaled using the same numbers
+				rivers->at(i).coords[i].y = ((rivers->at(i).coords[i].y - yDiff) / yEdge) * -1;//the diff variables are used to centre the map															   //the edge variables are used to scale down the coords to all fit in -1 -> 1	
+			}
 		}
 
 		std::cout << "xdiff: " << xDiff << " yDiff: " << yDiff << " xEdge: " << xEdge << " yedge: " << yEdge << std::endl;

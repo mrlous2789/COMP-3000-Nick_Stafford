@@ -147,14 +147,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMapController.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Reader.cpp" />
-    <ClCompile Include="River.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="TestState.cpp" />
   </ItemGroup>
