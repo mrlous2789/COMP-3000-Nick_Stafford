@@ -171,6 +171,7 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameMapController.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUIElements.h" />
     <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="Nation.h" />
     <ClInclude Include="Reader.h" />

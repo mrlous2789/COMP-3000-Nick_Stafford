@@ -2,13 +2,6 @@
 #include "State.h"
 #include "Game.h"
 #include "GameMapController.h"
-#include "LoadShaders.h"
-#include <glm/glm.hpp>
-#include "glm/ext/vector_float3.hpp"
-#include "glm/fwd.hpp"
-#include <glm/ext/matrix_transform.hpp> // GLM: translate, rotate
-#include <glm/ext/matrix_clip_space.hpp> // GLM: perspective and ortho 
-#include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
 #include "GUIManager.h"
 
 namespace Mer
@@ -27,86 +20,28 @@ namespace Mer
 		GameDataRef _data;//global data used by program
 
 		enum VAO_IDs { Cells, NumVAOs = 2 };
-		enum Buffer_Counts { NumCells = 12000, NumRivers = 200, NumMenus = 10};
-
-		GLuint VAO;
 		GLuint VAOs[NumVAOs];
-		GLuint cellBuffers[NumCells];		
-		GLuint riverBuffers[NumRivers];
-		GLuint menuBuffers[NumMenus];
+
+		bool mousePressed = false;
+		
+
+		static bool KeysPressed[348];
 
 		//MAP VARIABLES
 		GameMapController GMC;
-		GUIManager gui;
-		std::string location = ".\\Map_Files\\";
-		std::string mapname = "dibenay";
-
-		GLuint cellShader;
-		GLuint menuShader;
-		
+		GUIManager GUI;
 
 		//CELL SELECTION VARIABLES
 		double xpos = 0, ypos = 0;
 		int windowH = 0, windowW = 0;
 
-		Cell* selectedCell;
+		
+
+		//static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 
-		//MAP MOVEMENT VARIABLES
-		glm::mat4 model;
-		glm::mat4 view;
-		glm::mat4 projection;
-		glm::mat4 mvp;
-
-		float zoomLevel = 1.0f;
-		float zoomRate = 0.05f;
-		float minZoom = 1.0f;
-		float maxZoom = 3.0f;
-
-		float xoffset = 0.0f;
-		float yoffset = 0.0f;
-		float moveSpeed = 0.01f;
-
-		bool isMoveUp = false;
-		bool isMoveDown = false;
-		bool isMoveRight = false;
-		bool isMoveLeft = false;
-
-		static bool isZoomOut;
-		static bool isZoomIn;
-
-		bool moved = false;
-
-		//MAP MOVEMENT FUNCTIONS
-		void ZoomOut();
-		void ZoomIn();
-
-		void MoveUp();
-		void MoveDown();
-		void MoveLeft();
-		void MoveRight();
-
-		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
-		//COLOUR FOR CELLS SHADER
-		GLfloat color[3] = { 0.0f,0.0f,1.0f };
-
-
-		//MENU VARIABLES
-		GLfloat vertices[4][3] =
-		{
-			{-0.5f,0.1f,0.0f},
-			{0.5f,0.1f,0.0f},
-			{0.5f,-0.1f,0.0f},
-			{-0.5f,-0.1f,0.0f},
-		};
-		GLfloat texVertices[4][2] =
-		{
-			{0.0f,1.0f},//top left
-			{1.0f,1.0f},//top right
-			{1.0f,0.0f},//bottom right
-			{0.0f,0.0f}//bottom left
-		};
+	
 	};
 }
 

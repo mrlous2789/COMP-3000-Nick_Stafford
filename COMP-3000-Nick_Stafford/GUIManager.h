@@ -1,8 +1,8 @@
 #pragma once
 #include "GL/glew.h"
 #include <string>
-#include <map>
 #include "LoadShaders.h"
+#include "GUIElements.h"
 
 namespace Mer
 {
@@ -18,6 +18,9 @@ namespace Mer
 
 		void Panel();
 		bool Button(int x, int y, int width, int height, GLuint texture, std::string name);
+
+		bool ProcessButtonPress(double mouseX, double mouseY);
+		bool ProcessButtonRelease(double mouseX, double mouseY);
 
 	private:
 		enum Buffer_Counts { NumMenus = 100, NumTex = 1 };
@@ -36,7 +39,10 @@ namespace Mer
 
 		int buttonCount = 0;
 
-		std::map<std::string, int> _buttons;
+		
+		std::vector<ButtonElement> _buttons;
+
+		bool Intersects(double mouseX, double mouseY, double edgeX1, double edgeY1, double edgeX2, double edgeY2);
 	};
 }
 
