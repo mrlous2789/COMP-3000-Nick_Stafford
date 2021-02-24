@@ -56,4 +56,17 @@ namespace Mer
 	{
 		return &this->_icons[name];
 	}
+
+	void AssetManager::DeleteTexture(std::string name)
+	{
+		if (_textures.find(name) != _textures.end())
+		{
+			_textures.erase(name);
+		}
+	}
+
+	void AssetManager::CleanUp()
+	{
+		_textures.clear();
+	}
 }

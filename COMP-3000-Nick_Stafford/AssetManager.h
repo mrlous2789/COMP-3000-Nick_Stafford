@@ -19,6 +19,9 @@ namespace Mer
 		void LoadAnIcon(std::string name, std::string filename);
 		GLFWimage* getIcon(std::string name);
 
+		void CleanUp();
+		void DeleteTexture(std::string name);
+
 	private:
 		std::map<std::string, GLuint> _textures;
 		std::map<std::string, GLFWimage> _icons;

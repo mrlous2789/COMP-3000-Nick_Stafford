@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "TestState.h"
+#include "MainMenuState.h"
 
 
 #include "stb_image.h"
@@ -9,7 +9,7 @@ namespace Mer
 	{
 		if (Init())
 		{
-			this->_data->machine.AddState(StateRef(new TestState(_data)));
+			this->_data->machine.AddState(StateRef(new MainMenuState(_data)));
 			Run();
 		}
 	}

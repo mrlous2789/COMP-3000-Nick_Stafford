@@ -24,8 +24,7 @@ namespace Mer
 		glGenVertexArrays(1, VAOs);
 
 
-		_data->assets.LoadTexture("singleplayerB", "Assets\\Main_Menu\\singleplayer_button.tga");
-		_data->assets.LoadTexture("exitB", "Assets\\Main_Menu\\exit_button.tga");
+
 
 
 		GUI.InitialiseGUI();
@@ -100,16 +99,6 @@ namespace Mer
 
 		GMC.Draw();
 
-		GUI.NewFrame();
-		if (GUI.Button(700, 300, 500, 100, _data->assets.getTexture("singleplayerB"), "singleplayer"))
-		{
-			std::cout << "Singleplayer" << std::endl;
-		}
-		if (GUI.Button(700, 400, 500, 100, _data->assets.getTexture("exitB"), "exit"))
-		{
-			std::cout << "Exit" << std::endl;
-		}
-		GUI.EndFrame();
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 

@@ -22,6 +22,8 @@ namespace Mer
 		bool ProcessButtonPress(double mouseX, double mouseY);
 		bool ProcessButtonRelease(double mouseX, double mouseY);
 
+		void CleanUp();
+
 	private:
 		enum Buffer_Counts { NumMenus = 100, NumTex = 1 };
 		GLuint menuBuffers[NumMenus];
