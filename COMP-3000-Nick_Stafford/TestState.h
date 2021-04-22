@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "GameMapController.h"
 #include "GUIManager.h"
-
+#include "PlayerController.h"
 namespace Mer
 {
 	class TestState : public State
@@ -30,6 +30,7 @@ namespace Mer
 		//MAP VARIABLES
 		GameMapController GMC;
 		GUIManager GUI;
+		PlayerController PLC;
 
 		//CELL SELECTION VARIABLES
 		double xpos = 0, ypos = 0;

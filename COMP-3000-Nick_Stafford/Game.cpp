@@ -29,10 +29,6 @@ namespace Mer
 		glewInit();
 		
 		this->_data->assets.LoadAnIcon("32x32", icon32x32Filename);
-		
-
-		//icons[0].pixels = stbi_load(icon16x16Filename, &icons[0].width, &icons[0].height, 0, 4);
-		//icons[1].pixels = stbi_load(icon32x32Filename, &icons[1].width, &icons[1].height, 0, 4);
 
 		glfwSetWindowIcon(_data->window, 1, this->_data->assets.getIcon("32x32"));
 

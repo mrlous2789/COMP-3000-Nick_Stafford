@@ -31,6 +31,8 @@ namespace Mer
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glewExperimental = GL_TRUE;
+			
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else
@@ -67,6 +69,6 @@ namespace Mer
 
 	void AssetManager::CleanUp()
 	{
-		_textures.clear();
+		//_textures.clear();
 	}
 }

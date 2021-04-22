@@ -1,6 +1,5 @@
 #pragma once
 #include "Reader.h"
-#include "GL/glew.h"
 #include "LoadShaders.h"
 #include "glm/glm.hpp"
 #include "glm/ext/vector_float3.hpp"
@@ -27,17 +26,12 @@ namespace Mer
 
 		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+		enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions };
 
-
+		void UpdateDrawMode(int drawMode);
 
 	private:
 		Cell* getCellAtCoords(double xpos, double ypos);
-
-		std::vector<Cell> cells;
-		std::vector<River> rivers;
-		std::vector<Nation> nations;
-		std::vector<Culture> cultures;
-		std::vector<Religion> religions;
 
 		Nation getNationById(int id);
 		Culture getCultureById(int id);
@@ -46,6 +40,14 @@ namespace Mer
 		bool LoadFromFile(std::string location, std::string mapname);
 
 		bool Intersects(double mouseX, double mouseY, double edgeX1, double edgeY1, double edgeX2, double edgeY2);
+
+		std::vector<Cell> cells;
+		std::vector<River> rivers;
+		std::vector<Nation> nations;
+		std::vector<Culture> cultures;
+		std::vector<Religion> religions;
+
+		int drawMode = DrawTerrain;
 
 		Reader reader;
 

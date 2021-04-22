@@ -162,47 +162,130 @@ namespace Mer
 
 		for (int i = 0; i < cells.size(); i++)
 		{
-			if (cells[i].id == selectedCell->id)
+			if (drawMode == DrawNations)
 			{
-				color[0] = 1.0f;
-				color[1] = 1.0f;
-				color[2] = 0.0f;
+				Nation nat = getNationById(cells[i].state);
+				if (cells[i].id == selectedCell->id)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+				}
+				else if (nat.id == -1 && cells[i].type == "ocean")
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
+				}
+				else if (nat.id == -1 && cells[i].type != "ocean")
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 0.0f;
+				}
+				else
+				{
+					color[0] = nat.colour[0];
+					color[1] = nat.colour[1];
+					color[2] = nat.colour[2];
+				}
+
 			}
-			else if (cells[i].height > 8000)
+			else if (drawMode == DrawCultures)
 			{
-				color[0] = 1.0f;
-				color[1] = 0.0f;
-				color[2] = 0.0f;
+				Culture cult = getCultureById(cells[i].culture);
+				if (cells[i].id == selectedCell->id)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+				}
+				else if (cult.id == -1 && cells[i].type == "ocean")
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
+				}
+				else if (cult.id == -1 && cells[i].type != "ocean")
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 0.0f;
+				}
+				else
+				{
+					color[0] = cult.colour[0];
+					color[1] = cult.colour[1];
+					color[2] = cult.colour[2];
+				}
+
 			}
-			else if (cells[i].height > 6000)
+			else if (drawMode == 3)
 			{
-				color[0] = 1.0f;
-				color[1] = 0.18f;
-				color[2] = 0.18f;
-			}
-			else if (cells[i].height > 3000)
-			{
-				color[0] = 1.0f;
-				color[1] = 0.4f;
-				color[2] = 0.4f;
-			}
-			else if (cells[i].height > 1000)
-			{
-				color[0] = 1.0f;
-				color[1] = 0.7f;
-				color[2] = 0.7f;
-			}
-			else if (cells[i].height > 0)
-			{
-				color[0] = 0.0f;
-				color[1] = 1.0f;
-				color[2] = 0.0f;
+				Religion rel = getReligionById(cells[i].religion);
+				if (cells[i].id == selectedCell->id)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+				}
+				else if (rel.id == -1)
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
+				}
+				else
+				{
+					color[0] = rel.colour[0];
+					color[1] = rel.colour[1];
+					color[2] = rel.colour[2];
+				}
 			}
 			else
 			{
-				color[0] = 0.0f;
-				color[1] = 0.0f;
-				color[2] = 1.0f;
+				if (cells[i].id == selectedCell->id)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+				}
+				else if (cells[i].height > 8000)
+				{
+					color[0] = 1.0f;
+					color[1] = 0.0f;
+					color[2] = 0.0f;
+				}
+				else if (cells[i].height > 6000)
+				{
+					color[0] = 1.0f;
+					color[1] = 0.18f;
+					color[2] = 0.18f;
+				}
+				else if (cells[i].height > 3000)
+				{
+					color[0] = 1.0f;
+					color[1] = 0.4f;
+					color[2] = 0.4f;
+				}
+				else if (cells[i].height > 1000)
+				{
+					color[0] = 1.0f;
+					color[1] = 0.7f;
+					color[2] = 0.7f;
+				}
+				else if (cells[i].height > 0)
+				{
+					color[0] = 0.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+				}
+				else
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
+				}
 			}
 
 			GLint myLoc = glGetUniformLocation(cellShader, "color");
@@ -239,6 +322,12 @@ namespace Mer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableVertexAttribArray(0);
 	}
+
+	void GameMapController::UpdateDrawMode(int drawMode)
+	{
+		this->drawMode = drawMode;
+	}
+
 	Nation GameMapController::getNationById(int id)
 	{
 		Nation nat;

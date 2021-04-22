@@ -29,6 +29,12 @@ namespace Mer
 
 		GUI.InitialiseGUI();
 		GMC.Initialise();
+		PLC.Initialise();
+
+		_data->assets.LoadTexture("terrainB", "Assets\\Game_Map_Buttons\\terrain_map_button.tga");
+		_data->assets.LoadTexture("nationB", "Assets\\Game_Map_Buttons\\nation_map_button.tga");
+		_data->assets.LoadTexture("religionB", "Assets\\Game_Map_Buttons\\religion_map_button.tga");
+		_data->assets.LoadTexture("cultureB", "Assets\\Game_Map_Buttons\\culture_map_button.tga");
 
 		glfwGetWindowSize(_data->window, &windowW, &windowH);
 		glfwSetScrollCallback(_data->window, GMC.scroll_callback);
@@ -98,8 +104,27 @@ namespace Mer
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		GMC.Draw();
+		//PLC.Draw(_data->assets.getTexture("player"));
 
 
+		GUI.NewFrame();
+		if (GUI.Button(1600, 150, 50, 50,_data->assets.getTexture("terrainB"),"TerrainB"))
+		{
+			GMC.UpdateDrawMode(GMC.DrawTerrain);
+		}
+		if (GUI.Button(1655, 150, 50, 50, _data->assets.getTexture("nationB"), "NationB"))
+		{
+			GMC.UpdateDrawMode(GMC.DrawNations);
+		}
+		if (GUI.Button(1710, 150, 50, 50, _data->assets.getTexture("cultureB"), "CultureB"))
+		{
+			GMC.UpdateDrawMode(GMC.DrawCultures);
+		}
+		if (GUI.Button(1765, 150, 50, 50, _data->assets.getTexture("religionB"), "ReligionB"))
+		{
+			GMC.UpdateDrawMode(GMC.DrawReligions);
+		}
+		GUI.EndFrame();
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 
