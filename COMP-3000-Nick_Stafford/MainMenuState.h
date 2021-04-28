@@ -1,6 +1,7 @@
 #pragma once
 #include "TestState.h"
 
+
 namespace Mer
 {
 	class MainMenuState : public State
@@ -40,7 +41,8 @@ namespace Mer
 			{1.0f,0.0f},//bottom right
 			{0.0f,0.0f}//bottom left	
 		};
-	};
+
+	}; 
 }
 
 

@@ -88,6 +88,8 @@ namespace Mer
 		cultures = reader.ReadCutlureFile(location + mapname + "_cultures.mer");
 		religions = reader.ReadReligionFile(location + mapname + "_religions.mer");
 
+		
+
 		if (cells.empty())
 			return false;
 		else
@@ -170,24 +172,28 @@ namespace Mer
 					color[0] = 1.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else if (nat.id == -1 && cells[i].type == "ocean")
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 1.0f;
+					color[3] = 1.0f;
 				}
 				else if (nat.id == -1 && cells[i].type != "ocean")
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else
 				{
 					color[0] = nat.colour[0];
 					color[1] = nat.colour[1];
 					color[2] = nat.colour[2];
+					color[3] = 1.0f;
 				}
 
 			}
@@ -199,24 +205,28 @@ namespace Mer
 					color[0] = 1.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else if (cult.id == -1 && cells[i].type == "ocean")
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 1.0f;
+					color[3] = 1.0f;
 				}
 				else if (cult.id == -1 && cells[i].type != "ocean")
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else
 				{
 					color[0] = cult.colour[0];
 					color[1] = cult.colour[1];
 					color[2] = cult.colour[2];
+					color[3] = 1.0f;
 				}
 
 			}
@@ -228,18 +238,21 @@ namespace Mer
 					color[0] = 1.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else if (rel.id == -1)
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 1.0f;
+					color[3] = 1.0f;
 				}
 				else
 				{
 					color[0] = rel.colour[0];
 					color[1] = rel.colour[1];
 					color[2] = rel.colour[2];
+					color[3] = 1.0f;
 				}
 			}
 			else
@@ -249,47 +262,54 @@ namespace Mer
 					color[0] = 1.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 8000)
 				{
 					color[0] = 1.0f;
 					color[1] = 0.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 6000)
 				{
 					color[0] = 1.0f;
 					color[1] = 0.18f;
 					color[2] = 0.18f;
+					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 3000)
 				{
 					color[0] = 1.0f;
 					color[1] = 0.4f;
 					color[2] = 0.4f;
+					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 1000)
 				{
 					color[0] = 1.0f;
 					color[1] = 0.7f;
 					color[2] = 0.7f;
+					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 0)
 				{
 					color[0] = 0.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
 				}
 				else
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 1.0f;
+					color[3] = 1.0f;
 				}
 			}
 
 			GLint myLoc = glGetUniformLocation(cellShader, "color");
-			glProgramUniform3fv(cellShader, myLoc, 1, color);
+			glProgramUniform4fv(cellShader, myLoc, 1, color);
 
 			int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));

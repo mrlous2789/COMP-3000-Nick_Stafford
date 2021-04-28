@@ -25,8 +25,6 @@ namespace Mer
 
 
 
-
-
 		GUI.InitialiseGUI();
 		GMC.Initialise();
 		PLC.Initialise();
@@ -35,6 +33,7 @@ namespace Mer
 		_data->assets.LoadTexture("nationB", "Assets\\Game_Map_Buttons\\nation_map_button.tga");
 		_data->assets.LoadTexture("religionB", "Assets\\Game_Map_Buttons\\religion_map_button.tga");
 		_data->assets.LoadTexture("cultureB", "Assets\\Game_Map_Buttons\\culture_map_button.tga");
+		_data->assets.LoadTexture("mainPanel", "Assets\\Game_UI\\game_ui_main_panel.tga");
 
 		glfwGetWindowSize(_data->window, &windowW, &windowH);
 		glfwSetScrollCallback(_data->window, GMC.scroll_callback);
@@ -124,7 +123,11 @@ namespace Mer
 		{
 			GMC.UpdateDrawMode(GMC.DrawReligions);
 		}
+		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
+
 		GUI.EndFrame();
+		GUI.Text(GMC.getNationById(PLC.getNationID()).name, 5.0f, 580.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
+		
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 

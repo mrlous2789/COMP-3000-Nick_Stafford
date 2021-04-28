@@ -354,9 +354,11 @@ namespace Mer
 		std::string line;
 		int id = 0, capitalId = 0;
 		float red = 0.0f, green = 0.0f, blue = 0.0f;
+		std::string name;
 		while (std::getline(file,line))
 		{
 			if (line.find("id") != std::string::npos) { id = ConvertToInt(GetProperty(line)); }
+			else if (line.find("name") != std::string::npos) { name = GetProperty(line); }
 			else if (line.find("capital") != std::string::npos) { capitalId = ConvertToInt(GetProperty(line)); }
 			else if (line.find("red") != std::string::npos) { red = ConvertToFloat(GetProperty(line)); }
 			else if (line.find("green") != std::string::npos) { green = ConvertToFloat(GetProperty(line)); }
@@ -365,6 +367,7 @@ namespace Mer
 			{
 				Nation temp;
 				temp.id = id;
+				temp.name = name;
 				temp.capitalId = capitalId;
 				temp.colour[0] = red; temp.colour[1] = green; temp.colour[2] = blue;
 				nations.push_back(temp);

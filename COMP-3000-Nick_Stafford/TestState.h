@@ -4,6 +4,7 @@
 #include "GameMapController.h"
 #include "GUIManager.h"
 #include "PlayerController.h"
+
 namespace Mer
 {
 	class TestState : public State
@@ -24,6 +25,9 @@ namespace Mer
 
 		bool mousePressed = false;
 		
+		
+
+
 
 		static bool KeysPressed[348];
 

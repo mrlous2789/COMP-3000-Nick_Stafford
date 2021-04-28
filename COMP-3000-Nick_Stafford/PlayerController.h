@@ -10,12 +10,17 @@ namespace Mer
 		PlayerController();
 		void Initialise();
 		void Draw(GLuint texture);
+
+		int getNationID();
+
 	private:
 
+		int nationID = 11;
 
 		enum Buffer_Counts { Vertex, Texture, NumBuffers = 2 };
 		GLuint playerBuffers[NumBuffers];
 
+		
 
 		GLfloat texVertices[4][2] =
 		{

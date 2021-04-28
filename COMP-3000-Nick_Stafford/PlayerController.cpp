@@ -39,4 +39,9 @@ namespace Mer
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	}
+
+	int PlayerController::getNationID()
+	{
+		return nationID;
+	}
 }

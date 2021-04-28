@@ -30,10 +30,13 @@ namespace Mer
 
 		void UpdateDrawMode(int drawMode);
 
+		Nation getNationById(int id);
+
+
 	private:
 		Cell* getCellAtCoords(double xpos, double ypos);
 
-		Nation getNationById(int id);
+		
 		Culture getCultureById(int id);
 		Religion getReligionById(int id);
 
@@ -102,7 +105,7 @@ namespace Mer
 		void MoveRight();
 
 		//COLOUR FOR CELLS SHADER
-		GLfloat color[3] = { 0.0f,0.0f,1.0f };
+		GLfloat color[4] = { 0.0f,0.0f,1.0f,1.0f };
 	};
 }
 

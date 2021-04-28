@@ -1,7 +1,7 @@
 #version 450 core
 
-uniform vec3 color = vec3(1.0,0.0,0.0);
-out vec3 outColor;
+uniform vec4 color = vec4(1.0,0.0,0.0,1.0);
+out vec4 outColor;
 
 void main()
 {

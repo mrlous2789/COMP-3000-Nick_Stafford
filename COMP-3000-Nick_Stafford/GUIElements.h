@@ -11,4 +11,10 @@ namespace Mer
 		std::vector<glm::vec2> vertices;
 		bool pressed = false;
 	};
+	struct PanelElement 
+	{
+		int bufferID = 1;
+		std::string name;
+		std::vector<glm::vec2> vertices;
+	};
 }
