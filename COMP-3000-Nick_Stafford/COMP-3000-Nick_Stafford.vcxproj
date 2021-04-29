@@ -150,6 +150,7 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMapController.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameMapController.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUIElements.h" />
     <ClInclude Include="LoadShaders.h" />

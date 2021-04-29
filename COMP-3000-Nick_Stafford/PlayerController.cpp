@@ -5,7 +5,7 @@ namespace Mer
 	{
 
 	}
-	void PlayerController::Initialise()
+	void PlayerController::Initialise(Nation* selectedNation)
 	{
 		glGenBuffers(NumBuffers, playerBuffers);
 
@@ -24,6 +24,7 @@ namespace Mer
 			{ GL_NONE, NULL }
 		};
 
+		nation = selectedNation;
 		playerShader = LoadShaders(cellShaders);
 	}
 	void PlayerController::Draw(GLuint texture)
@@ -40,8 +41,71 @@ namespace Mer
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	}
 
+	void PlayerController::Tick(float dt)
+	{
+		gameTickAcc += dt;
+		if (gameTickAcc >= gameTickTimer)
+		{
+			goldPerTurn = nation->nationCells.size() / 4;
+			gold += goldPerTurn;
+
+			gameTickAcc -= gameTickTimer;
+		}
+	}
+
 	int PlayerController::getNationID()
 	{
-		return nationID;
+		return nation->id;
+	}
+	std::string PlayerController::getNationName()
+	{
+		return nation->name;
+	}
+
+	std::string PlayerController::getGold()
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << gold;
+
+		std::string temp = stream.str();
+		return temp;
+	}
+	std::string PlayerController::getGoldPerTurn()
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << goldPerTurn;
+			
+		std::string temp = stream.str();
+		return "+ " + temp;
+	}
+
+	void PlayerController::SetTickSpeed(int speed)
+	{
+		switch (speed)
+		{
+		case 1:
+			gameTickAcc = (gameTickAcc / gameTickTimer) * 20.0f;
+			gameTickTimer = 20.0f;
+			break;
+		case 2:
+			gameTickAcc = (gameTickAcc / gameTickTimer) * 15.0f;
+			gameTickTimer = 15.0f;
+			break;
+		case 3:
+			gameTickAcc = (gameTickAcc / gameTickTimer) * 10.0f;
+			gameTickTimer = 10.0f;
+			break;
+		case 4:
+			gameTickAcc = (gameTickAcc / gameTickTimer) * 6.0f;
+			gameTickTimer = 6.0f;
+			break;
+		case 5:
+			gameTickAcc = (gameTickAcc / gameTickTimer) * 3.0f;
+			gameTickTimer = 3.0f;
+			break;
+		default:
+			
+			break;
+		}
 	}
 }

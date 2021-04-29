@@ -31,6 +31,7 @@ namespace Mer
 		void UpdateDrawMode(int drawMode);
 
 		Nation getNationById(int id);
+		Nation* getNationPointerById(int id);
 
 
 	private:
@@ -43,6 +44,8 @@ namespace Mer
 		bool LoadFromFile(std::string location, std::string mapname);
 
 		bool Intersects(double mouseX, double mouseY, double edgeX1, double edgeY1, double edgeX2, double edgeY2);
+
+		
 
 		std::vector<Cell> cells;
 		std::vector<River> rivers;

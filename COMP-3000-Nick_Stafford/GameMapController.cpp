@@ -88,7 +88,15 @@ namespace Mer
 		cultures = reader.ReadCutlureFile(location + mapname + "_cultures.mer");
 		religions = reader.ReadReligionFile(location + mapname + "_religions.mer");
 
-		
+
+
+		for (int i = 0; i < cells.size(); i++)
+		{		
+			if (getNationPointerById(cells[i].state) != nullptr )
+			{
+				getNationPointerById(cells[i].state)->nationCells.push_back(&cells[i]);
+			}
+		}
 
 		if (cells.empty())
 			return false;
@@ -346,6 +354,23 @@ namespace Mer
 	void GameMapController::UpdateDrawMode(int drawMode)
 	{
 		this->drawMode = drawMode;
+	}
+
+	Nation* GameMapController::getNationPointerById(int id)
+	{
+		Nation nat;
+		nat.id = -1;
+		nat.capitalId = -1;
+
+		if (id >= 0 && id < nations.size())//if nation at index of id is correct nation return it
+			if (nations[id].id == id)
+				return &nations[id];
+
+		for (int i = 0; i < nations.size(); i++)//loop through all nations to find correct one
+			if (nations[i].id == id)
+				return &nations[i];
+
+		return nullptr;
 	}
 
 	Nation GameMapController::getNationById(int id)

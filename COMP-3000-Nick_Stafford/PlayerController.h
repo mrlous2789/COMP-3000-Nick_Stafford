@@ -1,6 +1,9 @@
 #pragma once
 #include "LoadShaders.h"
 #include <iostream>
+#include "Nation.h"
+#include <sstream>
+#include <iomanip>
 
 namespace Mer
 {
@@ -8,19 +11,36 @@ namespace Mer
 	{
 	public:
 		PlayerController();
-		void Initialise();
+		void Initialise(Nation* selectedNation);
 		void Draw(GLuint texture);
 
+		void Tick(float dt);
+
 		int getNationID();
+		std::string getNationName();
+
+		std::string getGold();
+		std::string getGoldPerTurn();
+
+		void SetTickSpeed(int speed);
 
 	private:
 
-		int nationID = 11;
+		Nation* nation;
+		float gold = 0.0f;
+		float prestige = 0.0f;
+		int soldiers = 0;
+
+		
+
+		float goldPerTurn = 0.0f;
+		float prestigePerTurn = 0.0f;
 
 		enum Buffer_Counts { Vertex, Texture, NumBuffers = 2 };
 		GLuint playerBuffers[NumBuffers];
 
-		
+		float gameTickTimer = 3.0f;
+		float gameTickAcc = 0.0f;
 
 		GLfloat texVertices[4][2] =
 		{

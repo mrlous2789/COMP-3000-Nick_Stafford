@@ -98,7 +98,7 @@ namespace Mer
 
 		if (GUI.Button(320, 480, 320, 60, _data->assets.getTexture("singleplayerB"), "singleplayer"))
 		{
-			_data->machine.AddState(StateRef(new TestState(_data)));
+			_data->machine.AddState(StateRef(new GameState(_data)));
 		}
 		if (GUI.Button(800, 480, 320, 60, _data->assets.getTexture("settingsB"), "settings"))
 		{

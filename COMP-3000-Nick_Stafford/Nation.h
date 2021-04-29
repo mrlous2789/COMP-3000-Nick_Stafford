@@ -1,10 +1,15 @@
 #pragma once
 #include <string>
+#include "Cell.h"
 //data structure for a nation
-struct Nation
+namespace Mer
 {
-	int id;
-	std::string name = "big country";
-	int capitalId;
-	float colour[3];
-};
+	struct Nation
+	{
+		int id;
+		std::string name = "big country";
+		std::vector<Cell*> nationCells;
+		int capitalId;
+		float colour[3];
+	};
+}
