@@ -37,7 +37,9 @@ namespace Mer
 	private:
 		Cell* getCellAtCoords(double xpos, double ypos);
 
-		
+		Cell* getCellbyID(int id);
+		void AddCapitalToNations();
+
 		Culture getCultureById(int id);
 		Religion getReligionById(int id);
 

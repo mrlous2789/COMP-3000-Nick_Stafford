@@ -10,6 +10,7 @@ namespace Mer
 		std::string name = "big country";
 		std::vector<Cell*> nationCells;
 		int capitalId;
+		Cell* capital;
 		float colour[3];
 	};
 }

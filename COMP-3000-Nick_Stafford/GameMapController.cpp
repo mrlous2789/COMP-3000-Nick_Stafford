@@ -32,6 +32,8 @@ namespace Mer
 			std::cout << "Loaded" << std::endl;
 		}
 
+		AddCapitalToNations();
+
 		selectedCell = &cells[0];
 
 		for (int i = 0; i < cells.size(); i++)
@@ -88,6 +90,7 @@ namespace Mer
 		cultures = reader.ReadCutlureFile(location + mapname + "_cultures.mer");
 		religions = reader.ReadReligionFile(location + mapname + "_religions.mer");
 
+		
 
 
 		for (int i = 0; i < cells.size(); i++)
@@ -102,6 +105,24 @@ namespace Mer
 			return false;
 		else
 			return true;
+	}
+
+	Cell* GameMapController::getCellbyID(int id)
+	{
+		for (int i = 0; i < cells.size(); i++)
+		{
+			if (cells[i].id == id)
+			{
+				return &cells[i];
+			}
+		}
+	}
+	void GameMapController::AddCapitalToNations()
+	{
+		for (int i = 0; i < nations.size(); i++)
+		{
+			nations[i].capital = getCellbyID(nations[i].capitalId);
+		}
 	}
 
 	void GameMapController::ProcessKeyPresses(bool KeysPressed[])
@@ -132,6 +153,8 @@ namespace Mer
 		if (selectedCell != temp && temp != nullptr)
 		{
 			selectedCell = temp;
+			//std::cout << selectedCell->id << std::endl;
+			//std::cout << getNationPointerById(selectedCell->state)->name << std::endl;
 		}
 	}
 	void GameMapController::UpdateMap()
@@ -203,7 +226,6 @@ namespace Mer
 					color[2] = nat.colour[2];
 					color[3] = 1.0f;
 				}
-
 			}
 			else if (drawMode == DrawCultures)
 			{
@@ -270,6 +292,13 @@ namespace Mer
 					color[0] = 1.0f;
 					color[1] = 1.0f;
 					color[2] = 0.0f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].id == 782)
+				{
+					color[0] = 1.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
 					color[3] = 1.0f;
 				}
 				else if (cells[i].height > 8000)
@@ -492,9 +521,9 @@ namespace Mer
 
 
 			//if the new zoom level causes off map to be shown change offset
-			if ((yoffset - (1.0f / zoomLevel)) < -0.99f)
+			if ((yoffset - (1.0f / zoomLevel)) < -1.1f)
 			{
-				yoffset = -0.99f + (1.0f / zoomLevel);
+				yoffset = -1.1f + (1.0f / zoomLevel);
 			}
 			else if ((yoffset + (1.0f / zoomLevel)) > 0.99f)
 			{
@@ -517,7 +546,7 @@ namespace Mer
 
 	void GameMapController::MoveUp()
 	{
-		if ((yoffset - (1.0f / zoomLevel)) > -0.99f)
+		if ((yoffset - (1.0f / zoomLevel)) > -1.1f)
 		{
 			yoffset -= moveSpeed;
 

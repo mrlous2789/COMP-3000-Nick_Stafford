@@ -125,6 +125,7 @@ namespace Mer
 		{
 			GMC.UpdateDrawMode(GMC.DrawReligions);
 		}
+
 		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
 
 		GUI.EndFrame();
