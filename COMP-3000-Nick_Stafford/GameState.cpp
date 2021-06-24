@@ -1,32 +1,20 @@
 #include "GameState.h"
 namespace Mer
 {
-	bool GameState::KeysPressed[348];
+
 
 	GameState::GameState(GameDataRef data) : _data(data)
 	{
 	}
 
-	void GameState::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-	{
-		if (action == GLFW_PRESS)
-		{
-			KeysPressed[key] = true;
-		}
-		else if (action == GLFW_RELEASE)
-		{
-			KeysPressed[key] = false;
-		}
-	}
 	void GameState::Init()
 	{
-		
+		glfwGetWindowSize(_data->window, &windowW, &windowH);
 
 
 
-		GUI.InitialiseGUI();
-		GMC.Initialise();
-		PLC.Initialise(GMC.getNationPointerById(11));
+		GUI.InitialiseGUI(windowW, windowH);
+		PLC.Initialise(windowW, windowH);
 
 		_data->assets.LoadTexture("player", "Assets\\Player\\temp_player.tga");
 		_data->assets.LoadTexture("terrainB", "Assets\\Game_Map_Buttons\\terrain_map_button.tga");
@@ -40,52 +28,71 @@ namespace Mer
 		_data->assets.LoadTexture("speed4B", "Assets\\Game_Map_Buttons\\speed_four_button.tga");
 		_data->assets.LoadTexture("speed5B", "Assets\\Game_Map_Buttons\\speed_five_button.tga");
 
-		glfwGetWindowSize(_data->window, &windowW, &windowH);
-		glfwSetScrollCallback(_data->window, GMC.scroll_callback);
-		glfwSetKeyCallback(_data->window, key_callback);
+
+		glfwSetScrollCallback(_data->window, PLC.scroll_callback);
+		glfwSetKeyCallback(_data->window, PLC.key_callback);
 	}
 	void GameState::HandleInput()
 	{
 
-		GMC.ProcessKeyPresses(KeysPressed);
+		PLC.HandleInput();
 		int mouseState = glfwGetMouseButton(_data->window, GLFW_MOUSE_BUTTON_LEFT);
 
 		if (mouseState == GLFW_PRESS)
 		{
-			mousePressed = true;
+			leftMousePressed = true;
 			glfwGetCursorPos(_data->window, &xpos, &ypos);
 
 			if (xpos > 0 && xpos <= windowW && ypos >= 0 && ypos <= windowH)
 			{
-				xpos -= (windowW / 2);
-				xpos = xpos / (windowW / 2);
-				ypos -= (windowH / 2);
-				ypos = ypos / (windowH / 2);
-				ypos *= -1;
 
 				if (GUI.ProcessButtonPress(xpos, ypos))
 				{
 
 				}
+				else if (PLC.ProcessMouseClick(xpos,ypos))
+				{
+
+				}
 				else
 				{
-					GMC.ProcessMousePress(xpos, ypos);
+					
 				}
 			}
 		}
-		else if (mousePressed == true && mouseState == GLFW_RELEASE)
+		else if (leftMousePressed == true && mouseState == GLFW_RELEASE)
 		{
-			mousePressed = false;
+			leftMousePressed = false;
 			glfwGetCursorPos(_data->window, &xpos, &ypos);
 			if (xpos > 0 && xpos <= windowW && ypos >= 0 && ypos <= windowH)
 			{
-				xpos -= (windowW / 2);
-				xpos = xpos / (windowW / 2);
-				ypos -= (windowH / 2);
-				ypos = ypos / (windowH / 2);
-				ypos *= -1;
 				if (GUI.ProcessButtonRelease(xpos, ypos))
 				{
+				}
+				else if (PLC.ProcessLeftMouseRelease(xpos,ypos))
+				{
+
+				}
+				else
+				{
+				}
+			}
+		}
+		mouseState = glfwGetMouseButton(_data->window, GLFW_MOUSE_BUTTON_RIGHT);
+
+		if (mouseState == GLFW_PRESS)
+		{
+			rightMousePressed = true;
+		}
+		else if (rightMousePressed == true && mouseState == GLFW_RELEASE)
+		{
+			rightMousePressed = false;
+			glfwGetCursorPos(_data->window, &xpos, &ypos);
+			if (xpos > 0 && xpos <= windowW && ypos >= 0 && ypos <= windowH)
+			{
+				if (PLC.ProcessRightMouseRelease(xpos, ypos))
+				{
+
 				}
 				else
 				{
@@ -95,9 +102,8 @@ namespace Mer
 	}
 	void GameState::Update(float dt)
 	{
-		GMC.UpdateMap();
 
-		PLC.Tick(dt);
+		PLC.Update(dt);
 
 		glfwPollEvents();
 	}
@@ -107,28 +113,27 @@ namespace Mer
 
 		glClearBufferfv(GL_COLOR, 0, black);
 		//glClear(GL_COLOR_BUFFER_BIT);
-
-		GMC.Draw();
 		
+		PLC.Draw(_data->assets.getTexture("player"));
 
 
 		GUI.NewFrame();
 		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
 		if (GUI.Button(1600, 150, 50, 50, _data->assets.getTexture("terrainB"), "TerrainB"))
 		{
-			GMC.UpdateDrawMode(GMC.DrawTerrain);
+			PLC.UpdateMapDrawMode(DrawTerrain);		
 		}
 		if (GUI.Button(1655, 150, 50, 50, _data->assets.getTexture("nationB"), "NationB"))
 		{
-			GMC.UpdateDrawMode(GMC.DrawNations);
+			PLC.UpdateMapDrawMode(DrawNations);
 		}
 		if (GUI.Button(1710, 150, 50, 50, _data->assets.getTexture("cultureB"), "CultureB"))
 		{
-			GMC.UpdateDrawMode(GMC.DrawCultures);
+			PLC.UpdateMapDrawMode(DrawCultures);
 		}
 		if (GUI.Button(1765, 150, 50, 50, _data->assets.getTexture("religionB"), "ReligionB"))
 		{
-			GMC.UpdateDrawMode(GMC.DrawReligions);
+			PLC.UpdateMapDrawMode(DrawReligions);
 		}
 		if (GUI.Button(1600, 1020, 50, 50, _data->assets.getTexture("speed1B"), "Speed1"))
 		{
@@ -154,19 +159,15 @@ namespace Mer
 		{
 			PLC.RaiseSoldiers();
 		}
-		//if (GUI.Button(650, 1020, 50, 50, _data->assets.getTexture("player"), "playerbutton"))
-		//{
-		//	
-		//}
 		GUI.EndFrame();
-		GUI.Text(GMC.getNationById(PLC.getNationID()).name, 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text("Gold: ", 65.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text(PLC.getGold(), 100.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text(PLC.getGoldPerTurn(), 100.0f, 575.0f, 0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 		
 
-		PLC.Draw(_data->assets.getTexture("player"));
+
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 

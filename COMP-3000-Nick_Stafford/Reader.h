@@ -47,5 +47,9 @@ namespace Mer
 
 		void FindLowestAndHightest(std::vector<Cell> cells);
 
+
+		void findCenetreOfCells(std::vector<Cell>* cells);
+
+		void SaveWorld(std::vector<Cell>* cells);
 	};
 }

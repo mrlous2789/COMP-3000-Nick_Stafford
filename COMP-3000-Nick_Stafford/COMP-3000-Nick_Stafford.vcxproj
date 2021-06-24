@@ -155,6 +155,7 @@
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Reader.cpp" />
     <ClCompile Include="StateMachine.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Nation.h" />
+    <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Reader.h" />
     <ClInclude Include="Religion.h" />

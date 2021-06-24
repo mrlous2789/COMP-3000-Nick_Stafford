@@ -1,31 +1,19 @@
 #include "GameMapController.h"
 namespace Mer
 {
-	bool GameMapController::isZoomIn = false;
-	bool GameMapController::isZoomOut = false;
 
-	void GameMapController::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-	{
-		if (yoffset < 0)
-		{
-			isZoomOut = true;
-		}
-		else if (yoffset > 0)
-		{
-			isZoomIn = true;
-		}
-	}
 
 	GameMapController::GameMapController()
 	{
 
 	}
-	void GameMapController::Initialise()
+	void GameMapController::Initialise(float screenWidth, float screenHeight)
 	{
-		//LoadFromFile(location, mapname);
 		glGenBuffers(NumCells, cellBuffers);
 		glGenBuffers(NumRivers, riverBuffers);
 
+		this->screenWidth = screenWidth;
+		this->screenHeight = screenHeight;
 
 		if (LoadFromFile(location,mapname))
 		{
@@ -79,6 +67,10 @@ namespace Mer
 		int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 
+
+		std::cout << "starting calc" << std::endl;
+		CalculatePathingWeights();
+		std::cout << "done" << std::endl;
 	}
 
 	bool GameMapController::LoadFromFile(std::string location, std::string mapname)
@@ -125,6 +117,15 @@ namespace Mer
 		}
 	}
 
+	void GameMapController::SetZoomIn(bool inZoom)
+	{
+		isZoomIn = inZoom;
+	}
+	void GameMapController::SetZoomOut(bool inZoom)
+	{
+		isZoomOut = inZoom;
+	}
+
 	void GameMapController::ProcessKeyPresses(bool KeysPressed[])
 	{
 
@@ -137,11 +138,16 @@ namespace Mer
 		if (KeysPressed[GLFW_KEY_D])
 			isMoveRight = true;
 	}
-	void GameMapController::ProcessMousePress(double mouseX, double mouseY)
+	bool GameMapController::ProcessMousePress(double mouseX, double mouseY)
 	{
-
+		mouseX -= (screenWidth / 2);
+		mouseX = mouseX / (screenWidth / 2);
+		mouseY -= (screenHeight / 2);
+		mouseY = mouseY / (screenHeight / 2);
+		mouseY *= -1;
 
 		mouseX /= zoomLevel;
+
 		mouseY /= zoomLevel;
 
 		mouseX -= xoffset;
@@ -153,9 +159,17 @@ namespace Mer
 		if (selectedCell != temp && temp != nullptr)
 		{
 			selectedCell = temp;
-			//std::cout << selectedCell->id << std::endl;
+		
+			std::cout << selectedCell->id << std::endl;
 			//std::cout << getNationPointerById(selectedCell->state)->name << std::endl;
 		}
+
+		if (temp != nullptr)
+		{
+			return true;
+		}
+
+		return false;
 	}
 	void GameMapController::UpdateMap()
 	{
@@ -361,12 +375,13 @@ namespace Mer
 		color[0] = 0.0f;
 		color[1] = 0.0f;
 		color[2] = 1.0f;
+		color[3] = 1.0f;
 
 		for (int i = 0; i < rivers.size(); i++)
 		{
 			glLineWidth(rivers[i].width * zoomLevel * 2.0f);
 			GLint myLoc = glGetUniformLocation(cellShader, "color");
-			glProgramUniform3fv(cellShader, myLoc, 1, color);
+			glProgramUniform4fv(cellShader, myLoc, 1, color);
 
 			int mvpLoc = glGetUniformLocation(cellShader, "mvp");
 			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -605,5 +620,39 @@ namespace Mer
 		{
 			isMoveRight = false;
 		}
+	}
+	void GameMapController::CalculatePathingWeights()
+	{
+		for (int i = 0; i < cells.size(); i++)
+		{
+			for (int j = 0; j < cells[i].neighbors.size(); j++)
+			{
+				double distance;
+
+				double a = abs(abs(cells[i].centre.x) - abs(getCellbyID(cells[i].neighbors[j].first)->centre.x));
+				double b = abs(abs(cells[i].centre.y) - abs(getCellbyID(cells[i].neighbors[j].first)->centre.y));
+
+				distance = sqrt((a * a) + (b * b));
+
+				cells[i].neighbors[j].second = distance;
+			}
+		}
+	}
+	std::vector<Cell>* GameMapController::getCells()
+	{
+		return &cells;
+	}
+
+	float GameMapController::getZoomLevel()
+	{
+		return zoomLevel;
+	}
+	float GameMapController::getXOffset()
+	{
+		return xoffset;
+	}
+	float GameMapController::getYOffset()
+	{
+		return yoffset;
 	}
 }

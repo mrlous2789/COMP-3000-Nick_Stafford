@@ -5,8 +5,11 @@ namespace Mer
 	{
 
 	}
-	void GUIManager::InitialiseGUI()
+	void GUIManager::InitialiseGUI(float screenWidth, float screenHeight)
 	{
+		this->screenWidth = screenWidth;
+		this->screenHeight = screenHeight;
+
 		glGenBuffers(NumMenus, menuBuffers);
 		glGenBuffers(NumTex, textureBuffer);
 		ShaderInfo menuShaders[] =
@@ -107,6 +110,12 @@ namespace Mer
 
 	bool GUIManager::ProcessButtonPress(double mouseX, double mouseY)
 	{
+		mouseX -= (screenWidth / 2);
+		mouseX = mouseX / (screenWidth / 2);
+		mouseY -= (screenHeight / 2);
+		mouseY = mouseY / (screenHeight / 2);
+		mouseY *= -1;
+
 		for (int i = 0; i < _buttons.size(); i++)
 		{
 			int counter = 0;
@@ -127,6 +136,12 @@ namespace Mer
 	}
 	bool GUIManager::ProcessButtonRelease(double mouseX, double mouseY)
 	{
+		mouseX -= (screenWidth / 2);
+		mouseX = mouseX / (screenWidth / 2);
+		mouseY -= (screenHeight / 2);
+		mouseY = mouseY / (screenHeight / 2);
+		mouseY *= -1;
+
 		for (int i = 0; i < _buttons.size(); i++)
 		{
 			int counter = 0;

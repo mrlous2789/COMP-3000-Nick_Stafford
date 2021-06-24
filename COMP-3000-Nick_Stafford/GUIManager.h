@@ -28,7 +28,7 @@ namespace Mer
 	public:
 		GUIManager();
 
-		void InitialiseGUI();
+		void InitialiseGUI(float screenWidth, float screenHeight);
 
 		void NewFrame();
 		void EndFrame();
@@ -67,7 +67,7 @@ namespace Mer
 
 		glm::mat4 projection;
 
-
+		float screenWidth = 0.0f, screenHeight = 0.0f;
 
 		std::map<char, Character> Characters;
 

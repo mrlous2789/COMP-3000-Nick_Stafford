@@ -7,7 +7,9 @@ namespace Mer
 	}
 	void MainMenuState::Init()
 	{
-		GUI.InitialiseGUI();
+		glfwGetWindowSize(_data->window, &windowW, &windowH);
+
+		GUI.InitialiseGUI(windowW, windowH);
 		_data->assets.LoadTexture("background", "Assets\\Main_Menu\\main_menu_background.png");
 		_data->assets.LoadTexture("singleplayerB", "Assets\\Main_Menu\\singleplayer_button.tga");
 		_data->assets.LoadTexture("settingsB", "Assets\\Main_Menu\\settings_button.tga");
@@ -23,7 +25,7 @@ namespace Mer
 		glBufferData(GL_ARRAY_BUFFER, 4 * (2 * sizeof(GLfloat)), texVertices, GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glfwGetWindowSize(_data->window, &windowW, &windowH);
+
 
 	}
 	void MainMenuState::HandleInput()
@@ -37,12 +39,6 @@ namespace Mer
 
 			if (xpos > 0 && xpos <= windowW && ypos >= 0 && ypos <= windowH)
 			{
-				xpos -= (windowW / 2);
-				xpos = xpos / (windowW / 2);
-				ypos -= (windowH / 2);
-				ypos = ypos / (windowH / 2);
-				ypos *= -1;
-
 				if (GUI.ProcessButtonPress(xpos, ypos))
 				{
 
@@ -59,11 +55,6 @@ namespace Mer
 			glfwGetCursorPos(_data->window, &xpos, &ypos);
 			if (xpos > 0 && xpos <= windowW && ypos >= 0 && ypos <= windowH)
 			{
-				xpos -= (windowW / 2);
-				xpos = xpos / (windowW / 2);
-				ypos -= (windowH / 2);
-				ypos = ypos / (windowH / 2);
-				ypos *= -1;
 				if (GUI.ProcessButtonRelease(xpos, ypos))
 				{
 				}

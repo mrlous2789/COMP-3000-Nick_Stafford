@@ -1,7 +1,6 @@
 #pragma once
 #include "State.h"
 #include "Game.h"
-#include "GameMapController.h"
 #include "GUIManager.h"
 #include "PlayerController.h"
 
@@ -23,16 +22,11 @@ namespace Mer
 		enum VAO_IDs { Cells, NumVAOs = 2 };
 		GLuint VAOs[NumVAOs];
 
-		bool mousePressed = false;
-
-
-
-
-
-		static bool KeysPressed[348];
+		bool leftMousePressed = false;
+		bool rightMousePressed = false;
+		
 
 		//MAP VARIABLES
-		GameMapController GMC;
 		GUIManager GUI;
 		PlayerController PLC;
 
@@ -42,8 +36,6 @@ namespace Mer
 
 
 
-		//static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	};
 }
 

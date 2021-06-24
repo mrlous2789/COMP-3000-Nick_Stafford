@@ -23,11 +23,11 @@ namespace Mer
 	{
 		glGenVertexArrays(1, VAOs);
 
+		glfwGetWindowSize(_data->window, &windowW, &windowH);
 
-
-		GUI.InitialiseGUI();
-		GMC.Initialise();
-		PLC.Initialise(GMC.getNationPointerById(11));
+		GUI.InitialiseGUI(windowW, windowH);
+		GMC.Initialise(windowW, windowH);
+		//PLC.Initialise(GMC.getNationPointerById(11));
 
 		_data->assets.LoadTexture("terrainB", "Assets\\Game_Map_Buttons\\terrain_map_button.tga");
 		_data->assets.LoadTexture("nationB", "Assets\\Game_Map_Buttons\\nation_map_button.tga");
@@ -35,8 +35,8 @@ namespace Mer
 		_data->assets.LoadTexture("cultureB", "Assets\\Game_Map_Buttons\\culture_map_button.tga");
 		_data->assets.LoadTexture("mainPanel", "Assets\\Game_UI\\game_ui_main_panel.tga");
 
-		glfwGetWindowSize(_data->window, &windowW, &windowH);
-		glfwSetScrollCallback(_data->window, GMC.scroll_callback);
+
+		//glfwSetScrollCallback(_data->window, GMC.scroll_callback);
 		glfwSetKeyCallback(_data->window, key_callback);
 	}
 	void TestState::HandleInput()
@@ -108,23 +108,23 @@ namespace Mer
 		//PLC.Draw(_data->assets.getTexture("player"));
 
 
-		GUI.NewFrame();
-		if (GUI.Button(1600, 150, 50, 50,_data->assets.getTexture("terrainB"),"TerrainB"))
-		{
-			GMC.UpdateDrawMode(GMC.DrawTerrain);
-		}
-		if (GUI.Button(1655, 150, 50, 50, _data->assets.getTexture("nationB"), "NationB"))
-		{
-			GMC.UpdateDrawMode(GMC.DrawNations);
-		}
-		if (GUI.Button(1710, 150, 50, 50, _data->assets.getTexture("cultureB"), "CultureB"))
-		{
-			GMC.UpdateDrawMode(GMC.DrawCultures);
-		}
-		if (GUI.Button(1765, 150, 50, 50, _data->assets.getTexture("religionB"), "ReligionB"))
-		{
-			GMC.UpdateDrawMode(GMC.DrawReligions);
-		}
+		//GUI.NewFrame();
+		//if (GUI.Button(1600, 150, 50, 50,_data->assets.getTexture("terrainB"),"TerrainB"))
+		//{
+		//	GMC.UpdateDrawMode(GMC.DrawTerrain);
+		//}
+		//if (GUI.Button(1655, 150, 50, 50, _data->assets.getTexture("nationB"), "NationB"))
+		//{
+		//	GMC.UpdateDrawMode(GMC.DrawNations);
+		//}
+		//if (GUI.Button(1710, 150, 50, 50, _data->assets.getTexture("cultureB"), "CultureB"))
+		//{
+		//	GMC.UpdateDrawMode(GMC.DrawCultures);
+		//}
+		//if (GUI.Button(1765, 150, 50, 50, _data->assets.getTexture("religionB"), "ReligionB"))
+		//{
+		//	GMC.UpdateDrawMode(GMC.DrawReligions);
+		//}
 
 		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
 

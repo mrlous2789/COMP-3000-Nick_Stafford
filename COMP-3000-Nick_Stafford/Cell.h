@@ -20,6 +20,7 @@ namespace Mer
 		int province = -1;//cell province
 		int culture = -1;//cell culture
 		int religion = -1;//cell religion
-		std::vector<int> neighbors;//neighboring cell ids
+		std::vector<std::pair<int,double>> neighbors;//neighboring cell ids
+		glm::vec2 centre;
 	};
 }

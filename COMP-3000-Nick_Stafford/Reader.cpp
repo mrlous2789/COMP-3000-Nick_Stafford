@@ -22,9 +22,9 @@ namespace Mer
 			//temp properties
 			int id = 0, height = 0, biome = 0, population = 0, state = 0, province = 0, culture = 0, religion = 0;
 			std::string type;
-			std::vector<int> neighbors;//temp neighbors vector
+			std::vector<std::pair<int,double>> neighbors;//temp neighbors vector
 			std::vector<glm::vec3> coords;//temp coords vectore
-
+			glm::vec2 centre = {0,0};
 			while (std::getline(file, line))
 			{
 				if (line.find("\"geometry\":") != std::string::npos)
@@ -62,6 +62,38 @@ namespace Mer
 					}
 				}															//
 				else if (line.find("\"id\":") != std::string::npos) { id = ConvertToInt(GetProperty(line)); }							//all these state if statements 																		
+				else if (line.find("\"centre\"") != std::string::npos)
+				{
+					int start = line.find_first_of('[');
+					bool xcoord = true;
+					std::string coord = "";
+					for (int i = start; i < line.size(); i++)
+					{
+						if (line.at(i) == '[' || line.at(i) == ']')//if a [ or ] do nothing
+						{
+
+						}
+						else if (line.at(i) == ',')// a ',' seperates each coord so when appears save coord string to variable then empty it
+						{
+							if (xcoord)
+							{
+								centre.x = ConvertToFloat(coord);
+								xcoord = false;
+								coord = "";
+							}
+							else//if its the y coord then we already have the x coord so save onto temp coords vector
+							{
+								centre.y = ConvertToFloat(coord);
+								xcoord = true;
+								coord = "";
+							}
+						}
+						else//build up coord
+						{
+							coord += line.at(i);
+						}
+					}
+				}
 				else if (line.find("\"height\":") != std::string::npos) { height = ConvertToInt(GetProperty(line)); }					//are pretty self explanatory 
 				else if (line.find("\"biome\":") != std::string::npos) { biome = ConvertToInt(GetProperty(line)); }						//if the attribute is on this line basically
 				else if (line.find("\"type\":") != std::string::npos) { type = GetProperty(line); }										//get the value basically
@@ -78,7 +110,7 @@ namespace Mer
 					{
 						if (line.at(i) == ',' || line.at(i) == ']')// a ',' seperates each id so save id to neighbors vector and a ']' is for the last id
 						{
-							neighbors.push_back(ConvertToInt(neighbor));
+							neighbors.push_back({ ConvertToInt(neighbor),0.0 });
 							neighbor = "";
 						}
 						else if (line.at(i) == '[')//do nothing
@@ -94,7 +126,7 @@ namespace Mer
 				else if (line == "}," || line == "]}")//save to cells vector
 				{
 					Cell temp;
-					temp = { coords,id,(float)height,biome,type,population,state,province,culture,religion,neighbors };
+					temp = { coords,id,(float)height,biome,type,population,state,province,culture,religion,neighbors,centre };
 					cells.push_back(temp);//add cell to cells vector
 					neighbors.clear();
 					coords.clear();
@@ -110,6 +142,8 @@ namespace Mer
 
 
 			file.close();
+
+
 			return cells;
 		}
 		else//return error
@@ -426,6 +460,106 @@ namespace Mer
 		file.close();
 		return religions;
 	}
+
+	void Reader::findCenetreOfCells(std::vector<Cell>* cells)
+	{
+		for (int j = 0; j < cells->size(); j++)
+		{
+			float xBig = -10.0f, xSmall = 10.0f, yBig = -10.0f, ySmall = 10.0f;
+
+			for (int i = 0; i < cells->at(j).coords.size(); i++)
+			{
+				if (cells->at(j).coords[i].x > xBig)
+				{
+					xBig = cells->at(j).coords[i].x;
+				}
+				if (cells->at(j).coords[i].x < xSmall)
+				{
+					xSmall = cells->at(j).coords[i].x;
+				}
+				if (cells->at(j).coords[i].y > yBig)
+				{
+					yBig = cells->at(j).coords[i].y;
+				}
+				if (cells->at(j).coords[i].y < ySmall)
+				{
+					ySmall = cells->at(j).coords[i].y;
+				}
+			}
+
+			cells->at(j).centre.x = (xSmall + xBig) / 2;
+			cells->at(j).centre.y = (ySmall + yBig) / 2;
+
+		}
+	}
+
+	void Reader::SaveWorld(std::vector<Cell>* cells)
+	{
+		std::ofstream file;
+		std::string filename = ".\\Map_Files\\dibenay2.geojson";
+
+		file.open(filename);
+		file.clear();
+
+		file << "{ \"type\": \"FeatureCollection\", \"features\": [\n";
+
+
+
+		for (int i = 0; i < cells->size(); i++)
+		{
+			file << "{\n";
+			file << "    " << "\"type\": \"Feature\",\n";
+
+			file << "    " << "\"geometry\": { \"type\": \"Polygon\", \"coordinates\": [[";
+
+			for (int j = 0; j < cells->at(i).coords.size(); j++)
+			{
+				file << "[";
+				file << cells->at(i).coords[j].x; file << ","; file << cells->at(i).coords[j].y;
+				if (j == (cells->at(i).coords.size() - 1))
+				{
+					file << "]";
+				}
+				else
+				{
+					file << "],";
+				}
+
+			}
+			file << "]] },\n";
+
+			file << "    " << "\"properties\": {\n";
+			file << "        " << "\"id\": " << "\"" << cells->at(i).id << "\",\n";
+			file << "        " << "\"centre\": " << "\"" << "[" <<cells->at(i).centre.x << "," << cells->at(i).centre.y << "]" << "\",\n";
+			file << "        " << "\"height\": " << "\"" << cells->at(i).height << "\",\n";
+			file << "        " << "\"biome\": " << "\"" << cells->at(i).biome << "\",\n";
+			file << "        " << "\"type\": " << "\"" << cells->at(i).type << "\",\n";
+			file << "        " << "\"population\": " << "\"" << cells->at(i).population << "\",\n";
+			file << "        " << "\"state\": " << "\"" << cells->at(i).state << "\",\n";
+			file << "        " << "\"province\": " << "\"" << cells->at(i).province << "\",\n";
+			file << "        " << "\"culture\": " << "\"" << cells->at(i).culture << "\",\n";
+			file << "        " << "\"religion\": " << "\"" << cells->at(i).religion << "\",\n";
+			file << "        " << "\"neighbors\": [";
+			for (int k = 0; k < cells->at(i).neighbors.size(); k++)
+			{
+				file << cells->at(i).neighbors[k].first;
+				if (k != cells->at(i).neighbors.size() - 1)
+					file << ",";
+
+			}
+			file << "]\n";
+			file << "    }\n";
+			if (i == cells->size() - 1)
+				file << "}\n";
+			else
+				file << "},\n";
+
+		}
+		file << "]}";
+
+		file.close();
+	}
+
 }
 
 

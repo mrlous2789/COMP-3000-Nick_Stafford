@@ -1,12 +1,48 @@
 #include "PlayerController.h"
 namespace Mer
 {
+	bool PlayerController::KeysPressed[348];
+
+
+	void PlayerController::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		if (action == GLFW_PRESS)
+		{
+			KeysPressed[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			KeysPressed[key] = false;
+		}
+	}
+
+	bool PlayerController::isZoomIn = false;
+	bool PlayerController::isZoomOut = false;
+
+	void PlayerController::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		if (yoffset < 0)
+		{
+			isZoomOut = true;
+		}
+		else if (yoffset > 0)
+		{
+			isZoomIn = true;
+		}
+	}
+
 	PlayerController::PlayerController()
 	{
 
 	}
-	void PlayerController::Initialise(Nation* selectedNation)
+	void PlayerController::Initialise(int screenWidth, int screenHeight)
 	{
+		GMC.Initialise(screenWidth, screenHeight);
+		nation = GMC.getNationPointerById(11);
+
+		PF.Initialise(GMC.getCells());
+		
+
 		glGenBuffers(NumBuffers, playerBuffers);
 		glGenBuffers(NumBuffers, textureBuffer);
 
@@ -46,20 +82,39 @@ namespace Mer
 		int mvpLoc = glGetUniformLocation(playerShader, "mvp");
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 		
+		this->screenWidth = screenWidth;
+		this->screenHeight = screenHeight;
 
-		nation = selectedNation;
 
-		FindCentreofCapital();
-
-		xCentering = (-1.0f + 0.947916687) / 2;
-		yCentering = (-1.0f + 0.907407403) / 2;
+		xCentering = (-1.0f + 0.991666675) / 2;
+		yCentering = (-1.0f + 0.985185206) / 2;
 
 		playerShader = LoadShaders(cellShaders);
 	}
+
+	void PlayerController::HandleInput()
+	{
+		if (isZoomIn)
+			GMC.SetZoomIn(); isZoomIn = false;
+		if (isZoomOut)
+			GMC.SetZoomOut(); isZoomOut = false;
+
+		GMC.ProcessKeyPresses(KeysPressed);
+	}
+
 	void PlayerController::Draw(GLuint texture)
 	{
+		GMC.Draw();
+
 		if (soldiersRaised)
 		{
+			UpdateMVP(GMC.getZoomLevel(), GMC.getXOffset(), GMC.getYOffset());
+	
+
+			GLint myLoc = glGetUniformLocation(playerShader, "color");
+			glProgramUniform4fv(playerShader, myLoc, 1, color);
+
+
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
 
@@ -84,26 +139,66 @@ namespace Mer
 			glDisableVertexAttribArray(1);
 		}
 	}
-
-	void PlayerController::Tick(float dt)
+	void PlayerController::UpdateMapDrawMode(int drawMode)
 	{
+		GMC.UpdateDrawMode(drawMode);
+	}
+
+	void PlayerController::Update(float dt)
+	{
+
+		GMC.UpdateMap();
+
+
+
 		gameTickAcc += dt;
 		if (gameTickAcc >= gameTickTimer)
 		{
-			goldPerTurn = nation->nationCells.size() / 10;
-			gold += goldPerTurn;
-
-			gameTickAcc -= gameTickTimer;
+			Tick();
 		}
-
 		if (toggleSoldiers)
 		{
 			soldiersRaised = !soldiersRaised;
-			soldierXPos = capitalXPos;
-			soldierYPos = capitalYPos;
-			UpdateMVP();
+			if (!soldiersRaised)
+			{
+				soldiersSelected = false;
+				soldierMoving = false;
+				color[3] = 0.8f;
+			}
+			soldierXPos = nation->capital->centre.x + 1;
+			soldierYPos = nation->capital->centre.y + 1;
+			soldierCellID = nation->capital->id;
 			toggleSoldiers = false;
 		}
+
+		if (soldierMoving)
+		{
+			smProgress += soldierMoveSpeed * gameSpeed;
+
+			if (smProgress >= 0.2f)
+			{
+				routePos++;
+				smProgress = 0.0f;
+				soldierXPos = route[routePos]->centre.x + 1;
+				soldierYPos = route[routePos]->centre.y + 1;
+				soldierCellID = route[routePos]->id;
+			}
+
+			if (routePos == route.size() - 1)
+			{
+				soldierMoving = false;
+			}
+		}
+
+
+	}
+	
+	void PlayerController::Tick()
+	{
+		goldPerTurn = nation->nationCells.size() / 10;
+		gold += goldPerTurn;
+
+		gameTickAcc -= gameTickTimer;
 	}
 
 	int PlayerController::getNationID()
@@ -139,22 +234,27 @@ namespace Mer
 		case 1:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 20.0f;
 			gameTickTimer = 20.0f;
+			gameSpeed = 1;
 			break;
 		case 2:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 15.0f;
-			gameTickTimer = 15.0f;
+			gameTickTimer = 10.0f;
+			gameSpeed = 2;
 			break;
 		case 3:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 10.0f;
-			gameTickTimer = 10.0f;
+			gameTickTimer = 6.5f;
+			gameSpeed = 3;
 			break;
 		case 4:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 6.0f;
-			gameTickTimer = 6.0f;
+			gameTickTimer = 5.0f;
+			gameSpeed = 4;
 			break;
 		case 5:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 3.0f;
-			gameTickTimer = 3.0f;
+			gameTickTimer = 4.0f;
+			gameSpeed = 5;
 			break;
 		default:			
 			break;
@@ -166,14 +266,14 @@ namespace Mer
 		toggleSoldiers = true;
 	}
 
-	void PlayerController::UpdateMVP()
+	void PlayerController::UpdateMVP(float zoomLevel, float xOffset, float yOffset)
 	{
-		soldierXOffset = (soldierXPos + 1) + xCentering;
-		soldierYOffset = (soldierYPos + 1) + yCentering;
+		soldierXOffset = ((soldierXPos) + xCentering) + xOffset;
+		soldierYOffset = ((soldierYPos) + yCentering) + yOffset;
 
 		// creating the model matrix
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(zoomLevel, zoomLevel, 1.0f));
 		model = glm::translate(model, glm::vec3(soldierXOffset, soldierYOffset, 0.0f));
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
@@ -181,33 +281,111 @@ namespace Mer
 		mvp = projection * view * model;
 	}
 
-	void PlayerController::FindCentreofCapital()
+	bool PlayerController::ProcessMouseClick(double mouseX, double mouseY)
 	{
-		float xBig = -10.0f, xSmall = 10.0f, yBig = -10.0f, ySmall = 10.0f;
+		double correctedMouseX = mouseX, correctedMouseY = mouseY;
+		
+		correctedMouseX -= (screenWidth / 2);
+		correctedMouseX = correctedMouseX / (screenWidth / 2);
+		correctedMouseY -= (screenHeight / 2);
+		correctedMouseY = correctedMouseY / (screenHeight / 2);
+		correctedMouseY *= -1;
 
-		for (int i = 0; i < nation->capital->coords.size(); i++)
+		correctedMouseX /= GMC.getZoomLevel();
+		correctedMouseY /= GMC.getZoomLevel();
+
+		correctedMouseX -= soldierXOffset;
+		correctedMouseY -= soldierYOffset;
+
+
+		if (correctedMouseX <= -0.991666675f && correctedMouseX >= -1.0f && correctedMouseY <= -0.985185206f && correctedMouseY >= -1.0f && soldiersRaised)
 		{
-			if (nation->capital->coords[i].x > xBig)
-			{
-				xBig = nation->capital->coords[i].x;
-			}
-			if (nation->capital->coords[i].x < xSmall)
-			{
-				xSmall = nation->capital->coords[i].x;
-			}
-			if (nation->capital->coords[i].y > yBig)
-			{
-				yBig = nation->capital->coords[i].y;
-			}
-			if (nation->capital->coords[i].y < ySmall)
-			{
-				ySmall = nation->capital->coords[i].y;
-			}
+			return true;
+		}
+		else if (soldiersSelected)
+		{
+
+		}
+		else if (GMC.ProcessMousePress(mouseX, mouseY))
+		{
+			return true;
 		}
 
-		capitalXPos = (xSmall + xBig) / 2;
-		capitalYPos = (ySmall + yBig) / 2;
+		return false;
+	}
 
-		std::cout << "X: " << capitalXPos << " Y: " << capitalYPos << std::endl;
+	bool PlayerController::ProcessLeftMouseRelease(double mouseX, double mouseY)
+	{
+		double correctedMouseX = mouseX, correctedMouseY = mouseY;
+
+		correctedMouseX -= (screenWidth / 2);
+		correctedMouseX = correctedMouseX / (screenWidth / 2);
+		correctedMouseY -= (screenHeight / 2);
+		correctedMouseY = correctedMouseY / (screenHeight / 2);
+		correctedMouseY *= -1;
+
+		correctedMouseX /= GMC.getZoomLevel();
+		correctedMouseY /= GMC.getZoomLevel();
+
+
+		correctedMouseX -= soldierXOffset;
+		correctedMouseY -= soldierYOffset;
+
+		if (correctedMouseX <= -0.991666675f && correctedMouseX >= -1.0f && correctedMouseY <= -0.985185206f && correctedMouseY >= -1.0f && soldiersRaised)
+		{
+			std::cout << "clicked soldiers " << std::endl;
+			soldiersSelected = !soldiersSelected;
+			if (soldiersSelected)
+			{
+				color[3] = 1.0f;
+			}
+			else
+			{
+				color[3] = 0.8f;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	bool PlayerController::ProcessRightMouseRelease(double mouseX, double mouseY)
+	{
+		if (soldiersSelected)
+		{
+			double origMouseX = mouseX, origMouseY = mouseY;
+
+			mouseX -= (screenWidth / 2);
+			mouseX = mouseX / (screenWidth / 2);
+			mouseY -= (screenHeight / 2);
+			mouseY = mouseY / (screenHeight / 2);
+			mouseY *= -1;
+
+			mouseX /= GMC.getZoomLevel();
+			mouseY /= GMC.getZoomLevel();
+
+			mouseX -= GMC.getXOffset();
+			mouseY -= GMC.getYOffset();
+
+			Cell* destination = GMC.getCellAtCoords(mouseX, mouseY);
+
+			soldierMoving = true;
+
+			route = PF.CalculatePath(&GMC.getCells()->at(soldierCellID), destination);
+			routePos = 0;
+
+			return true;
+		}
+		return false;
+	}
+
+
+	float PlayerController::getSoldierScreenX()
+	{		
+		return (((soldierXOffset - 1) * GMC.getZoomLevel()) / 2) * screenWidth;
+		
+	}
+	float PlayerController::getSoldierScreenY()
+	{
+		return (((soldierYOffset - 1) * GMC.getZoomLevel()) / 2)  * screenHeight;
 	}
 }

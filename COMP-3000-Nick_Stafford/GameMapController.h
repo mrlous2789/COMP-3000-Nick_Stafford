@@ -11,31 +11,42 @@
 
 namespace Mer
 {
+	enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions };
+
 	class GameMapController
 	{
 	public:
 		GameMapController();
 
 
-		void Initialise();
-		void ProcessMousePress(double mouseX, double mouseY);
+		void Initialise(float screenWidth, float screenHeight);
+		bool ProcessMousePress(double mouseX, double mouseY);
 		void Draw();
 
 		void ProcessKeyPresses(bool KeysPressed[]);
 		void UpdateMap();
 
-		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-		enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions };
+		
 
 		void UpdateDrawMode(int drawMode);
 
 		Nation getNationById(int id);
 		Nation* getNationPointerById(int id);
 
+		float getZoomLevel();
+		float getXOffset();
+		float getYOffset();
 
-	private:
+		void SetZoomIn(bool inZoom = true);
+		void SetZoomOut(bool inZoom = true);
+
+
+		std::vector<Cell>* getCells();
+
 		Cell* getCellAtCoords(double xpos, double ypos);
+	private:
+		
 
 		Cell* getCellbyID(int id);
 		void AddCapitalToNations();
@@ -46,7 +57,11 @@ namespace Mer
 		bool LoadFromFile(std::string location, std::string mapname);
 
 		bool Intersects(double mouseX, double mouseY, double edgeX1, double edgeY1, double edgeX2, double edgeY2);
+		
+		void CalculatePathingWeights();
 
+
+		float screenWidth = 0, screenHeight = 0;
 		
 
 		std::vector<Cell> cells;
@@ -95,8 +110,8 @@ namespace Mer
 		bool isMoveRight = false;
 		bool isMoveLeft = false;
 
-		static bool isZoomOut;
-		static bool isZoomIn;
+		bool isZoomOut;
+		bool isZoomIn;
 
 		bool moved = false;
 
