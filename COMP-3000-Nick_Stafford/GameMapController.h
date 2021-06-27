@@ -60,6 +60,7 @@ namespace Mer
 		
 		void CalculatePathingWeights();
 
+		bool showCellBorders = true;
 
 		float screenWidth = 0, screenHeight = 0;
 		

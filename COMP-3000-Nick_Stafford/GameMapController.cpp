@@ -370,7 +370,24 @@ namespace Mer
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 			glDrawArrays(GL_TRIANGLE_FAN, 0, cells[i].coords.size());
+
+			color[0] = 0.0f;
+			color[1] = 0.0f;
+			color[2] = 0.0f;
+			color[3] = 1.0f;
+
+			
+
+			if (showCellBorders)
+			{
+				myLoc = glGetUniformLocation(cellShader, "color");
+				glProgramUniform4fv(cellShader, myLoc, 1, color);
+
+				glDrawArrays(GL_LINE_LOOP, 0, cells[i].coords.size());
+			}
 		}
+
+
 
 		color[0] = 0.0f;
 		color[1] = 0.0f;

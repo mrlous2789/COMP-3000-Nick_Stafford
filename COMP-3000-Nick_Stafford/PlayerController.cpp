@@ -345,6 +345,15 @@ namespace Mer
 			}
 			return true;
 		}
+		else
+		{
+			if (soldiersSelected)
+			{
+				soldiersSelected = false;
+				color[3] = 0.8f;
+			}
+			
+		}
 		return false;
 	}
 

@@ -26,7 +26,7 @@ namespace Mer
 			{
 				double currentF = CalculateF(route.back()->neighbors[i].first, route.back()->neighbors[i].second);
 
-				if (currentF < lowestF)
+				if (currentF < lowestF && !IsInRoute(route.back()->neighbors[i].first))
 				{
 					lowestF = currentF;
 					lowestFID = route.back()->neighbors[i].first;
@@ -56,5 +56,17 @@ namespace Mer
 		double yDistance = abs(_cells->at(cellID).centre.y - destination->centre.y);
 
 		return xDistance + yDistance;
+	}
+
+	bool Pathfinding::IsInRoute(int id)
+	{
+		for (int i = 0; i < route.size(); i++)
+		{
+			if (id == route[i]->id)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

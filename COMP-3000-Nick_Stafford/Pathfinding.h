@@ -19,6 +19,8 @@ namespace Mer
 		double CalculateF(int cellID, double g);
 		double CalculateH(int cellID);
 
+		bool IsInRoute(int id);
+
 		std::vector<Cell*> route;
 		std::vector<Cell>* _cells;
 		Cell* destination;
