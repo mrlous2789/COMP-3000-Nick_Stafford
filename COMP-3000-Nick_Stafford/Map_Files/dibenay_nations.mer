@@ -1,7 +1,7 @@
 Nations
 {
     {
-        "id": "11"
+        "id": "0"
 		"name": "Andorys"
         "capital": "843"
         "red": "0.183659"
@@ -9,7 +9,7 @@ Nations
         "blue": "0.456132"
     }
     {
-        "id": "12"
+        "id": "1"
 		"name": "Nedan"
         "capital": "5690"
         "red": "0.752896"
@@ -17,7 +17,7 @@ Nations
         "blue": "0.159881"
     }
     {
-        "id": "13"
+        "id": "2"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.791506"
@@ -25,7 +25,7 @@ Nations
         "blue": "0.168455"
     }
     {
-        "id": "14"
+        "id": "3"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.4"
@@ -33,7 +33,7 @@ Nations
         "blue": "0.389401"
     }
     {
-        "id": "15"
+        "id": "4"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.365558"
@@ -41,7 +41,7 @@ Nations
         "blue": "0.706564"
     }
     {
-        "id": "16"
+        "id": "5"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.124506"
@@ -49,7 +49,7 @@ Nations
         "blue": "0.671815"
     }
     {
-        "id": "17"
+        "id": "6"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0"
@@ -57,7 +57,7 @@ Nations
         "blue": "1"
     }
     {
-        "id": "18"
+        "id": "7"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.0441854"
@@ -65,7 +65,7 @@ Nations
         "blue": "0.440154"
     }
     {
-        "id": "19"
+        "id": "8"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0"
@@ -73,7 +73,7 @@ Nations
         "blue": "0.272909"
     }
     {
-        "id": "20"
+        "id": "9"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.32577"
@@ -81,7 +81,7 @@ Nations
         "blue": "0.281555"
     }
     {
-        "id": "21"
+        "id": "10"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.227165"
@@ -89,7 +89,7 @@ Nations
         "blue": "0.158137"
     }
     {
-        "id": "22"
+        "id": "11"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.0125384"
@@ -97,7 +97,7 @@ Nations
         "blue": "0.00755804"
     }
     {
-        "id": "23"
+        "id": "12"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0"
@@ -105,7 +105,7 @@ Nations
         "blue": "0.633205"
     }
     {
-        "id": "24"
+        "id": "13"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.0796947"
@@ -113,7 +113,7 @@ Nations
         "blue": "0.502727"
     }
     {
-        "id": "25"
+        "id": "14"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.408646"
@@ -121,7 +121,7 @@ Nations
         "blue": "0.205811"
     }
     {
-        "id": "26"
+        "id": "15"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.676532"
@@ -129,7 +129,7 @@ Nations
         "blue": "0.514363"
     }
     {
-        "id": "27"
+        "id": "16"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.436293"
@@ -137,7 +137,7 @@ Nations
         "blue": "0.706176"
     }
     {
-        "id": "28"
+        "id": "17"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.144976"
@@ -145,7 +145,7 @@ Nations
         "blue": "0.107214"
     }
     {
-        "id": "29"
+        "id": "18"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.707726"
@@ -153,7 +153,7 @@ Nations
         "blue": "0.868726"
     }
     {
-        "id": "30"
+        "id": "19"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.168856"
@@ -161,7 +161,7 @@ Nations
         "blue": "0.930502"
     }
     {
-        "id": "31"
+        "id": "20"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.697198"
@@ -169,7 +169,7 @@ Nations
         "blue": "0.756757"
     }
     {
-        "id": "32"
+        "id": "21"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.810811"
@@ -177,11 +177,19 @@ Nations
         "blue": "0"
     }
     {
-        "id": "33"
+        "id": "22"
 		"name": "Andorys"
         "capital": "-1"
         "red": "0.945946"
         "green": "0.761017"
         "blue": "0.339664"
+    }
+	{
+        "id": "23"
+		"name": "Andorys"
+        "capital": "-1"
+        "red": "0.445946"
+        "green": "0.561017"
+        "blue": "0.839664"
     }
 }

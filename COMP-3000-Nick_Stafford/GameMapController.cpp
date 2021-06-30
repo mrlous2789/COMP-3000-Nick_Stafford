@@ -207,6 +207,7 @@ namespace Mer
 
 		glUseProgram(cellShader);
 
+
 		for (int i = 0; i < cells.size(); i++)
 		{
 			if (drawMode == DrawNations)
@@ -274,7 +275,7 @@ namespace Mer
 				}
 
 			}
-			else if (drawMode == 3)
+			else if (drawMode == DrawReligions)
 			{
 				Religion rel = getReligionById(cells[i].religion);
 				if (cells[i].id == selectedCell->id)
@@ -299,7 +300,7 @@ namespace Mer
 					color[3] = 1.0f;
 				}
 			}
-			else
+			else if (drawMode == 4)
 			{
 				if (cells[i].id == selectedCell->id)
 				{
@@ -315,7 +316,7 @@ namespace Mer
 					color[2] = 1.0f;
 					color[3] = 1.0f;
 				}
-				else if (cells[i].height > 8000)
+				else if (cells[i].id > 8000)
 				{
 					color[0] = 1.0f;
 					color[1] = 0.0f;
@@ -358,6 +359,65 @@ namespace Mer
 					color[3] = 1.0f;
 				}
 			}
+			else
+			{
+				if (cells[i].id == selectedCell->id)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 4)
+				{
+					color[0] = 0.61f;
+					color[1] = 0.84f;
+					color[2] = 0.56f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 9)
+				{
+					color[0] = 0.29f;
+					color[1] = 0.42f;
+					color[2] = 0.2f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 8)
+				{
+					color[0] = 0.25f;
+					color[1] = 0.61f;
+					color[2] = 0.26f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 10)
+				{
+					color[0] = 0.59f;
+					color[1] = 0.47f;
+					color[2] = 0.29f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 11)
+				{
+					color[0] = 0.84f;
+					color[1] = 0.91f;
+					color[2] = 0.92f;
+					color[3] = 1.0f;
+				}
+				else if (cells[i].biome == 6)
+				{
+					color[0] = 0.16f;
+					color[1] = 0.74f;
+					color[2] = 0.34f;
+					color[3] = 1.0f;
+				}
+				else
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 1.0f;
+					color[3] = 1.0f;
+				}
+			}
 
 			GLint myLoc = glGetUniformLocation(cellShader, "color");
 			glProgramUniform4fv(cellShader, myLoc, 1, color);
@@ -376,7 +436,7 @@ namespace Mer
 			color[2] = 0.0f;
 			color[3] = 1.0f;
 
-			
+			glLineWidth(1.0f);
 
 			if (showCellBorders)
 			{
@@ -387,12 +447,12 @@ namespace Mer
 			}
 		}
 
-
-
 		color[0] = 0.0f;
 		color[1] = 0.0f;
 		color[2] = 1.0f;
 		color[3] = 1.0f;
+
+		
 
 		for (int i = 0; i < rivers.size(); i++)
 		{
@@ -439,6 +499,11 @@ namespace Mer
 		Nation nat;
 		nat.id = -1;
 		nat.capitalId = -1;
+
+		if (id == -1)
+		{
+			return nat;
+		}
 
 		if (id >= 0 && id < nations.size())//if nation at index of id is correct nation return it
 			if (nations[id].id == id)

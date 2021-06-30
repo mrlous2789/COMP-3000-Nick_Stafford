@@ -9,6 +9,11 @@
 #include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
 #include <GLFW/glfw3.h>
 
+
+#include <iostream>
+#include <chrono>
+#include <ctime>    
+
 namespace Mer
 {
 	enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions };
@@ -71,7 +76,7 @@ namespace Mer
 		std::vector<Culture> cultures;
 		std::vector<Religion> religions;
 
-		int drawMode = DrawTerrain;
+		int drawMode = DrawNations;
 
 		Reader reader;
 
@@ -100,7 +105,7 @@ namespace Mer
 		float zoomLevel = 1.0f;
 		float zoomRate = 0.05f;
 		float minZoom = 1.0f;
-		float maxZoom = 3.0f;
+		float maxZoom = 4.0f;
 
 		float xoffset = 0.0f;
 		float yoffset = 0.0f;

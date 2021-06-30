@@ -87,15 +87,15 @@ namespace Mer
 		glBindTexture(GL_TEXTURE_2D, _data->assets.getTexture("background"));
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-		if (GUI.Button(320, 480, 320, 60, _data->assets.getTexture("singleplayerB"), "singleplayer"))
+		if (GUI.Button(50, 180, 320, 60, _data->assets.getTexture("singleplayerB"), "singleplayer"))
 		{
 			_data->machine.AddState(StateRef(new GameState(_data)));
 		}
-		if (GUI.Button(800, 480, 320, 60, _data->assets.getTexture("settingsB"), "settings"))
+		if (GUI.Button(50, 100, 320, 60, _data->assets.getTexture("settingsB"), "settings"))
 		{
 			std::cout << "Settings" << std::endl;
 		}
-		if (GUI.Button(1280, 480, 320, 60, _data->assets.getTexture("exitB"), "exit"))
+		if (GUI.Button(50, 20, 320, 60, _data->assets.getTexture("exitB"), "exit"))
 		{
 			glfwSetWindowShouldClose(_data->window, GLFW_TRUE);
 		}

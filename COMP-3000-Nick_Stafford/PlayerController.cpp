@@ -38,7 +38,7 @@ namespace Mer
 	void PlayerController::Initialise(int screenWidth, int screenHeight)
 	{
 		GMC.Initialise(screenWidth, screenHeight);
-		nation = GMC.getNationPointerById(11);
+		nation = GMC.getNationPointerById(0);
 
 		PF.Initialise(GMC.getCells());
 		

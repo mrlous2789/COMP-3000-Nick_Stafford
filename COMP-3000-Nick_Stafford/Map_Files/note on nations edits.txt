@@ -1,0 +1,2 @@
+andorys started at 11 and then all nations incremented by one after that
+now andorys starts at 0

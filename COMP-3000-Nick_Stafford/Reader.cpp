@@ -143,6 +143,8 @@ namespace Mer
 
 			file.close();
 
+			//findCenetreOfCells(&cells);
+			//SaveWorld(&cells);
 
 			return cells;
 		}
@@ -217,10 +219,10 @@ namespace Mer
 				}
 			}
 
-			if (highestX > 1 || highestY > 1 || lowestX < -1 || lowestY < -1)//if the cells coords go out of bounds normalise them 
-			{
-				NormaliseRivers(&rivers);
-			}
+			//if (highestX > 1 || highestY > 1 || lowestX < -1 || lowestY < -1)//if the cells coords go out of bounds normalise them 
+			//{
+			//	NormaliseRivers(&rivers);
+			//}
 		}
 
 		return rivers;
@@ -300,14 +302,14 @@ namespace Mer
 			yEdge = highestY - yDiff;
 		}
 
-		//see NormaliseCoords for how these variables are used
+		
 
 		for (int i = 0; i < cells->size(); i++)
 		{
-			for (int i = 0; i < cells->at(i).coords.size(); i++)
+			for (int j = 0; j < cells->at(i).coords.size(); j++)
 			{
-				cells->at(i).coords[i].x = ((cells->at(i).coords[i].x - xDiff) / xEdge) * -1;//all cells are scaled using the same numbers
-				cells->at(i).coords[i].y = ((cells->at(i).coords[i].y - yDiff) / yEdge) * -1;//the diff variables are used to centre the map														   //the edge variables are used to scale down the coords to all fit in -1 -> 1	
+				cells->at(i).coords[j].x = ((cells->at(i).coords[j].x - xDiff) / xEdge) * -1;//all cells are scaled using the same numbers
+				cells->at(i).coords[j].y = ((cells->at(i).coords[j].y - yDiff) / yEdge);//the diff variables are used to centre the map														   //the edge variables are used to scale down the coords to all fit in -1 -> 1	
 			}
 		}
 	}
@@ -348,7 +350,7 @@ namespace Mer
 	void Reader::FindLowestAndHightest(std::vector<Cell> cells)
 	{
 		lowestX = 0.0f;
-		lowestY = 0.0f;
+		lowestY = 10.0f;
 		highestX = 0.0f;
 		highestY = -10.0f;
 
@@ -496,7 +498,7 @@ namespace Mer
 	void Reader::SaveWorld(std::vector<Cell>* cells)
 	{
 		std::ofstream file;
-		std::string filename = ".\\Map_Files\\dibenay2.geojson";
+		std::string filename = ".\\Map_Files\\dibenay5.geojson";
 
 		file.open(filename);
 		file.clear();
