@@ -13,6 +13,8 @@
 #include "GameMapController.h"
 #include<cmath>
 
+
+#include "AIController.h"
 #include "Pathfinding.h"
 
 namespace Mer
@@ -72,6 +74,7 @@ namespace Mer
 
 		GameMapController GMC;
 		Pathfinding PF;
+		AIController AIC;
 
 		bool AlreadyAtWar(int id);
 
@@ -88,7 +91,7 @@ namespace Mer
 		Nation* nation;
 		float gold = 0.0f;
 		float prestige = 0.0f;
-		int soldiers = 0;
+		int soldiersTotal = 0;
 
 		float soldierXPos = 0.0f, soldierYPos = 0.0f; 
 		float soldierXOffset = 0.0f, soldierYOffset = 0.0f;
@@ -109,7 +112,6 @@ namespace Mer
 
 		bool soldierMoving = false;
 
-		int soldiersTotal = 0;
 
 		float goldPerTurn = 0.0f;
 		float prestigePerTurn = 0.0f;

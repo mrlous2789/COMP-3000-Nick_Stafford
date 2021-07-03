@@ -778,4 +778,9 @@ namespace Mer
 		}
 		return "None";
 	}
+
+	std::vector<Nation>* GameMapController::getNations()
+	{
+		return &nations;
+	}
 }

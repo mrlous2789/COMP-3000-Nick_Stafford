@@ -39,7 +39,7 @@ namespace Mer
 	{
 		GMC.Initialise(screenWidth, screenHeight);
 		nation = GMC.getNationPointerById(0);
-
+		AIC.Initialise(GMC.getNations(), nation->id);
 		PF.Initialise(GMC.getCells());
 		
 
@@ -140,6 +140,8 @@ namespace Mer
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
 		}
+
+		AIC.Draw(GMC.getZoomLevel(), GMC.getXOffset(), GMC.getYOffset(), texture);
 	}
 	void PlayerController::UpdateMapDrawMode(int drawMode)
 	{
@@ -151,7 +153,7 @@ namespace Mer
 
 		GMC.UpdateMap();
 
-
+		AIC.Update();
 
 		gameTickAcc += dt;
 		if (gameTickAcc >= gameTickTimer)
@@ -185,10 +187,6 @@ namespace Mer
 				soldierYPos = route[routePos]->centre.y + 1;
 				soldierCellID = route[routePos]->id;
 
-				if (AlreadyAtWar(route[routePos]->state))
-				{
-					route[routePos]->state = nation->id;
-				}
 			}
 
 			if (routePos == route.size() - 1)
@@ -204,6 +202,8 @@ namespace Mer
 	{
 		goldPerTurn = nation->nationCells.size() / 10;
 		gold += goldPerTurn;
+
+		AIC.Tick();
 
 		gameTickAcc -= gameTickTimer;
 	}
@@ -404,6 +404,7 @@ namespace Mer
 		if (!AlreadyAtWar(id))
 		{
 			nation->atWar.push_back(GMC.getNationPointerById(id));
+			GMC.getNationPointerById(id)->atWar.push_back(nation);
 		}
 	}
 	void PlayerController::PeaceWith(int id)
@@ -413,6 +414,17 @@ namespace Mer
 			if (nation->atWar[i]->id == id)
 			{
 				nation->atWar.erase(nation->atWar.begin() + i);
+				
+			}
+		}
+
+		Nation* temp;
+		temp = GMC.getNationPointerById(id);
+		for (int i = 0; i < temp->atWar.size(); i++)
+		{
+			if (temp->atWar[i]->id == id)
+			{
+				temp->atWar.erase(temp->atWar.begin() + i);
 			}
 		}
 	}

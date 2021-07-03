@@ -55,6 +55,8 @@ namespace Mer
 		std::vector<Cell>* getCells();
 
 		Cell* getCellAtCoords(double xpos, double ypos);
+		std::vector<Nation>* getNations();
+
 	private:
 		
 
@@ -69,6 +71,8 @@ namespace Mer
 		bool Intersects(double mouseX, double mouseY, double edgeX1, double edgeY1, double edgeX2, double edgeY2);
 		
 		void CalculatePathingWeights();
+
+
 
 		bool showCellBorders = true;
 
