@@ -44,6 +44,10 @@ namespace Mer
 		float getXOffset();
 		float getYOffset();
 
+		std::string getSelectedCellNationName();
+		std::string getSelectedCellReligionName();
+		std::string getSelectedCellCultureName();
+
 		void SetZoomIn(bool inZoom = true);
 		void SetZoomOut(bool inZoom = true);
 

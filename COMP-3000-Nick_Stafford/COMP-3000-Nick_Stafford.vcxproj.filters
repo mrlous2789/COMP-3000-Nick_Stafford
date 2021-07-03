@@ -19,6 +19,9 @@
     <Filter Include="STB">
       <UniqueIdentifier>{0884df7b-3abc-479a-9ae5-e80c6fa09d17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cell properties">
+      <UniqueIdentifier>{fb5108c5-067f-4f0e-b447-8bca49c5b7f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -110,18 +113,6 @@
     <ClInclude Include="LoadShaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Culture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Nation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Religion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,6 +142,18 @@
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files\Cell properties</Filter>
+    </ClInclude>
+    <ClInclude Include="Nation.h">
+      <Filter>Header Files\Cell properties</Filter>
+    </ClInclude>
+    <ClInclude Include="Religion.h">
+      <Filter>Header Files\Cell properties</Filter>
+    </ClInclude>
+    <ClInclude Include="Culture.h">
+      <Filter>Header Files\Cell properties</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

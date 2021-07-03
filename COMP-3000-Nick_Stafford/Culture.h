@@ -3,5 +3,6 @@
 struct Culture
 {
 	int id;
+	std::string name;
 	float colour[3];
 };

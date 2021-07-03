@@ -753,4 +753,29 @@ namespace Mer
 	{
 		return nations[id].name;
 	}
+
+	std::string GameMapController::getSelectedCellNationName()
+	{
+		if (selectedCell->state != -1)
+		{
+			return getNationById(selectedCell->state).name;
+		}
+		return "None";
+	}
+	std::string GameMapController::getSelectedCellReligionName()
+	{
+		if (selectedCell->religion != -1)
+		{
+			return getReligionById(selectedCell->religion).name;
+		}
+		return "None";
+	}
+	std::string GameMapController::getSelectedCellCultureName()
+	{
+		if (selectedCell->culture != -1)
+		{
+			return getCultureById(selectedCell->culture).name;
+		}
+		return "None";
+	}
 }

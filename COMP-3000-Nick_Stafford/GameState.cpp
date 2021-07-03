@@ -33,6 +33,7 @@ namespace Mer
 		_data->assets.LoadTexture("downArrowB", "Assets\\Game_UI\\game_ui_down_arrow.tga");
 		_data->assets.LoadTexture("warB", "Assets\\Game_UI\\game_ui_diplomacy_war.tga");
 		_data->assets.LoadTexture("peaceB", "Assets\\Game_UI\\game_ui_diplomacy_peace.tga");
+		_data->assets.LoadTexture("cellPanel", "Assets\\Game_UI\\game_ui_cell_panel.tga");
 
 		glfwSetScrollCallback(_data->window, PLC.scroll_callback);
 		glfwSetKeyCallback(_data->window, PLC.key_callback);
@@ -124,6 +125,7 @@ namespace Mer
 
 		GUI.NewFrame();
 		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
+		GUI.Panel(10, 10, 384, 144, _data->assets.getTexture("cellPanel"), "CellPanel");
 		if (GUI.Button(1600, 150, 50, 50, _data->assets.getTexture("terrainB"), "TerrainB"))
 		{
 			PLC.UpdateMapDrawMode(DrawTerrain);		
@@ -168,6 +170,10 @@ namespace Mer
 		{
 			showDiplomacyPanel = !showDiplomacyPanel;
 		}
+		if (PLC.areSoldiersSelected())
+		{
+			GUI.Panel(10, 144, 144, 144, _data->assets.getTexture("cellPanel"), "SoldiersPanel");
+		}
 		if (showDiplomacyPanel)
 		{
 			GUI.Panel(80, 416, 336, 576, _data->assets.getTexture("diplomacyP"), "DiplomacyP");
@@ -196,17 +202,16 @@ namespace Mer
 					std::string name = "WarB" + std::to_string(i);
 					if (GUI.Button(256, (904 - yOffset), 48, 48, _data->assets.getTexture("warB"), name))
 					{
-						std::cout << "war" << std::endl;
+						PLC.WarWith(i + diplomacyOffset);
 					}
 					name = "PeaceB" + std::to_string(i);
 					if (GUI.Button(336, (904 - yOffset), 48, 48, _data->assets.getTexture("peaceB"), name))
 					{
-						std::cout << "peace" << std::endl;
+						PLC.PeaceWith(i + diplomacyOffset);
 					}
 				}
 
 			}
-
 		}
 		GUI.EndFrame();
 		GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -223,7 +228,21 @@ namespace Mer
 			}
 		}
 
+		if (PLC.areSoldiersSelected())
+		{
+			GUI.Text("Army", 10.0f, 140.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("Total: ", 10.0f, 120.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text(std::to_string(PLC.getSoldiersTotal()), 35.0f, 120.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		}
 
+
+		GUI.Text("Nation:", 10.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text("Culture:", 10.0f, 43.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text("Religion:", 10.0f, 19.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+
+		GUI.Text(PLC.getSelectedCellNationName(), 50.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellCultureName(), 50.0f, 43.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellReligionName(), 50.0f, 19.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 

@@ -90,6 +90,8 @@ namespace Mer
 		yCentering = (-1.0f + 0.985185206) / 2;
 
 		playerShader = LoadShaders(cellShaders);
+
+		soldiersTotal = nation->nationCells.size();
 	}
 
 	void PlayerController::HandleInput()
@@ -182,6 +184,11 @@ namespace Mer
 				soldierXPos = route[routePos]->centre.x + 1;
 				soldierYPos = route[routePos]->centre.y + 1;
 				soldierCellID = route[routePos]->id;
+
+				if (AlreadyAtWar(route[routePos]->state))
+				{
+					route[routePos]->state = nation->id;
+				}
 			}
 
 			if (routePos == route.size() - 1)
@@ -387,6 +394,40 @@ namespace Mer
 		return false;
 	}
 
+	bool PlayerController::areSoldiersSelected()
+	{
+		return soldiersSelected;
+	}
+
+	void PlayerController::WarWith(int id)
+	{
+		if (!AlreadyAtWar(id))
+		{
+			nation->atWar.push_back(GMC.getNationPointerById(id));
+		}
+	}
+	void PlayerController::PeaceWith(int id)
+	{
+		for (int i = 0; i < nation->atWar.size(); i++)
+		{
+			if (nation->atWar[i]->id == id)
+			{
+				nation->atWar.erase(nation->atWar.begin() + i);
+			}
+		}
+	}
+
+	bool PlayerController::AlreadyAtWar(int id)
+	{
+		for (int i = 0; i < nation->atWar.size(); i++)
+		{
+			if (nation->atWar[i]->id == id)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	int PlayerController::getNationsCount()
 	{
@@ -405,5 +446,23 @@ namespace Mer
 	float PlayerController::getSoldierScreenY()
 	{
 		return (((soldierYOffset - 1) * GMC.getZoomLevel()) / 2)  * screenHeight;
+	}
+
+	std::string PlayerController::getSelectedCellNationName()
+	{
+		return GMC.getSelectedCellNationName();
+	}
+	std::string PlayerController::getSelectedCellReligionName()
+	{
+		return GMC.getSelectedCellReligionName();
+	}
+	std::string PlayerController::getSelectedCellCultureName()
+	{
+		return GMC.getSelectedCellCultureName();
+	}
+
+	int PlayerController::getSoldiersTotal()
+	{
+		return soldiersTotal;
 	}
 }

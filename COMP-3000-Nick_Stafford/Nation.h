@@ -12,5 +12,6 @@ namespace Mer
 		int capitalId;
 		Cell* capital;
 		float colour[3];
+		std::vector<Nation*> atWar;
 	};
 }

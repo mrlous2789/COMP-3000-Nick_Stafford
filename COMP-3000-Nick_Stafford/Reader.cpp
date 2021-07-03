@@ -418,10 +418,12 @@ namespace Mer
 		file.open(filename);
 		std::string line;
 		int id = 0;
+		std::string name;
 		float red = 0.0f, green = 0.0f, blue = 0.0f;
 		while (std::getline(file, line))
 		{
 			if (line.find("id") != std::string::npos) { id = ConvertToInt(GetProperty(line)); }
+			else if (line.find("name") != std::string::npos) { name = GetProperty(line); }
 			else if (line.find("red") != std::string::npos) { red = ConvertToFloat(GetProperty(line)); }
 			else if (line.find("green") != std::string::npos) { green = ConvertToFloat(GetProperty(line)); }
 			else if (line.find("blue") != std::string::npos) { blue = ConvertToFloat(GetProperty(line)); }
@@ -429,6 +431,7 @@ namespace Mer
 			{
 				Culture temp;
 				temp.id = id;
+				temp.name = name;
 				temp.colour[0] = red; temp.colour[1] = green; temp.colour[2] = blue;
 				cultures.push_back(temp);
 			}
@@ -443,10 +446,12 @@ namespace Mer
 		file.open(filename);
 		std::string line;
 		int id = 0;
+		std::string name;
 		float red = 0.0f, green = 0.0f, blue = 0.0f;
 		while (std::getline(file, line))
 		{
 			if (line.find("id") != std::string::npos) { id = ConvertToInt(GetProperty(line)); }
+			else if (line.find("name") != std::string::npos) { name = GetProperty(line); }
 			else if (line.find("red") != std::string::npos) { red = ConvertToFloat(GetProperty(line)); }
 			else if (line.find("green") != std::string::npos) { green = ConvertToFloat(GetProperty(line)); }
 			else if (line.find("blue") != std::string::npos) { blue = ConvertToFloat(GetProperty(line)); }
@@ -454,6 +459,7 @@ namespace Mer
 			{
 				Religion temp;
 				temp.id = id;
+				temp.name = name;
 				temp.colour[0] = red; temp.colour[1] = green; temp.colour[2] = blue;
 				religions.push_back(temp);
 			}

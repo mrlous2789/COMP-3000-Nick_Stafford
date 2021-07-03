@@ -3,5 +3,6 @@
 struct Religion
 {
 	int id;
+	std::string name;
 	float colour[3];
 };

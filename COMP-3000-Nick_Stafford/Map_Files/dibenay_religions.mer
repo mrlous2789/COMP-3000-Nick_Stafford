@@ -2,66 +2,77 @@ Religions
 {
     {
         "id": "0"
+		"name": "Antioccan Forefathers"
         "red": "0.753"
         "green": "0.184"
         "blue": "0.157"
     }
 	{
         "id": "1"
+		"name": "Reltic Beliefs"
         "red": "0.663"
         "green": "0.875"
         "blue": "0.302"
     }
 	{
         "id": "2"
+		"name": "Wolman Shamanism"
         "red": "0.463"
         "green": "0.643"
         "blue": "0.678"
     }
 	{
         "id": "3"
+		"name": "Vasian Gods"
         "red": "0.263"
         "green": "0.647"
         "blue": "0.957"
     }
 	{
         "id": "4"
+		"name": "Karomi Spirits"
         "red": "0.247"
         "green": "0.89"
         "blue": "0.498"
     }
 	{
         "id": "5"
+		"name": "Dagin Shamanism"
         "red": "0.208"
         "green": "0.635"
         "blue": "0.824"
     }
     {
         "id": "6"
+		"name": "Thelarn Spirits"
         "red": "0.647"
         "green": "0.31"
         "blue": "0.667"
     }
 	{
         "id": "7"
+		"name": "Andoran Beliefs"
         "red": "0.227"
         "green": "0.62"
         "blue": "0.827"
     }
 	{
         "id": "8"
+		"name": "Dracian Shamanism"
         "red": "0.224"
         "green": "0.863"
         "blue": "0.553"
     }
 	{
         "id": "9"
+		"name": "Alvechecor Pantheon"
         "red": "0.906"
         "green": "0.757"
         "blue": "0.333"
     }
 	{
         "id": "10"
+		"name": "Antian Religion"
         "red": "0.447"
         "green": "0.29"
         "blue": "0.925"

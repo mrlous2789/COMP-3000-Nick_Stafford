@@ -41,8 +41,13 @@ namespace Mer
 
 		void RaiseSoldiers();
 
+		bool areSoldiersSelected();
+
 #define PI 3.14159265
 
+		std::string getSelectedCellNationName();
+		std::string getSelectedCellReligionName();
+		std::string getSelectedCellCultureName();
 
 		int getNationsCount();
 		std::string getNationsName(int id);
@@ -52,6 +57,8 @@ namespace Mer
 		bool ProcessRightMouseRelease(double mouseX, double mouseY);
 
 		void HandleInput();
+
+		int getSoldiersTotal();
 
 		float getSoldierScreenX();
 		float getSoldierScreenY();
@@ -65,6 +72,8 @@ namespace Mer
 
 		GameMapController GMC;
 		Pathfinding PF;
+
+		bool AlreadyAtWar(int id);
 
 		std::vector<Cell*> route;
 		int routePos = 0;
@@ -91,7 +100,6 @@ namespace Mer
 		float soldierMoveSpeed = 0.001f;
 		float xDifference = 0.0f, yDifference = 0.0f, xyRatio = 0.0f;
 
-		float soldierMoveAngle = 0.0f;
 
 		float soldierMoveGradient = 0.0f;
 		float soldierYIntercept = 0.0f;
@@ -100,6 +108,8 @@ namespace Mer
 		bool soldiersRaised = false;
 
 		bool soldierMoving = false;
+
+		int soldiersTotal = 0;
 
 		float goldPerTurn = 0.0f;
 		float prestigePerTurn = 0.0f;
