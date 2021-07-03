@@ -285,11 +285,18 @@ namespace Mer
 					color[2] = 0.0f;
 					color[3] = 1.0f;
 				}
-				else if (rel.id == -1)
+				else if (rel.id == -1 && cells[i].type == "ocean")
 				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
 					color[2] = 1.0f;
+					color[3] = 1.0f;
+				}
+				else if (rel.id == -1 && cells[i].type != "ocean")
+				{
+					color[0] = 0.0f;
+					color[1] = 0.0f;
+					color[2] = 0.0f;
 					color[3] = 1.0f;
 				}
 				else
@@ -736,5 +743,14 @@ namespace Mer
 	float GameMapController::getYOffset()
 	{
 		return yoffset;
+	}
+
+	int GameMapController::getNationCount()
+	{
+		return nations.size();
+	}
+	std::string GameMapController::getNationName(int id)
+	{
+		return nations[id].name;
 	}
 }

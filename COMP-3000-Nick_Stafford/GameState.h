@@ -25,6 +25,9 @@ namespace Mer
 		bool leftMousePressed = false;
 		bool rightMousePressed = false;
 		
+		bool showDiplomacyPanel = false;
+
+		int diplomacyOffset = 0;
 
 		//MAP VARIABLES
 		GUIManager GUI;

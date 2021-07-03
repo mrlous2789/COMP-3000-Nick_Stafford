@@ -388,6 +388,15 @@ namespace Mer
 	}
 
 
+	int PlayerController::getNationsCount()
+	{
+		return GMC.getNationCount();
+	}
+	std::string PlayerController::getNationsName(int id)
+	{
+		return GMC.getNationName(id);
+	}
+
 	float PlayerController::getSoldierScreenX()
 	{		
 		return (((soldierXOffset - 1) * GMC.getZoomLevel()) / 2) * screenWidth;

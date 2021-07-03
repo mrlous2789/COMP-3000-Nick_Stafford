@@ -31,6 +31,9 @@ namespace Mer
 		int getNationID();
 		std::string getNationName();
 
+		void WarWith(int id);
+		void PeaceWith(int id);
+
 		std::string getGold();
 		std::string getGoldPerTurn();
 
@@ -41,6 +44,8 @@ namespace Mer
 #define PI 3.14159265
 
 
+		int getNationsCount();
+		std::string getNationsName(int id);
 
 		bool ProcessMouseClick(double mouseX, double mouseY);
 		bool ProcessLeftMouseRelease(double mouseX, double mouseY);

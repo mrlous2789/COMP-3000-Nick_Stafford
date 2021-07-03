@@ -32,7 +32,8 @@ namespace Mer
 		void UpdateMap();
 
 
-		
+		int getNationCount();
+		std::string getNationName(int id);
 
 		void UpdateDrawMode(int drawMode);
 
@@ -76,7 +77,7 @@ namespace Mer
 		std::vector<Culture> cultures;
 		std::vector<Religion> religions;
 
-		int drawMode = DrawNations;
+		int drawMode = DrawTerrain;
 
 		Reader reader;
 

@@ -27,7 +27,12 @@ namespace Mer
 		_data->assets.LoadTexture("speed3B", "Assets\\Game_Map_Buttons\\speed_three_button.tga");
 		_data->assets.LoadTexture("speed4B", "Assets\\Game_Map_Buttons\\speed_four_button.tga");
 		_data->assets.LoadTexture("speed5B", "Assets\\Game_Map_Buttons\\speed_five_button.tga");
-
+		_data->assets.LoadTexture("diplomacyB", "Assets\\Game_UI\\game_ui_diplomacy_button.tga");
+		_data->assets.LoadTexture("diplomacyP", "Assets\\Game_UI\\game_ui_diplomacy_panel.tga");
+		_data->assets.LoadTexture("upArrowB", "Assets\\Game_UI\\game_ui_up_arrow.tga");
+		_data->assets.LoadTexture("downArrowB", "Assets\\Game_UI\\game_ui_down_arrow.tga");
+		_data->assets.LoadTexture("warB", "Assets\\Game_UI\\game_ui_diplomacy_war.tga");
+		_data->assets.LoadTexture("peaceB", "Assets\\Game_UI\\game_ui_diplomacy_peace.tga");
 
 		glfwSetScrollCallback(_data->window, PLC.scroll_callback);
 		glfwSetKeyCallback(_data->window, PLC.key_callback);
@@ -159,13 +164,64 @@ namespace Mer
 		{
 			PLC.RaiseSoldiers();
 		}
+		if (GUI.Button(16, 928, 64, 64, _data->assets.getTexture("diplomacyB"), "DiplomacyB"))
+		{
+			showDiplomacyPanel = !showDiplomacyPanel;
+		}
+		if (showDiplomacyPanel)
+		{
+			GUI.Panel(80, 416, 336, 576, _data->assets.getTexture("diplomacyP"), "DiplomacyP");
+
+			if (GUI.Button(232, 960, 32, 32, _data->assets.getTexture("upArrowB"), "UpArrowB"))
+			{
+				if (diplomacyOffset > 0)
+				{
+					diplomacyOffset--;
+				}
+			}
+			if (GUI.Button(232, 416, 32, 32, _data->assets.getTexture("downArrowB"), "DownArrowB"))
+			{
+				if (diplomacyOffset + 8 < PLC.getNationsCount())
+				{
+					diplomacyOffset++;
+				}
+			}
+			
+			for (int i = 0; i < 8; i++)
+			{
+				float yOffset = 64.0f * i;
+
+				if (i + diplomacyOffset != PLC.getNationID())
+				{
+					std::string name = "WarB" + std::to_string(i);
+					if (GUI.Button(256, (904 - yOffset), 48, 48, _data->assets.getTexture("warB"), name))
+					{
+						std::cout << "war" << std::endl;
+					}
+					name = "PeaceB" + std::to_string(i);
+					if (GUI.Button(336, (904 - yOffset), 48, 48, _data->assets.getTexture("peaceB"), name))
+					{
+						std::cout << "peace" << std::endl;
+					}
+				}
+
+			}
+
+		}
 		GUI.EndFrame();
 		GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text("Gold: ", 65.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text(PLC.getGold(), 100.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text(PLC.getGoldPerTurn(), 100.0f, 575.0f, 0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-		
+		if (showDiplomacyPanel)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				float yOffset = (72.0f * i) / 2;
+				GUI.Text(PLC.getNationsName(i + diplomacyOffset), 42.0f, (512 - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			}
+		}
 
 
 

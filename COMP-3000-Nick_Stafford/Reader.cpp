@@ -153,7 +153,6 @@ namespace Mer
 			std::cout << "File: " + filename + " could not be opened" << std::endl;
 			return cells;
 		}
-
 	}
 
 	std::vector<River> Reader::ReadRiversFile(std::string filename)

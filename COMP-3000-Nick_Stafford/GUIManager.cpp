@@ -154,8 +154,16 @@ namespace Mer
 			}
 			if (counter % 2 != 0)
 			{
-				_buttons[i].pressed = true;
-				return true;
+				if (_buttons[i].active)
+				{
+					_buttons[i].pressed = true;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				
 			}
 		}
 
@@ -270,6 +278,8 @@ namespace Mer
 
 		}
 
+		_buttons[id].active = true;
+
 		glBindBuffer(GL_ARRAY_BUFFER, menuBuffers[_buttons[id].bufferID]);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glBindBuffer(GL_ARRAY_BUFFER, textureBuffer[0]);
@@ -329,8 +339,10 @@ namespace Mer
 			_panels.push_back(temp);
 			id = _panels.size() - 1;
 			uiCount++;
-
+			
 		}
+
+		_panels[id].active = true;
 
 		glBindBuffer(GL_ARRAY_BUFFER, menuBuffers[_panels[id].bufferID]);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -346,6 +358,15 @@ namespace Mer
 		glUseProgram(menuShader);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
+
+		for (int i = 0; i < _buttons.size(); i++)
+		{
+			_buttons[i].active = false;
+		}
+		for (int i = 0; i < _panels.size(); i++)
+		{
+			_panels[i].active = false;
+		}
 	}
 	void GUIManager::EndFrame()
 	{
