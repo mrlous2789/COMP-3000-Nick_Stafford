@@ -53,7 +53,7 @@ namespace Mer
 		{
 			std::cout << "free type init failed" << std::endl;
 		}
-		error = FT_New_Face(library, "Assets\\Fonts\\Roboto-Black.ttf", 0, &face);
+		error = FT_New_Face(library, "Assets\\Fonts\\Yellowtail-Regular.ttf", 0, &face);
 		if (error == FT_Err_Unknown_File_Format)
 		{
 			std::cout << "free type unknown file type" << std::endl;

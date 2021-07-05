@@ -42,56 +42,13 @@ namespace Mer
 		AIC.Initialise(GMC.getNations(), nation->id);
 		PF.Initialise(GMC.getCells());
 		
-
-		glGenBuffers(NumBuffers, playerBuffers);
-		glGenBuffers(NumBuffers, textureBuffer);
-
-		glBindBuffer(GL_ARRAY_BUFFER, playerBuffers[0]);
-		glBufferData(GL_ARRAY_BUFFER, 4 * (3 * sizeof(GLfloat)), Vertices, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, textureBuffer[0]);
-		glBufferData(GL_ARRAY_BUFFER, 4 * (2 * sizeof(GLfloat)), texVertices, GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		ShaderInfo  cellShaders[] =
-		{
-			{ GL_VERTEX_SHADER, "Shaders/player.vert" },
-			{ GL_FRAGMENT_SHADER, "Shaders/player.frag" },
-			{ GL_NONE, NULL }
-		};
-
-		// creating the model matrix
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(soldierXOffset, soldierYOffset, 0.0f));
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1);
 
 
-		// creating the view matrix
-		view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
-
-		// creating the projection matrix
-		projection = glm::perspective(89.535f, 1.0f, 0.1f, 20.0f);
-
-		// Adding all matrices up to create combined matrix
-		mvp = projection * view * model;
-
-		//adding the Uniform to the shader
-		int mvpLoc = glGetUniformLocation(playerShader, "mvp");
-		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 		
 		this->screenWidth = screenWidth;
 		this->screenHeight = screenHeight;
 
-
-		xCentering = (-1.0f + 0.991666675) / 2;
-		yCentering = (-1.0f + 0.985185206) / 2;
-
-		playerShader = LoadShaders(cellShaders);
-
-		soldiersTotal = nation->nationCells.size();
 	}
 
 	void PlayerController::HandleInput()
@@ -110,35 +67,7 @@ namespace Mer
 
 		if (soldiersRaised)
 		{
-			UpdateMVP(GMC.getZoomLevel(), GMC.getXOffset(), GMC.getYOffset());
-	
-
-			GLint myLoc = glGetUniformLocation(playerShader, "color");
-			glProgramUniform4fv(playerShader, myLoc, 1, color);
-
-
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-
-			glUseProgram(playerShader);
-
-			glBindBuffer(GL_ARRAY_BUFFER, playerBuffers[0]);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-			glBindBuffer(GL_ARRAY_BUFFER, textureBuffer[0]);
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-			int mvpLoc = glGetUniformLocation(playerShader, "mvp");
-			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
-
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
+			army.Draw(GMC.getZoomLevel(), GMC.getXOffset(), GMC.getYOffset(), texture);
 		}
 
 		AIC.Draw(GMC.getZoomLevel(), GMC.getXOffset(), GMC.getYOffset(), texture);
@@ -167,11 +96,9 @@ namespace Mer
 			{
 				soldiersSelected = false;
 				soldierMoving = false;
-				color[3] = 0.8f;
+				army.Selected();
 			}
-			soldierXPos = nation->capital->centre.x + 1;
-			soldierYPos = nation->capital->centre.y + 1;
-			soldierCellID = nation->capital->id;
+			army.Move(nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->capital->id);
 			toggleSoldiers = false;
 		}
 
@@ -183,10 +110,7 @@ namespace Mer
 			{
 				routePos++;
 				smProgress = 0.0f;
-				soldierXPos = route[routePos]->centre.x + 1;
-				soldierYPos = route[routePos]->centre.y + 1;
-				soldierCellID = route[routePos]->id;
-
+				army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);
 			}
 
 			if (routePos == route.size() - 1)
@@ -273,20 +197,6 @@ namespace Mer
 		toggleSoldiers = true;
 	}
 
-	void PlayerController::UpdateMVP(float zoomLevel, float xOffset, float yOffset)
-	{
-		soldierXOffset = ((soldierXPos) + xCentering) + xOffset;
-		soldierYOffset = ((soldierYPos) + yCentering) + yOffset;
-
-		// creating the model matrix
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(zoomLevel, zoomLevel, 1.0f));
-		model = glm::translate(model, glm::vec3(soldierXOffset, soldierYOffset, 0.0f));
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-
-		// Adding all matrices up to create combined matrix
-		mvp = projection * view * model;
-	}
 
 	bool PlayerController::ProcessMouseClick(double mouseX, double mouseY)
 	{
@@ -301,8 +211,8 @@ namespace Mer
 		correctedMouseX /= GMC.getZoomLevel();
 		correctedMouseY /= GMC.getZoomLevel();
 
-		correctedMouseX -= soldierXOffset;
-		correctedMouseY -= soldierYOffset;
+		correctedMouseX -= army.soldierXOffset;
+		correctedMouseY -= army.soldierYOffset;
 
 
 		if (correctedMouseX <= -0.991666675f && correctedMouseX >= -1.0f && correctedMouseY <= -0.985185206f && correctedMouseY >= -1.0f && soldiersRaised)
@@ -335,8 +245,8 @@ namespace Mer
 		correctedMouseY /= GMC.getZoomLevel();
 
 
-		correctedMouseX -= soldierXOffset;
-		correctedMouseY -= soldierYOffset;
+		correctedMouseX -= army.soldierXOffset;
+		correctedMouseY -= army.soldierYOffset;
 
 		if (correctedMouseX <= -0.991666675f && correctedMouseX >= -1.0f && correctedMouseY <= -0.985185206f && correctedMouseY >= -1.0f && soldiersRaised)
 		{
@@ -344,11 +254,11 @@ namespace Mer
 			soldiersSelected = !soldiersSelected;
 			if (soldiersSelected)
 			{
-				color[3] = 1.0f;
+				army.Selected();
 			}
 			else
 			{
-				color[3] = 0.8f;
+				army.Selected();
 			}
 			return true;
 		}
@@ -357,7 +267,7 @@ namespace Mer
 			if (soldiersSelected)
 			{
 				soldiersSelected = false;
-				color[3] = 0.8f;
+				army.Selected();
 			}
 			
 		}
@@ -386,7 +296,7 @@ namespace Mer
 
 			soldierMoving = true;
 
-			route = PF.CalculatePath(&GMC.getCells()->at(soldierCellID), destination);
+			route = PF.CalculatePath(&GMC.getCells()->at(army.locationID), destination);
 			routePos = 0;
 
 			return true;
@@ -450,15 +360,15 @@ namespace Mer
 		return GMC.getNationName(id);
 	}
 
-	float PlayerController::getSoldierScreenX()
-	{		
-		return (((soldierXOffset - 1) * GMC.getZoomLevel()) / 2) * screenWidth;
-		
-	}
-	float PlayerController::getSoldierScreenY()
-	{
-		return (((soldierYOffset - 1) * GMC.getZoomLevel()) / 2)  * screenHeight;
-	}
+	//float PlayerController::getSoldierScreenX()
+	//{		
+	//	return (((soldierXOffset - 1) * GMC.getZoomLevel()) / 2) * screenWidth;
+	//	
+	//}
+	//float PlayerController::getSoldierScreenY()
+	//{
+	//	return (((soldierYOffset - 1) * GMC.getZoomLevel()) / 2)  * screenHeight;
+	//}
 
 	std::string PlayerController::getSelectedCellNationName()
 	{
@@ -475,6 +385,6 @@ namespace Mer
 
 	int PlayerController::getSoldiersTotal()
 	{
-		return soldiersTotal;
+		return army.totalSoldiers;
 	}
 }

@@ -149,7 +149,9 @@
   <ItemGroup>
     <ClCompile Include="AIAgent.cpp" />
     <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="Army.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="BattleController.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMapController.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -177,7 +179,10 @@
   <ItemGroup>
     <ClInclude Include="AIAgent.h" />
     <ClInclude Include="AIController.h" />
+    <ClInclude Include="Army.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="Battle.h" />
+    <ClInclude Include="BattleController.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Culture.h" />
     <ClInclude Include="Game.h" />
