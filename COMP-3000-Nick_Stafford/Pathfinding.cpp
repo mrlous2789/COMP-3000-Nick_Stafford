@@ -18,6 +18,11 @@ namespace Mer
 
 		bool routeFound = false;
 
+		if (start->id == destination->id)
+		{
+			routeFound = true;
+		}
+
 		while (!routeFound)
 		{
 			double lowestF = 1000.0f;

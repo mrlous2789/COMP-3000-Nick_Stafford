@@ -13,5 +13,6 @@ namespace Mer
 
 		float attDisad = 0.0f;
 
+		bool over = false;
 	};
 }

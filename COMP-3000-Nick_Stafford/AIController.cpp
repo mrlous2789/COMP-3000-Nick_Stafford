@@ -38,4 +38,28 @@ namespace Mer
 			agents[i].Draw(zoomLevel, xOffset, yOffset, texture);
 		}
 	}
+	int AIController::IsCellOccupied(int id)
+	{
+		for (int i = 0; i < agents.size(); i++)
+		{
+			if (agents[i].getArmyLocation() == id)
+			{
+				return agents[i].getNationID();
+			}
+		}
+		return -1;
+	}
+
+	Army* AIController::getAgentArmy(int nationID)
+	{
+		for (int i = 0; i < agents.size(); i++)
+		{
+			if (agents[i].getNationID() == nationID)
+			{
+				return agents[i].getArmy();
+			}
+		}
+
+		return nullptr;
+	}
 }

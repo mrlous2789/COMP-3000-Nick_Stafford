@@ -12,10 +12,13 @@ namespace Mer
 
 		void NewBattle(Army* attacker, Army* defender, int biomeID);
 
-		void Tick();
+		void Tick(float dt, int gameSpeed);
 	private:
 		std::vector<Battle> battles;
 
+		
+
+		float battleTimer = 20.0f, battleAcc = 0.0f;
 	};
 }
 

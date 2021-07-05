@@ -73,6 +73,7 @@ namespace Mer
 		Pathfinding PF;
 		AIController AIC;
 		Army army;
+		BattleController BC;
 
 		bool AlreadyAtWar(int id);
 

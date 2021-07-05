@@ -38,7 +38,7 @@ namespace Mer
 	void PlayerController::Initialise(int screenWidth, int screenHeight)
 	{
 		GMC.Initialise(screenWidth, screenHeight);
-		nation = GMC.getNationPointerById(0);
+		nation = GMC.getNationPointerById(22);
 		AIC.Initialise(GMC.getNations(), nation->id);
 		PF.Initialise(GMC.getCells());
 		
@@ -84,6 +84,15 @@ namespace Mer
 
 		AIC.Update();
 
+		BC.Tick(dt, gameSpeed);
+
+		if (army.broken && !soldierMoving)
+		{
+			route = PF.CalculatePath(&GMC.getCells()->at(army.locationID), &GMC.getCells()->at(nation->capitalId));
+			soldierMoving = true;
+			routePos = 0;
+		}
+
 		gameTickAcc += dt;
 		if (gameTickAcc >= gameTickTimer)
 		{
@@ -110,12 +119,34 @@ namespace Mer
 			{
 				routePos++;
 				smProgress = 0.0f;
-				army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);
+
+				int cellOccupation = AIC.IsCellOccupied(route[routePos]->id);
+				if (cellOccupation == -1)
+				{
+					army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);
+				}
+				else
+				{
+					if (AlreadyAtWar(cellOccupation))
+					{
+						BC.NewBattle(&army, AIC.getAgentArmy(cellOccupation), route[routePos]->biome);
+						routePos = route.size() - 1;
+					}
+					else
+					{
+						routePos = route.size() - 1;
+					}
+				}
+
 			}
 
 			if (routePos == route.size() - 1)
 			{
 				soldierMoving = false;
+				if (army.broken)
+				{
+					army.broken = false;
+				}
 			}
 		}
 
@@ -276,7 +307,7 @@ namespace Mer
 
 	bool PlayerController::ProcessRightMouseRelease(double mouseX, double mouseY)
 	{
-		if (soldiersSelected)
+		if (soldiersSelected && !army.enganged && !army.broken)
 		{
 			double origMouseX = mouseX, origMouseY = mouseY;
 

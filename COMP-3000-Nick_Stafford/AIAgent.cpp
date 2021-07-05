@@ -45,4 +45,16 @@ namespace Mer
 			armies.Draw(zoomLevel, xOffset, yOffset, texture);
 		}
 	}
+	int AIAgent::getArmyLocation()
+	{
+		return armies.locationID;
+	}
+	int AIAgent::getNationID()
+	{
+		return nation->id;
+	}
+	Army* AIAgent::getArmy()
+	{
+		return &armies;
+	}
 }

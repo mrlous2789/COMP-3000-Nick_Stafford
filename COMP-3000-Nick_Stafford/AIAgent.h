@@ -24,9 +24,12 @@ namespace Mer
 		void Update();
 		void Tick();
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
-	private:
 
-		void UpdateMVP(float zoomLevel, float xOffset, float yOffset);
+		int getArmyLocation();
+		int getNationID();
+
+		Army* getArmy();
+	private:
 
 		Army armies;
 

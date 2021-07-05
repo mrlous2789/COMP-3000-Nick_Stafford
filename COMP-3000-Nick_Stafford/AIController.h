@@ -10,6 +10,10 @@ namespace Mer
 		void Update();
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
 		void Tick();
+
+		int IsCellOccupied(int id);
+
+		Army* getAgentArmy(int nationID);
 	private:
 		std::vector<AIAgent> agents;
 
