@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Army.h"
+#include "Wars.h"
 
 namespace Mer
 {
@@ -9,9 +10,12 @@ namespace Mer
 		Army* attacker;
 		Army* defender;
 
+		float warScore;
+
 		int location;
 
-		float attDisad = 0.0f;
+		int attDisad = 0;
+		int ticks = 0;
 
 		bool over = false;
 	};

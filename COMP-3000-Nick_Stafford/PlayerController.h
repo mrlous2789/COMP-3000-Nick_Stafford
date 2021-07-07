@@ -15,7 +15,6 @@
 #include "BattleController.h"
 
 #include "AIController.h"
-#include "Pathfinding.h"
 
 namespace Mer
 {
@@ -67,6 +66,9 @@ namespace Mer
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+		int getWarsSize();
+		std::string getWarsNationName(int id);
+		std::string getWarsWarScore(int id);
 	private:
 
 		GameMapController GMC;
@@ -75,13 +77,18 @@ namespace Mer
 		Army army;
 		BattleController BC;
 
+		std::vector<Battle> finishedBattles;
+
 		bool AlreadyAtWar(int id);
+
+		War* getWarWith(int id);
 
 		std::vector<Cell*> route;
 		int routePos = 0;
 		double smProgress = 0.0f;
 
-
+		std::vector<War> wars;
+		
 
 
 		bool soldiersSelected = false;

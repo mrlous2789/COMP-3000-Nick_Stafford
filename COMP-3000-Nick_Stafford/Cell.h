@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "Army.h"
 
 #include "glm/glm.hpp"
 
@@ -22,5 +23,7 @@ namespace Mer
 		int religion = -1;//cell religion
 		std::vector<std::pair<int,double>> neighbors;//neighboring cell ids
 		glm::vec2 centre;
+
+		Army* occupier = nullptr;
 	};
 }

@@ -29,11 +29,15 @@ namespace Mer
 		_data->assets.LoadTexture("speed5B", "Assets\\Game_Map_Buttons\\speed_five_button.tga");
 		_data->assets.LoadTexture("diplomacyB", "Assets\\Game_UI\\game_ui_diplomacy_button.tga");
 		_data->assets.LoadTexture("diplomacyP", "Assets\\Game_UI\\game_ui_diplomacy_panel.tga");
+		_data->assets.LoadTexture("warP", "Assets\\Game_UI\\game_ui_war_panel.tga");
 		_data->assets.LoadTexture("upArrowB", "Assets\\Game_UI\\game_ui_up_arrow.tga");
 		_data->assets.LoadTexture("downArrowB", "Assets\\Game_UI\\game_ui_down_arrow.tga");
 		_data->assets.LoadTexture("warB", "Assets\\Game_UI\\game_ui_diplomacy_war.tga");
 		_data->assets.LoadTexture("peaceB", "Assets\\Game_UI\\game_ui_diplomacy_peace.tga");
 		_data->assets.LoadTexture("cellPanel", "Assets\\Game_UI\\game_ui_cell_panel.tga");
+
+
+		std::cout << "Loaded textures" << std::endl;
 
 		glfwSetScrollCallback(_data->window, PLC.scroll_callback);
 		glfwSetKeyCallback(_data->window, PLC.key_callback);
@@ -169,6 +173,14 @@ namespace Mer
 		if (GUI.Button(16, 928, 64, 64, _data->assets.getTexture("diplomacyB"), "DiplomacyB"))
 		{
 			showDiplomacyPanel = !showDiplomacyPanel;
+			showWarsPanel = false;
+			diplomacyOffset = 0;
+		}
+		if (GUI.Button(16, 864, 64, 64, _data->assets.getTexture("warB"), "WarPB"))
+		{
+			showWarsPanel = !showWarsPanel;
+			showDiplomacyPanel = false;
+			diplomacyOffset = 0;
 		}
 		if (PLC.areSoldiersSelected())
 		{
@@ -213,6 +225,25 @@ namespace Mer
 
 			}
 		}
+		if (showWarsPanel)
+		{
+			GUI.Panel(80, 416, 336, 576, _data->assets.getTexture("warP"), "WarP");
+
+			if (GUI.Button(232, 960, 32, 32, _data->assets.getTexture("upArrowB"), "UpArrowB"))
+			{
+				if (diplomacyOffset > 0)
+				{
+					diplomacyOffset--;
+				}
+			}
+			if (GUI.Button(232, 416, 32, 32, _data->assets.getTexture("downArrowB"), "DownArrowB"))
+			{
+				if (diplomacyOffset + 8 < PLC.getWarsSize())
+				{
+					diplomacyOffset++;
+				}
+			}
+		}
 		GUI.EndFrame();
 		GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text("Gold: ", 65.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -225,6 +256,31 @@ namespace Mer
 			{
 				float yOffset = (72.0f * i) / 2;
 				GUI.Text(PLC.getNationsName(i + diplomacyOffset), 42.0f, (512 - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			}
+		}
+
+		if (showWarsPanel)
+		{
+			GUI.Text("War With", 42.0f, 520.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("War Score", 128.0f, 520.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+
+			if (PLC.getWarsSize() > 8)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					float yOffset = (72.0f * i) / 2;
+					GUI.Text(PLC.getWarsNationName(i + diplomacyOffset), 42.0f, (500 - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+					GUI.Text(PLC.getWarsWarScore(i + diplomacyOffset), 136.0f, (500 - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+				}
+			}
+			else
+			{
+				for (int i = 0; i < PLC.getWarsSize(); i++)
+				{
+					float yOffset = (72.0f * i) / 2;
+					GUI.Text(PLC.getWarsNationName(i), 42.0f, (500 - yOffset), 0.25f, glm::vec3(0.0f, 0.0f, 0.0f));
+					GUI.Text(PLC.getWarsWarScore(i), 136.0f, (500 - yOffset), 0.25f, glm::vec3(0.0f, 0.0f, 0.0f));
+				}
 			}
 		}
 

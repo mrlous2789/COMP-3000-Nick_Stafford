@@ -10,6 +10,11 @@
 #include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
 #include <GLFW/glfw3.h>
 #include "Army.h"
+#include "Wars.h"
+#include "Pathfinding.h"
+#include <random>
+#include "BattleController.h"
+#include <chrono>
 
 namespace Mer
 {
@@ -18,21 +23,44 @@ namespace Mer
 	public:
 		AIAgent();
 
-		void Initialise(Nation*);
+		void Initialise(Nation*, std::vector<Cell>* cells);
 
 		
-		void Update();
+		void Update(int gameSpeed);
 		void Tick();
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
 
 		int getArmyLocation();
 		int getNationID();
 
+		std::vector<War>* getWars();
+		War* getWarWith(int id);
+
+		void MakePeaceWith(int id);
+		
+
 		Army* getArmy();
 	private:
 
+		Pathfinding PF;
+		BattleController BC;
+
+		std::vector<Cell*> route;
+
+		std::vector<Cell>* cells;
+
+		bool AlreadyAtWar(int id);
+
+
+
+
 		Army armies;
 
+		std::vector<War> wars;
+
+		int routePos = 0;
+		double smProgress = 0.0f;
+		float soldierMoveSpeed = 0.001f;
 
 		float gold = 0.0f;
 		float prestige = 0.0f;
@@ -41,6 +69,8 @@ namespace Mer
 
 		Nation* nation;
 
+
+		bool soldiersMoving = false;
 		bool isAtWar = false;
 		bool soldiersRaised = false;
 		bool toggleSoldiers = false;

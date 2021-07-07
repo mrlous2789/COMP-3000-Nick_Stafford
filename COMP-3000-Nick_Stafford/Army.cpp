@@ -6,13 +6,14 @@ namespace Mer
 	{
 
 	}
-	void Army::Initialise(float red, float green, float blue, int maxSoldiers, float soldierXpos, float soldierYpos)
+	void Army::Initialise(float red, float green, float blue, int maxSoldiers, float soldierXpos, float soldierYpos, int nationID)
 	{
 		this->maxSoldiers = maxSoldiers;
 		totalSoldiers = this->maxSoldiers;
 		attack = maxSoldiers / 10.0f;
-		defence = maxSoldiers / 12.0f;
+		defence = maxSoldiers / 20.0f;
 
+		this->nationID = nationID;
 
 
 		glGenBuffers(NumBuffers, playerBuffers);

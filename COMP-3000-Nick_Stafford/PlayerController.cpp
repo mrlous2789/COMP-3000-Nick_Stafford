@@ -39,10 +39,10 @@ namespace Mer
 	{
 		GMC.Initialise(screenWidth, screenHeight);
 		nation = GMC.getNationPointerById(22);
-		AIC.Initialise(GMC.getNations(), nation->id);
+		AIC.Initialise(GMC.getNations(), nation->id, GMC.getCells());
 		PF.Initialise(GMC.getCells());
 		
-		army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1);
+		army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->id);
 
 
 		
@@ -82,15 +82,43 @@ namespace Mer
 
 		GMC.UpdateMap();
 
-		AIC.Update();
+		AIC.Update(gameSpeed);
 
-		BC.Tick(dt, gameSpeed);
+		finishedBattles = BC.Tick(dt, gameSpeed);
+
+		if (!finishedBattles.empty())
+		{
+			for (int i = 0; i < finishedBattles.size(); i++)
+			{
+				if (finishedBattles[i].attacker->nationID == nation->id)
+				{
+					getWarWith(finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
+				}
+				else
+				{
+					AIC.getWarOfWith(finishedBattles[i].attacker->nationID, finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
+				}
+				if (finishedBattles[i].defender->nationID == nation->id)
+				{
+					getWarWith(finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
+				}
+				else
+				{
+					AIC.getWarOfWith(finishedBattles[i].defender->nationID, finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
+				}
+			}
+			finishedBattles.clear();
+		}
 
 		if (army.broken && !soldierMoving)
 		{
 			route = PF.CalculatePath(&GMC.getCells()->at(army.locationID), &GMC.getCells()->at(nation->capitalId));
 			soldierMoving = true;
 			routePos = 0;
+		}
+		if (soldierMoving && army.enganged)
+		{
+			soldierMoving = false;
 		}
 
 		gameTickAcc += dt;
@@ -108,6 +136,7 @@ namespace Mer
 				army.Selected();
 			}
 			army.Move(nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->capital->id);
+			GMC.getCells()->at(nation->capital->id).occupier = &army;
 			toggleSoldiers = false;
 		}
 
@@ -120,16 +149,21 @@ namespace Mer
 				routePos++;
 				smProgress = 0.0f;
 
-				int cellOccupation = AIC.IsCellOccupied(route[routePos]->id);
-				if (cellOccupation == -1)
+				
+				if (route[routePos]->occupier == nullptr || army.broken)
 				{
-					army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);
+					GMC.getCells()->at(army.locationID).occupier = nullptr;
+					army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);				
+					route[routePos]->occupier = &army;
 				}
 				else
 				{
-					if (AlreadyAtWar(cellOccupation))
+					if (AlreadyAtWar(route[routePos]->occupier->nationID))
 					{
-						BC.NewBattle(&army, AIC.getAgentArmy(cellOccupation), route[routePos]->biome);
+						if (!route[routePos]->occupier->broken)
+						{
+							BC.NewBattle(&army, route[routePos]->occupier, route[routePos]->biome);
+						}
 						routePos = route.size() - 1;
 					}
 					else
@@ -225,7 +259,10 @@ namespace Mer
 
 	void PlayerController::RaiseSoldiers()
 	{
-		toggleSoldiers = true;
+		if (!army.enganged && !army.broken)
+		{
+			toggleSoldiers = true;
+		}
 	}
 
 
@@ -344,37 +381,33 @@ namespace Mer
 	{
 		if (!AlreadyAtWar(id))
 		{
-			nation->atWar.push_back(GMC.getNationPointerById(id));
-			GMC.getNationPointerById(id)->atWar.push_back(nation);
+			War temp;
+			temp.nation = GMC.getNationPointerById(id);
+			wars.push_back(temp);
+
+			War tempother;
+			tempother.nation = nation;
+			AIC.getWarsOfNation(id)->push_back(tempother);
 		}
 	}
 	void PlayerController::PeaceWith(int id)
 	{
-		for (int i = 0; i < nation->atWar.size(); i++)
+		for (int i = 0; i < wars.size(); i++)
 		{
-			if (nation->atWar[i]->id == id)
+			if (wars[i].nation->id == id)
 			{
-				nation->atWar.erase(nation->atWar.begin() + i);
-				
+				wars.erase(wars.begin() + i);
 			}
 		}
 
-		Nation* temp;
-		temp = GMC.getNationPointerById(id);
-		for (int i = 0; i < temp->atWar.size(); i++)
-		{
-			if (temp->atWar[i]->id == id)
-			{
-				temp->atWar.erase(temp->atWar.begin() + i);
-			}
-		}
+		AIC.MakePeaceWith(id, nation->id);
 	}
 
 	bool PlayerController::AlreadyAtWar(int id)
 	{
-		for (int i = 0; i < nation->atWar.size(); i++)
+		for (int i = 0; i < wars.size(); i++)
 		{
-			if (nation->atWar[i]->id == id)
+			if (wars[i].nation->id == id)
 			{
 				return true;
 			}
@@ -413,9 +446,37 @@ namespace Mer
 	{
 		return GMC.getSelectedCellCultureName();
 	}
-
 	int PlayerController::getSoldiersTotal()
 	{
 		return army.totalSoldiers;
+	}
+	int PlayerController::getWarsSize()
+	{
+		return wars.size();
+	}
+	std::string PlayerController::getWarsNationName(int id)
+	{
+		return wars[id].nation->name;
+	}
+	std::string PlayerController::getWarsWarScore(int id)
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << wars[id].warScore;
+
+		std::string temp = stream.str();
+		return temp;
+	}
+	War* PlayerController::getWarWith(int id)
+	{
+		for (int i = 0; i < wars.size(); i++)
+		{
+			if (wars[i].nation->id == id)
+			{
+				return &wars[i];
+			}
+		}
+
+		
+		return nullptr;
 	}
 }

@@ -26,6 +26,7 @@ namespace Mer
 		bool rightMousePressed = false;
 		
 		bool showDiplomacyPanel = false;
+		bool showWarsPanel = false;
 
 		int diplomacyOffset = 0;
 

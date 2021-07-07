@@ -1,5 +1,4 @@
 #pragma once
-#include "Pathfinding.h"
 #include "LoadShaders.h"
 #include "glm/glm.hpp"
 #include "glm/ext/vector_float3.hpp"
@@ -8,7 +7,6 @@
 #include <glm/ext/matrix_clip_space.hpp> // GLM: perspective and ortho 
 #include <glm/gtc/type_ptr.hpp> // GLM: access to the value_ptr
 #include <GLFW/glfw3.h>
-#include "Army.h"
 
 namespace Mer
 {
@@ -17,7 +15,7 @@ namespace Mer
 
 	public:
 		Army();
-		void Initialise(float red, float green, float blue, int maxSoldiers, float soldierXpos, float soldierYpos);
+		void Initialise(float red, float green, float blue, int maxSoldiers, float soldierXpos, float soldierYpos, int nationID);
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
 		void Move(float xPos, float yPos, int id);
 

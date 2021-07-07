@@ -2,6 +2,8 @@
 #include "Battle.h"
 #include <vector>
 #include <random>
+#include <iostream>
+#include <chrono>
 
 namespace Mer
 {
@@ -12,7 +14,7 @@ namespace Mer
 
 		void NewBattle(Army* attacker, Army* defender, int biomeID);
 
-		void Tick(float dt, int gameSpeed);
+		std::vector<Battle> Tick(float dt, int gameSpeed);
 	private:
 		std::vector<Battle> battles;
 

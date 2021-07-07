@@ -34,10 +34,12 @@ namespace Mer
 			//glewExperimental = GL_TRUE;
 			
 			glGenerateMipmap(GL_TEXTURE_2D);
+
+			std::cout << "loaded texture: " << filename << std::endl;
 		}
 		else
 		{
-			std::cout << "Failed to load texture" << std::endl;
+			std::cout << "Failed to load texture: " << filename << std::endl;
 		}
 		stbi_image_free(data);
 
