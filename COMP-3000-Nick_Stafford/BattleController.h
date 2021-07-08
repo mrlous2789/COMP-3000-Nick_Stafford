@@ -15,6 +15,8 @@ namespace Mer
 		void NewBattle(Army* attacker, Army* defender, int biomeID);
 
 		std::vector<Battle> Tick(float dt, int gameSpeed);
+
+		Battle* getBattleInfoOf(int id);
 	private:
 		std::vector<Battle> battles;
 

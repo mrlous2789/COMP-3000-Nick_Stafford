@@ -25,5 +25,6 @@ namespace Mer
 		glm::vec2 centre;
 
 		Army* occupier = nullptr;
+		bool isInPeaceDeal = false;
 	};
 }

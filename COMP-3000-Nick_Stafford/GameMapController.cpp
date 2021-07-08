@@ -138,7 +138,7 @@ namespace Mer
 		if (KeysPressed[GLFW_KEY_D])
 			isMoveRight = true;
 	}
-	bool GameMapController::ProcessMousePress(double mouseX, double mouseY)
+	Cell* GameMapController::ProcessMousePress(double mouseX, double mouseY)
 	{
 		mouseX -= (screenWidth / 2);
 		mouseX = mouseX / (screenWidth / 2);
@@ -166,10 +166,10 @@ namespace Mer
 
 		if (temp != nullptr)
 		{
-			return true;
+			return temp;
 		}
 
-		return false;
+		return nullptr;
 	}
 	void GameMapController::UpdateMap()
 	{
@@ -222,10 +222,10 @@ namespace Mer
 				}
 				else if (nat.id == -1 && cells[i].type == "ocean")
 				{
-					color[0] = 0.0f;
-					color[1] = 0.0f;
-					color[2] = 1.0f;
-					color[3] = 1.0f;
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
 				}
 				else if (nat.id == -1 && cells[i].type != "ocean")
 				{
@@ -254,10 +254,10 @@ namespace Mer
 				}
 				else if (cult.id == -1 && cells[i].type == "ocean")
 				{
-					color[0] = 0.0f;
-					color[1] = 0.0f;
-					color[2] = 1.0f;
-					color[3] = 1.0f;
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
 				}
 				else if (cult.id == -1 && cells[i].type != "ocean")
 				{
@@ -287,10 +287,10 @@ namespace Mer
 				}
 				else if (rel.id == -1 && cells[i].type == "ocean")
 				{
-					color[0] = 0.0f;
-					color[1] = 0.0f;
-					color[2] = 1.0f;
-					color[3] = 1.0f;
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
 				}
 				else if (rel.id == -1 && cells[i].type != "ocean")
 				{
@@ -307,7 +307,7 @@ namespace Mer
 					color[3] = 1.0f;
 				}
 			}
-			else if (drawMode == 4)
+			else if (drawMode == DrawHeight)
 			{
 				if (cells[i].id == selectedCell->id)
 				{
@@ -360,9 +360,41 @@ namespace Mer
 				}
 				else
 				{
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
+				}
+			}
+			else if (drawMode == DrawPeaceDeal)
+			{
+				Nation nat = getNationById(cells[i].state);
+				if (cells[i].isInPeaceDeal)
+				{
+					color[0] = 1.0f;
+					color[1] = 1.0f;
+					color[2] = 0.0f;
+					color[3] = 1.0f;
+				}
+				else if (nat.id == -1 && cells[i].type == "ocean")
+				{
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
+				}
+				else if (nat.id == -1 && cells[i].type != "ocean")
+				{
 					color[0] = 0.0f;
 					color[1] = 0.0f;
-					color[2] = 1.0f;
+					color[2] = 0.0f;
+					color[3] = 1.0f;
+				}
+				else
+				{
+					color[0] = nat.colour[0];
+					color[1] = nat.colour[1];
+					color[2] = nat.colour[2];
 					color[3] = 1.0f;
 				}
 			}
@@ -419,10 +451,10 @@ namespace Mer
 				}
 				else
 				{
-					color[0] = 0.0f;
-					color[1] = 0.0f;
-					color[2] = 1.0f;
-					color[3] = 1.0f;
+					color[0] = ocean[0];
+					color[1] = ocean[1];
+					color[2] = ocean[2];
+					color[3] = ocean[3];
 				}
 			}
 
@@ -438,12 +470,12 @@ namespace Mer
 
 			glDrawArrays(GL_TRIANGLE_FAN, 0, cells[i].coords.size());
 
-			color[0] = 0.0f;
-			color[1] = 0.0f;
-			color[2] = 0.0f;
-			color[3] = 1.0f;
+			color[0] = ocean[0] + 0.2f;
+			color[1] = ocean[1] + 0.05f;
+			color[2] = ocean[2];
+			color[3] = ocean[3];
 
-			glLineWidth(1.0f);
+			glLineWidth(0.5f * zoomLevel);
 
 			if (showCellBorders)
 			{
@@ -454,10 +486,10 @@ namespace Mer
 			}
 		}
 
-		color[0] = 0.0f;
-		color[1] = 0.0f;
-		color[2] = 1.0f;
-		color[3] = 1.0f;
+		color[0] = ocean[0];
+		color[1] = ocean[1];
+		color[2] = ocean[2];
+		color[3] = ocean[3];
 
 		
 

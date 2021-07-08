@@ -16,7 +16,7 @@
 
 namespace Mer
 {
-	enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions };
+	enum Drawing_Modes { DrawTerrain, DrawNations, DrawCultures, DrawReligions, DrawHeight, DrawPeaceDeal };
 
 	class GameMapController
 	{
@@ -25,7 +25,7 @@ namespace Mer
 
 
 		void Initialise(float screenWidth, float screenHeight);
-		bool ProcessMousePress(double mouseX, double mouseY);
+		Cell* ProcessMousePress(double mouseX, double mouseY);
 		void Draw();
 
 		void ProcessKeyPresses(bool KeysPressed[]);
@@ -141,6 +141,8 @@ namespace Mer
 
 		//COLOUR FOR CELLS SHADER
 		GLfloat color[4] = { 0.0f,0.0f,1.0f,1.0f };
+
+		GLfloat ocean[4] = { 0.16f, 0.53f, 0.7f, 1.0f };
 	};
 }
 

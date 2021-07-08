@@ -37,7 +37,7 @@ namespace Mer
 		War* getWarWith(int id);
 
 		void MakePeaceWith(int id);
-		
+		void RemoveLand(std::vector<Cell*> conqueredLand);
 
 		Army* getArmy();
 	private:

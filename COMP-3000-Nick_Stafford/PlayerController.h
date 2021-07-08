@@ -43,8 +43,15 @@ namespace Mer
 		void RaiseSoldiers();
 
 		bool areSoldiersSelected();
+		bool isArmyEnganged();
+		
+		Battle* getBattleInfo();
 
-#define PI 3.14159265
+		std::string getAttackerName();
+		std::string getDefenderName();
+
+		std::string getAttackerMorale();
+		std::string getDefenderMorale();
 
 		std::string getSelectedCellNationName();
 		std::string getSelectedCellReligionName();
@@ -69,6 +76,18 @@ namespace Mer
 		int getWarsSize();
 		std::string getWarsNationName(int id);
 		std::string getWarsWarScore(int id);
+
+		void StartPeaceDeal(int id);
+
+		std::string getPeaceWarScoreWith();
+		std::string getCurrentWarScoreCost();
+
+		void AcceptPeaceDeal();
+		void CancelPeaceDeal();
+
+		std::string getMakingPeaceWithName();
+
+		bool isMakingPeace();
 	private:
 
 		GameMapController GMC;
@@ -80,6 +99,9 @@ namespace Mer
 		std::vector<Battle> finishedBattles;
 
 		bool AlreadyAtWar(int id);
+		int makingPeaceWith = -1;
+
+		std::vector<Cell*> conqueredLand;
 
 		War* getWarWith(int id);
 
@@ -89,7 +111,9 @@ namespace Mer
 
 		std::vector<War> wars;
 		
+		Cell* lastSelectedCell;
 
+		bool makingPeaceDeal = false;
 
 		bool soldiersSelected = false;
 		glm::vec2 soldierMoveTo;

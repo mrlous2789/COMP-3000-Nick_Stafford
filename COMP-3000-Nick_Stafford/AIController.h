@@ -21,6 +21,8 @@ namespace Mer
 
 		void MakePeaceWith(int AiID, int peaceID);
 		War* getWarOfWith(int AIid, int withID);
+
+		void RemoveLandFrom(int nationID, std::vector<Cell*> conqueredLand);
 	private:
 		std::vector<AIAgent> agents;
 

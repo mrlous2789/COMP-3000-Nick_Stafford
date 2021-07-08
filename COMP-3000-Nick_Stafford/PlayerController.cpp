@@ -79,53 +79,8 @@ namespace Mer
 
 	void PlayerController::Update(float dt)
 	{
-
 		GMC.UpdateMap();
 
-		AIC.Update(gameSpeed);
-
-		finishedBattles = BC.Tick(dt, gameSpeed);
-
-		if (!finishedBattles.empty())
-		{
-			for (int i = 0; i < finishedBattles.size(); i++)
-			{
-				if (finishedBattles[i].attacker->nationID == nation->id)
-				{
-					getWarWith(finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
-				}
-				else
-				{
-					AIC.getWarOfWith(finishedBattles[i].attacker->nationID, finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
-				}
-				if (finishedBattles[i].defender->nationID == nation->id)
-				{
-					getWarWith(finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
-				}
-				else
-				{
-					AIC.getWarOfWith(finishedBattles[i].defender->nationID, finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
-				}
-			}
-			finishedBattles.clear();
-		}
-
-		if (army.broken && !soldierMoving)
-		{
-			route = PF.CalculatePath(&GMC.getCells()->at(army.locationID), &GMC.getCells()->at(nation->capitalId));
-			soldierMoving = true;
-			routePos = 0;
-		}
-		if (soldierMoving && army.enganged)
-		{
-			soldierMoving = false;
-		}
-
-		gameTickAcc += dt;
-		if (gameTickAcc >= gameTickTimer)
-		{
-			Tick();
-		}
 		if (toggleSoldiers)
 		{
 			soldiersRaised = !soldiersRaised;
@@ -140,51 +95,102 @@ namespace Mer
 			toggleSoldiers = false;
 		}
 
-		if (soldierMoving)
+		if (gameSpeed == 0)
 		{
-			smProgress += soldierMoveSpeed * gameSpeed;
 
-			if (smProgress >= 0.2f)
+		}
+		else
+		{
+			AIC.Update(gameSpeed);
+
+			finishedBattles = BC.Tick(dt, gameSpeed);
+
+			if (!finishedBattles.empty())
 			{
-				routePos++;
-				smProgress = 0.0f;
-
-				
-				if (route[routePos]->occupier == nullptr || army.broken)
+				for (int i = 0; i < finishedBattles.size(); i++)
 				{
-					GMC.getCells()->at(army.locationID).occupier = nullptr;
-					army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);				
-					route[routePos]->occupier = &army;
-				}
-				else
-				{
-					if (AlreadyAtWar(route[routePos]->occupier->nationID))
+					if (finishedBattles[i].attacker->nationID == nation->id)
 					{
-						if (!route[routePos]->occupier->broken)
-						{
-							BC.NewBattle(&army, route[routePos]->occupier, route[routePos]->biome);
-						}
-						routePos = route.size() - 1;
+						getWarWith(finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
 					}
 					else
 					{
-						routePos = route.size() - 1;
+						AIC.getWarOfWith(finishedBattles[i].attacker->nationID, finishedBattles[i].defender->nationID)->warScore += finishedBattles[i].warScore;
+					}
+					if (finishedBattles[i].defender->nationID == nation->id)
+					{
+						getWarWith(finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
+					}
+					else
+					{
+						AIC.getWarOfWith(finishedBattles[i].defender->nationID, finishedBattles[i].attacker->nationID)->warScore -= finishedBattles[i].warScore;
 					}
 				}
-
+				finishedBattles.clear();
 			}
 
-			if (routePos == route.size() - 1)
+			if (army.broken && !soldierMoving)
+			{
+				route = PF.CalculatePath(&GMC.getCells()->at(army.locationID), &GMC.getCells()->at(nation->capitalId));
+				soldierMoving = true;
+				routePos = 0;
+			}
+			if (soldierMoving && army.enganged)
 			{
 				soldierMoving = false;
-				if (army.broken)
+			}
+
+			gameTickAcc += dt;
+			if (gameTickAcc >= gameTickTimer)
+			{
+				Tick();
+			}
+
+
+			if (soldierMoving)
+			{
+				smProgress += soldierMoveSpeed * gameSpeed;
+
+				if (smProgress >= 0.2f)
 				{
-					army.broken = false;
+					routePos++;
+					smProgress = 0.0f;
+
+
+					if (route[routePos]->occupier == nullptr || army.broken)
+					{
+						GMC.getCells()->at(army.locationID).occupier = nullptr;
+						army.Move(route[routePos]->centre.x + 1, route[routePos]->centre.y + 1, route[routePos]->id);
+						route[routePos]->occupier = &army;
+					}
+					else
+					{
+						if (AlreadyAtWar(route[routePos]->occupier->nationID))
+						{
+							if (!route[routePos]->occupier->broken)
+							{
+								BC.NewBattle(&army, route[routePos]->occupier, route[routePos]->biome);
+							}
+							routePos = route.size() - 1;
+						}
+						else
+						{
+							routePos = route.size() - 1;
+						}
+					}
+
+				}
+
+				if (routePos == route.size() - 1)
+				{
+					soldierMoving = false;
+					if (army.broken)
+					{
+						army.broken = false;
+					}
 				}
 			}
 		}
-
-
 	}
 	
 	void PlayerController::Tick()
@@ -227,6 +233,9 @@ namespace Mer
 	{
 		switch (speed)
 		{
+		case 0:
+			gameSpeed = 0;
+			break;
 		case 1:
 			gameTickAcc = (gameTickAcc / gameTickTimer) * 20.0f;
 			gameTickTimer = 20.0f;
@@ -291,8 +300,32 @@ namespace Mer
 		{
 
 		}
-		else if (GMC.ProcessMousePress(mouseX, mouseY))
+		else 
 		{
+			Cell* temp = GMC.ProcessMousePress(mouseX, mouseY);
+			if (temp!=nullptr && makingPeaceDeal)
+			{
+
+				if (temp->state == makingPeaceWith && temp != lastSelectedCell)
+				{
+					temp->isInPeaceDeal = !temp->isInPeaceDeal;
+					if (temp->isInPeaceDeal)
+					{
+						conqueredLand.push_back(temp);
+					}
+					else
+					{
+						for (int i = 0; i < conqueredLand.size(); i++)
+						{
+							if (conqueredLand[i]->id == temp->id)
+							{
+								conqueredLand.erase(conqueredLand.begin() + i);
+							}
+						}
+					}
+				}
+			}
+			lastSelectedCell = temp;
 			return true;
 		}
 
@@ -301,6 +334,8 @@ namespace Mer
 
 	bool PlayerController::ProcessLeftMouseRelease(double mouseX, double mouseY)
 	{
+		lastSelectedCell = nullptr;
+
 		double correctedMouseX = mouseX, correctedMouseY = mouseY;
 
 		correctedMouseX -= (screenWidth / 2);
@@ -376,6 +411,15 @@ namespace Mer
 	{
 		return soldiersSelected;
 	}
+	bool PlayerController::isArmyEnganged()
+	{
+		return army.enganged;
+	}
+
+	Battle* PlayerController::getBattleInfo()
+	{
+		return BC.getBattleInfoOf(nation->id);
+	}
 
 	void PlayerController::WarWith(int id)
 	{
@@ -390,6 +434,72 @@ namespace Mer
 			AIC.getWarsOfNation(id)->push_back(tempother);
 		}
 	}
+	void PlayerController::StartPeaceDeal(int id)
+	{
+		if (AlreadyAtWar(id))
+		{
+			makingPeaceDeal = true;
+			makingPeaceWith = id;
+			UpdateMapDrawMode(DrawPeaceDeal);
+			SetTickSpeed(0);
+		}
+	}
+
+	void PlayerController::AcceptPeaceDeal()
+	{
+		if ((conqueredLand.size() * 5) <= getWarWith(makingPeaceWith)->warScore)
+		{
+			AIC.RemoveLandFrom(makingPeaceWith, conqueredLand);
+
+			for (int i = 0; i < conqueredLand.size(); i++)
+			{
+				conqueredLand[i]->state = nation->id;
+				conqueredLand[i]->isInPeaceDeal = false;
+				nation->nationCells.push_back(conqueredLand[i]);
+			}
+
+			conqueredLand.clear();
+
+			makingPeaceDeal = false;
+			makingPeaceWith = -1;
+			UpdateMapDrawMode(DrawNations);
+			SetTickSpeed(3);
+
+			PeaceWith(makingPeaceWith);
+		}
+
+	}
+	void PlayerController::CancelPeaceDeal()
+	{
+		for (int i = 0; i < conqueredLand.size(); i++)
+		{
+			conqueredLand[i]->isInPeaceDeal = false;
+		}
+		conqueredLand.clear();
+		makingPeaceDeal = false;
+		makingPeaceWith = -1;
+		UpdateMapDrawMode(DrawNations);
+		SetTickSpeed(3);
+	}
+
+	std::string PlayerController::getPeaceWarScoreWith()
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << getWarWith(makingPeaceWith)->warScore;
+
+		std::string temp = stream.str();
+		return temp;
+	}
+	std::string PlayerController::getCurrentWarScoreCost()
+	{
+		float warScoreCost = conqueredLand.size() * 5.0f;
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << warScoreCost;
+
+		std::string temp = stream.str();
+		return temp;
+	}
+
 	void PlayerController::PeaceWith(int id)
 	{
 		for (int i = 0; i < wars.size(); i++)
@@ -422,6 +532,34 @@ namespace Mer
 	std::string PlayerController::getNationsName(int id)
 	{
 		return GMC.getNationName(id);
+	}
+
+	std::string PlayerController::getAttackerName()
+	{
+		return GMC.getNationName(getBattleInfo()->attacker->nationID);
+	}
+	std::string PlayerController::getDefenderName()
+	{
+		return GMC.getNationName(getBattleInfo()->defender->nationID);
+	}
+
+	std::string PlayerController::getAttackerMorale()
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << getBattleInfo()->attacker->morale;
+
+		std::string temp = stream.str();
+
+		return temp;
+	}
+	std::string PlayerController::getDefenderMorale()
+	{
+		std::stringstream stream;
+		stream << std::fixed << std::setprecision(1) << getBattleInfo()->defender->morale;
+
+		std::string temp = stream.str();
+
+		return temp;
 	}
 
 	//float PlayerController::getSoldierScreenX()
@@ -478,5 +616,15 @@ namespace Mer
 
 		
 		return nullptr;
+	}
+
+	bool PlayerController::isMakingPeace()
+	{
+		return makingPeaceDeal;
+	}
+
+	std::string PlayerController::getMakingPeaceWithName()
+	{
+		return GMC.getNationName(makingPeaceWith);
 	}
 }

@@ -96,4 +96,16 @@ namespace Mer
 		}
 		return nullptr;
 	}
+
+	void AIController::RemoveLandFrom(int nationID, std::vector<Cell*> conqueredLand)
+	{
+		for (int i = 0; i < agents.size(); i++)
+		{
+			if (agents[i].getNationID() == nationID)
+			{
+				agents[i].RemoveLand(conqueredLand);
+				break;
+			}
+		}
+	}
 }

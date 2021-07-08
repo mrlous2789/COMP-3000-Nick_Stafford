@@ -124,4 +124,16 @@ namespace Mer
 		return finishedBattles;
 
 	}
+
+	Battle* BattleController::getBattleInfoOf(int id)
+	{
+		for (int i = 0; i < battles.size(); i++)
+		{
+			if (battles[i].attacker->nationID == id || battles[i].defender->nationID == id)
+			{
+				return &battles[i];
+			}
+		}
+		return nullptr;
+	}
 }

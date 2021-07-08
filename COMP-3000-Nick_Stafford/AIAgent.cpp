@@ -154,4 +154,17 @@ namespace Mer
 		}
 		return nullptr;
 	}
+	void AIAgent::RemoveLand(std::vector<Cell*> conqueredLand)
+	{
+		for (int i = 0; i < conqueredLand.size(); i++)
+		{
+			for (int j = 0; j < nation->nationCells.size(); j++)
+			{
+				if (nation->nationCells[j] == conqueredLand[i])
+				{
+					nation->nationCells.erase(nation->nationCells.begin() + j);
+				}
+			}
+		}
+	}
 }
