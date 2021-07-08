@@ -12,6 +12,7 @@ namespace Mer
 		totalSoldiers = this->maxSoldiers;
 		attack = maxSoldiers / 10.0f;
 		defence = maxSoldiers / 20.0f;
+		soldiersCost = maxSoldiers / 8.0f;
 
 		this->nationID = nationID;
 
@@ -124,5 +125,14 @@ namespace Mer
 		{
 			color[3] = 1.0f;
 		}
+	}
+
+	void Army::updateMaxSoldiers(int maxSoldiers)
+	{
+		this->maxSoldiers = maxSoldiers;
+		totalSoldiers = this->maxSoldiers;
+		attack = maxSoldiers / 10.0f;
+		defence = maxSoldiers / 20.0f;
+		soldiersCost = maxSoldiers / 8.0f;
 	}
 }

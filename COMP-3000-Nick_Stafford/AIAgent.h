@@ -38,6 +38,7 @@ namespace Mer
 
 		void MakePeaceWith(int id);
 		void RemoveLand(std::vector<Cell*> conqueredLand);
+		void UpdateMaxSoldiers();
 
 		Army* getArmy();
 	private:

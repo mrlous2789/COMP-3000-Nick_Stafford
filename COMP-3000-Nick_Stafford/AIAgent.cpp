@@ -167,4 +167,8 @@ namespace Mer
 			}
 		}
 	}
+	void AIAgent::UpdateMaxSoldiers()
+	{
+		armies.updateMaxSoldiers(nation->nationCells.size());
+	}
 }

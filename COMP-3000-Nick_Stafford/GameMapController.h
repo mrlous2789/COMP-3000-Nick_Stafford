@@ -48,6 +48,8 @@ namespace Mer
 		std::string getSelectedCellReligionName();
 		std::string getSelectedCellCultureName();
 
+		int getSelectedCellNationID();
+
 		void SetZoomIn(bool inZoom = true);
 		void SetZoomOut(bool inZoom = true);
 

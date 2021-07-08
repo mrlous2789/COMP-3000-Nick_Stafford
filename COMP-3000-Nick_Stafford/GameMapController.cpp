@@ -810,6 +810,10 @@ namespace Mer
 		}
 		return "None";
 	}
+	int GameMapController::getSelectedCellNationID()
+	{
+		return selectedCell->state;
+	}
 
 	std::vector<Nation>* GameMapController::getNations()
 	{

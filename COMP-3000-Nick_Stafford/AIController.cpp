@@ -104,6 +104,7 @@ namespace Mer
 			if (agents[i].getNationID() == nationID)
 			{
 				agents[i].RemoveLand(conqueredLand);
+				agents[i].UpdateMaxSoldiers();
 				break;
 			}
 		}

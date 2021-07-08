@@ -18,6 +18,7 @@ namespace Mer
 		void Initialise(float red, float green, float blue, int maxSoldiers, float soldierXpos, float soldierYpos, int nationID);
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
 		void Move(float xPos, float yPos, int id);
+		void updateMaxSoldiers(int maxSoldiers);
 
 		void Selected();
 
@@ -31,11 +32,15 @@ namespace Mer
 		float attack;
 		float defence;
 		
+		float soldiersCost;
+
 		int locationID;
 
 		float soldierXPos = 0.0f, soldierYPos = 0.0f;
 		float soldierXOffset = 0.0f, soldierYOffset = 0.0f;
 		float xCentering = 0.0f, yCentering = 0.0f;
+
+		bool bankrupt = false;
 
 		bool enganged = false;
 

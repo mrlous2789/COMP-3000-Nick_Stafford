@@ -39,6 +39,7 @@ namespace Mer
 		_data->assets.LoadTexture("cellPanel", "Assets\\Game_UI\\game_ui_cell_panel.tga");
 		_data->assets.LoadTexture("acceptPeaceB", "Assets\\Game_UI\\game_ui_peace_accept.tga");
 		_data->assets.LoadTexture("cancelPeaceB", "Assets\\Game_UI\\game_ui_peace_cancel.tga");
+		_data->assets.LoadTexture("playB", "Assets\\Game_UI\\game_ui_play_button.tga");
 
 
 		std::cout << "Loaded textures" << std::endl;
@@ -136,15 +137,23 @@ namespace Mer
 		GUI.Panel(10, 10, 384, 144, _data->assets.getTexture("cellPanel"), "CellPanel");
 		if (PLC.isMakingPeace())
 		{
-			if (GUI.Button(1600, 10, 50, 50, _data->assets.getTexture("cancelPeaceB"), "CancelPeaceB"))
+			if (GUI.Button(1710, 10, 100, 100, _data->assets.getTexture("cancelPeaceB"), "CancelPeaceB"))
 			{
 				PLC.CancelPeaceDeal();
 			}
-			if (GUI.Button(1650, 10, 50, 50, _data->assets.getTexture("acceptPeaceB"), "AcceptPeaceB"))
+			if (GUI.Button(1810, 10, 100, 100, _data->assets.getTexture("acceptPeaceB"), "AcceptPeaceB"))
 			{
 				PLC.AcceptPeaceDeal();
 			}
 			GUI.Panel(394, 10, 384, 144, _data->assets.getTexture("cellPanel"), "WarScorePanel");
+		}
+		else if (!PLC.getNationChosen())
+		{
+			if (GUI.Button(1620, 10, 300, 100, _data->assets.getTexture("playB"), "PlayB"))
+			{
+				PLC.PlayAsNation();
+			}
+			GUI.Panel(394, 10, 384, 144, _data->assets.getTexture("cellPanel"), "ChooseNationPanel");
 		}
 		else
 		{
@@ -292,10 +301,15 @@ namespace Mer
 			GUI.Text("Making Peace With " + PLC.getMakingPeaceWithName(), 280.0f, 575.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
 			
 
-			GUI.Text("War Score ", 197.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text(PLC.getPeaceWarScoreWith(), 237.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text("Score Cost", 197.0f, 24.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text(PLC.getCurrentWarScoreCost(), 237.0f, 24.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("War Score ", 177.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text(PLC.getPeaceWarScoreWith(), 237.0f, 67.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("Score Cost", 177.0f, 24.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text(PLC.getCurrentWarScoreCost(), 237.0f, 24.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		}
+		else if (!PLC.getNationChosen())
+		{
+			GUI.Text("Choose Nation", 280.0f, 575.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("Play As " + PLC.getSelectedCellNationName(), 177.0f, 67.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
 		}
 		else 
 		{

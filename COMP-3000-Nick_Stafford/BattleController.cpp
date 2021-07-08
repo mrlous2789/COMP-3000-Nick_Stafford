@@ -62,7 +62,15 @@ namespace Mer
 
 				int diceRoll = distribution(generator);
 
-				battles[i].defender->morale -= ((battles[i].attacker->attack) + diceRoll);
+				if (battles[i].attacker->bankrupt)
+				{
+					battles[i].defender->morale -= ((battles[i].attacker->attack * 0.5f) + diceRoll);
+				}
+				else
+				{
+					battles[i].defender->morale -= ((battles[i].attacker->attack) + diceRoll);
+				}
+				
 
 				if (battles[i].defender->morale <= 0)
 				{
@@ -84,7 +92,15 @@ namespace Mer
 				else
 				{
 					diceRoll = distribution(generator);
-					battles[i].attacker->morale -= (battles[i].defender->attack) + (diceRoll + battles[i].attDisad);
+					if (battles[i].defender->bankrupt)
+					{
+						battles[i].attacker->morale -= (battles[i].defender->attack * 0.5f) + (diceRoll + battles[i].attDisad);
+					}
+					else
+					{
+						battles[i].attacker->morale -= (battles[i].defender->attack) + (diceRoll + battles[i].attDisad);
+					}
+					
 				}
 
 				if (battles[i].attacker->morale <= 0 && !battles[i].over)

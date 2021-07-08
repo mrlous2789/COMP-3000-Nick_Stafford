@@ -38,13 +38,13 @@ namespace Mer
 	void PlayerController::Initialise(int screenWidth, int screenHeight)
 	{
 		GMC.Initialise(screenWidth, screenHeight);
-		nation = GMC.getNationPointerById(22);
-		AIC.Initialise(GMC.getNations(), nation->id, GMC.getCells());
+
+
 		PF.Initialise(GMC.getCells());
 		
-		army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->id);
+		UpdateMapDrawMode(DrawNations);
 
-
+		gameSpeed = 0;
 		
 		this->screenWidth = screenWidth;
 		this->screenHeight = screenHeight;
@@ -195,8 +195,21 @@ namespace Mer
 	
 	void PlayerController::Tick()
 	{
-		goldPerTurn = nation->nationCells.size() / 10;
+		if (soldiersRaised)
+		{
+			goldPerTurn = (nation->nationCells.size() / 10) - army.soldiersCost;
+		}
+		else
+		{
+			goldPerTurn = (nation->nationCells.size() / 10);
+		}
+	
 		gold += goldPerTurn;
+
+		if (gold < 0)
+		{
+			army.bankrupt = true;
+		}
 
 		AIC.Tick();
 
@@ -421,6 +434,18 @@ namespace Mer
 		return BC.getBattleInfoOf(nation->id);
 	}
 
+	void PlayerController::PlayAsNation()
+	{
+		if (GMC.getSelectedCellNationID() != -1)
+		{
+			nation = GMC.getNationPointerById(GMC.getSelectedCellNationID());
+			nationChosen = true;
+			gameSpeed = 3;
+			AIC.Initialise(GMC.getNations(), nation->id, GMC.getCells());
+			army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->id);
+		}
+	}
+
 	void PlayerController::WarWith(int id)
 	{
 		if (!AlreadyAtWar(id))
@@ -459,6 +484,8 @@ namespace Mer
 			}
 
 			conqueredLand.clear();
+
+			army.updateMaxSoldiers(nation->nationCells.size());
 
 			makingPeaceDeal = false;
 			makingPeaceWith = -1;
@@ -561,16 +588,11 @@ namespace Mer
 
 		return temp;
 	}
-
-	//float PlayerController::getSoldierScreenX()
-	//{		
-	//	return (((soldierXOffset - 1) * GMC.getZoomLevel()) / 2) * screenWidth;
-	//	
-	//}
-	//float PlayerController::getSoldierScreenY()
-	//{
-	//	return (((soldierYOffset - 1) * GMC.getZoomLevel()) / 2)  * screenHeight;
-	//}
+	
+	bool PlayerController::getNationChosen()
+	{
+		return nationChosen;
+	}
 
 	std::string PlayerController::getSelectedCellNationName()
 	{

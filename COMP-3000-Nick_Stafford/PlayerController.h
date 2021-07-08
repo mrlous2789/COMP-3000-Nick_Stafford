@@ -25,6 +25,8 @@ namespace Mer
 		void Initialise(int screenWidth, int screenHeight);
 		void Draw(GLuint texture);
 
+		void PlayAsNation();
+
 		void Tick();
 
 		void Update(float dt);
@@ -88,7 +90,10 @@ namespace Mer
 		std::string getMakingPeaceWithName();
 
 		bool isMakingPeace();
+		bool getNationChosen();
 	private:
+
+		bool nationChosen = false;
 
 		GameMapController GMC;
 		Pathfinding PF;
