@@ -16,7 +16,7 @@ namespace Mer
 		GUI.InitialiseGUI(windowW, windowH);
 		PLC.Initialise(windowW, windowH);
 
-		_data->assets.LoadTexture("player", "Assets\\Player\\temp_player.tga");
+		_data->assets.LoadTexture("player", "Assets\\Player\\soldiers_icon.tga");
 		_data->assets.LoadTexture("heightB", "Assets\\Game_Map_Buttons\\height_map_button.tga");
 		_data->assets.LoadTexture("terrainB", "Assets\\Game_Map_Buttons\\terrain_map_button.tga");
 		_data->assets.LoadTexture("nationB", "Assets\\Game_Map_Buttons\\nation_map_button.tga");
@@ -40,6 +40,7 @@ namespace Mer
 		_data->assets.LoadTexture("acceptPeaceB", "Assets\\Game_UI\\game_ui_peace_accept.tga");
 		_data->assets.LoadTexture("cancelPeaceB", "Assets\\Game_UI\\game_ui_peace_cancel.tga");
 		_data->assets.LoadTexture("playB", "Assets\\Game_UI\\game_ui_play_button.tga");
+		_data->assets.LoadTexture("raiseSoldiersB", "Assets\\Game_UI\\game_ui_raise_soldiers.tga");
 
 
 		std::cout << "Loaded textures" << std::endl;
@@ -157,51 +158,51 @@ namespace Mer
 		}
 		else
 		{
-			if (GUI.Button(1600, 150, 50, 50, _data->assets.getTexture("terrainB"), "TerrainB"))
+			if (GUI.Button(1846, 928, 64, 64, _data->assets.getTexture("terrainB"), "TerrainB"))
 			{
 				PLC.UpdateMapDrawMode(DrawTerrain);
 			}
-			if (GUI.Button(1655, 150, 50, 50, _data->assets.getTexture("nationB"), "NationB"))
+			if (GUI.Button(1846, 864, 64, 64, _data->assets.getTexture("nationB"), "NationB"))
 			{
 				PLC.UpdateMapDrawMode(DrawNations);
 			}
-			if (GUI.Button(1710, 150, 50, 50, _data->assets.getTexture("cultureB"), "CultureB"))
+			if (GUI.Button(1846, 800, 64, 64, _data->assets.getTexture("cultureB"), "CultureB"))
 			{
 				PLC.UpdateMapDrawMode(DrawCultures);
 			}
-			if (GUI.Button(1765, 150, 50, 50, _data->assets.getTexture("religionB"), "ReligionB"))
+			if (GUI.Button(1846, 736, 64, 64, _data->assets.getTexture("religionB"), "ReligionB"))
 			{
 				PLC.UpdateMapDrawMode(DrawReligions);
 			}
-			if (GUI.Button(1820, 150, 50, 50, _data->assets.getTexture("heightB"), "HeightB"))
+			if (GUI.Button(1846, 672, 64, 64, _data->assets.getTexture("heightB"), "HeightB"))
 			{
 				PLC.UpdateMapDrawMode(DrawHeight);
 			}
-			if (GUI.Button(1545, 1020, 50, 50, _data->assets.getTexture("speed0B"), "Speed0"))
+			if (GUI.Button(1526, 1016, 64, 64, _data->assets.getTexture("speed0B"), "Speed0"))
 			{
 				PLC.SetTickSpeed(0);
 			}
-			if (GUI.Button(1600, 1020, 50, 50, _data->assets.getTexture("speed1B"), "Speed1"))
+			if (GUI.Button(1590, 1016, 64, 64, _data->assets.getTexture("speed1B"), "Speed1"))
 			{
 				PLC.SetTickSpeed(1);
 			}
-			if (GUI.Button(1655, 1020, 50, 50, _data->assets.getTexture("speed2B"), "Speed2"))
+			if (GUI.Button(1654, 1016, 64, 64, _data->assets.getTexture("speed2B"), "Speed2"))
 			{
 				PLC.SetTickSpeed(2);
 			}
-			if (GUI.Button(1710, 1020, 50, 50, _data->assets.getTexture("speed3B"), "Speed3"))
+			if (GUI.Button(1718, 1016, 64, 64, _data->assets.getTexture("speed3B"), "Speed3"))
 			{
 				PLC.SetTickSpeed(3);
 			}
-			if (GUI.Button(1765, 1020, 50, 50, _data->assets.getTexture("speed4B"), "Speed4"))
+			if (GUI.Button(1782, 1016, 64, 64, _data->assets.getTexture("speed4B"), "Speed4"))
 			{
 				PLC.SetTickSpeed(4);
 			}
-			if (GUI.Button(1820, 1020, 50, 50, _data->assets.getTexture("speed5B"), "Speed5"))
+			if (GUI.Button(1846, 1016, 64, 64, _data->assets.getTexture("speed5B"), "Speed5"))
 			{
 				PLC.SetTickSpeed(5);
 			}
-			if (GUI.Button(600, 1020, 50, 50, _data->assets.getTexture("religionB"), "RaiseSoldiersB"))
+			if (GUI.Button(600, 1016, 64, 64, _data->assets.getTexture("raiseSoldiersB"), "RaiseSoldiersB"))
 			{
 				PLC.RaiseSoldiers();
 			}
@@ -288,13 +289,13 @@ namespace Mer
 		GUI.EndFrame();
 
 
-		GUI.Text("Nation:", 10.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text("Culture:", 10.0f, 43.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text("Religion:", 10.0f, 19.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text("Nation:", 10.0f, 67.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text("Culture:", 10.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text("Religion:", 10.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-		GUI.Text(PLC.getSelectedCellNationName(), 50.0f, 67.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text(PLC.getSelectedCellCultureName(), 50.0f, 43.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text(PLC.getSelectedCellReligionName(), 50.0f, 19.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellNationName(), 55.0f, 67.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellCultureName(), 55.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellReligionName(), 55.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 		if (PLC.isMakingPeace())
 		{
@@ -308,15 +309,14 @@ namespace Mer
 		}
 		else if (!PLC.getNationChosen())
 		{
-			GUI.Text("Choose Nation", 280.0f, 575.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("Choose Nation", 320.0f, 575.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
 			GUI.Text("Play As " + PLC.getSelectedCellNationName(), 177.0f, 67.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
 		}
 		else 
 		{
-			GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text("Gold: ", 65.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text(PLC.getGold(), 100.0f, 580.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-			GUI.Text(PLC.getGoldPerTurn(), 100.0f, 575.0f, 0.15f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text(PLC.getNationName(), 5.0f, 580.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text("Gold: " + PLC.getGold(), 95.0f, 580.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
+			GUI.Text(PLC.getGoldPerTurn(), 130.0f, 575.0f, 0.20f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 			if (showDiplomacyPanel)
 			{
