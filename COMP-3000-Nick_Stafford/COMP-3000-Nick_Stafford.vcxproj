@@ -81,6 +81,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Dev\Libraries\SDL2-2.0.12\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Dev\Libraries\SDL2-2.0.12\lib\x64;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -183,6 +184,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleController.h" />
+    <ClInclude Include="Buildings.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Culture.h" />
     <ClInclude Include="Game.h" />

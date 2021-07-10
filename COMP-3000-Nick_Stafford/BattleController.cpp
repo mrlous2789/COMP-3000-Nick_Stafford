@@ -64,11 +64,11 @@ namespace Mer
 
 				if (battles[i].attacker->bankrupt)
 				{
-					battles[i].defender->morale -= ((battles[i].attacker->attack * 0.5f) + diceRoll);
+					battles[i].defender->morale -= (((battles[i].attacker->attack * battles[i].attacker->attackMultiplier) * 0.5f) + diceRoll + battles[i].attacker->diceRollAdvantage);
 				}
 				else
 				{
-					battles[i].defender->morale -= ((battles[i].attacker->attack) + diceRoll);
+					battles[i].defender->morale -= (((battles[i].attacker->attack * battles[i].attacker->attackMultiplier)) + diceRoll + battles[i].attacker->diceRollAdvantage);
 				}
 				
 
@@ -94,11 +94,11 @@ namespace Mer
 					diceRoll = distribution(generator);
 					if (battles[i].defender->bankrupt)
 					{
-						battles[i].attacker->morale -= (battles[i].defender->attack * 0.5f) + (diceRoll + battles[i].attDisad);
+						battles[i].attacker->morale -= ((battles[i].defender->attack * battles[i].defender->attackMultiplier) * 0.5f) + (diceRoll + battles[i].attDisad + battles[i].defender->diceRollAdvantage);
 					}
 					else
 					{
-						battles[i].attacker->morale -= (battles[i].defender->attack) + (diceRoll + battles[i].attDisad);
+						battles[i].attacker->morale -= ((battles[i].defender->attack * battles[i].defender->attackMultiplier)) + (diceRoll + battles[i].attDisad + battles[i].defender->diceRollAdvantage);
 					}
 					
 				}

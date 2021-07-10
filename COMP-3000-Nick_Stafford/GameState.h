@@ -27,6 +27,7 @@ namespace Mer
 		
 		bool showDiplomacyPanel = false;
 		bool showWarsPanel = false;
+		bool showConstructionPanel = false;
 
 		int diplomacyOffset = 0;
 

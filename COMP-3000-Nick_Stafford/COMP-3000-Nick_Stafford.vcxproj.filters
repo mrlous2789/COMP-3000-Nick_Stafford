@@ -185,5 +185,8 @@
     <ClInclude Include="Wars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Buildings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

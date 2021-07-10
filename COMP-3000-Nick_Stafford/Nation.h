@@ -12,5 +12,7 @@ namespace Mer
 		int capitalId;
 		Cell* capital;
 		float colour[3];
+
+
 	};
 }

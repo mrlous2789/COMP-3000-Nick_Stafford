@@ -45,6 +45,9 @@ namespace Mer
 		bool enganged = false;
 
 		bool broken = false;
+
+		int diceRollAdvantage = 0;
+		float attackMultiplier = 1.0f;
 	private:
 		void UpdateMVP(float zoomLevel, float xOffset, float yOffset);
 
@@ -76,9 +79,9 @@ namespace Mer
 		GLfloat Vertices[4][3]
 		{
 			{-1.0f,-1.0f,0.0f},//bottom left
-			{-0.991666675,-1.0f,0.0f},//bottom right
-			{-0.991666675,-0.985185206,0.0f},//top right
-			{-1.0f,-0.985185206,0.0f}//top left
+			{-0.989583f,-1.0f,0.0f},//bottom right
+			{-0.989583f,-0.98148f,0.0f},//top right
+			{-1.0f,-0.98148f,0.0f}//top left
 		};
 
 	};

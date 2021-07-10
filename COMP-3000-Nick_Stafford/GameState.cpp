@@ -41,7 +41,8 @@ namespace Mer
 		_data->assets.LoadTexture("cancelPeaceB", "Assets\\Game_UI\\game_ui_peace_cancel.tga");
 		_data->assets.LoadTexture("playB", "Assets\\Game_UI\\game_ui_play_button.tga");
 		_data->assets.LoadTexture("raiseSoldiersB", "Assets\\Game_UI\\game_ui_raise_soldiers.tga");
-
+		_data->assets.LoadTexture("constructionB", "Assets\\Game_UI\\game_ui_construction_button.tga");
+		_data->assets.LoadTexture("constructionP", "Assets\\Game_UI\\game_ui_construction_panel.tga");
 
 		std::cout << "Loaded textures" << std::endl;
 
@@ -210,12 +211,21 @@ namespace Mer
 			{
 				showDiplomacyPanel = !showDiplomacyPanel;
 				showWarsPanel = false;
+				showConstructionPanel = false;
 				diplomacyOffset = 0;
 			}
 			if (GUI.Button(16, 864, 64, 64, _data->assets.getTexture("warB"), "WarPB"))
 			{
 				showWarsPanel = !showWarsPanel;
 				showDiplomacyPanel = false;
+				showConstructionPanel = false;
+				diplomacyOffset = 0;
+			}
+			if (GUI.Button(16, 800, 64, 64, _data->assets.getTexture("constructionB"), "ConstructionPB"))
+			{
+				showConstructionPanel = !showConstructionPanel;
+				showDiplomacyPanel = false;
+				showWarsPanel = false;
 				diplomacyOffset = 0;
 			}
 			if (PLC.areSoldiersSelected())
@@ -284,6 +294,21 @@ namespace Mer
 					}
 				}
 			}
+			if (showConstructionPanel)
+			{
+				GUI.Panel(80, 416, 336, 576, _data->assets.getTexture("constructionP"), "ConstructionP");
+
+				for (int i = 0; i < 4; i++)
+				{
+					float yOffset = 128.0f * i;
+
+					std::string name = "constructionB" + std::to_string(i);
+					if (GUI.Button(296, (832 - yOffset), 100, 100, _data->assets.getTexture("constructionB"), name))
+					{
+						PLC.ConstructBuilding(i);
+					}
+				}
+			}
 		}
 
 		GUI.EndFrame();
@@ -293,9 +318,9 @@ namespace Mer
 		GUI.Text("Culture:", 10.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text("Religion:", 10.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-		GUI.Text(PLC.getSelectedCellNationName(), 55.0f, 67.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text(PLC.getSelectedCellCultureName(), 55.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-		GUI.Text(PLC.getSelectedCellReligionName(), 55.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellNationName(), 57.0f, 67.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellCultureName(), 57.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+		GUI.Text(PLC.getSelectedCellReligionName(), 57.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 		if (PLC.isMakingPeace())
 		{
@@ -352,6 +377,20 @@ namespace Mer
 				}
 			}
 
+			if (showConstructionPanel)
+			{
+				GUI.Text("Construction", 42.0f, 525.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));		
+
+				for (int i = 0; i < 4; i++)
+				{
+					float yOffset = (144.0f * i) / 2;
+					GUI.Text(PLC.getBuildingName(i), 42.0f, (500.0f - yOffset), 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+					GUI.Text("Cost: " + PLC.getBuildingCost(i) + " gold", 70.0f, (470.0f - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
+					GUI.Text(PLC.getBuildingEffect(i), 42.0f, (485.0f - yOffset), 0.19f, glm::vec3(0.0f, 0.0f, 0.0f));
+					GUI.Text(PLC.getBuildingAmount(i) + "/" + PLC.getBuildingMaxAmount(i), 42.0f, (470.0f - yOffset), 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+				}
+			}
+
 			if (PLC.areSoldiersSelected())
 			{
 				GUI.Text("Army", 10.0f, 140.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -359,7 +398,6 @@ namespace Mer
 				GUI.Text(std::to_string(PLC.getSoldiersTotal()), 35.0f, 120.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 				if (PLC.isArmyEnganged())
 				{
-
 					GUI.Text(PLC.getAttackerName(), 65.0f, 140.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 					GUI.Text(PLC.getAttackerMorale(), 100.0f, 140.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 					GUI.Text(PLC.getDefenderName(), 65.0f, 120.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));

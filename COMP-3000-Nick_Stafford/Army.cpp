@@ -58,8 +58,8 @@ namespace Mer
 
 		soldierShader = LoadShaders(soldierShaders);
 
-		xCentering = (-1.0f + 0.991666675) / 2;
-		yCentering = (-1.0f + 0.985185206) / 2;
+		xCentering = (-1.0f + 0.989583f) / 2;
+		yCentering = (-1.0f + 0.98148f) / 2;
 	}
 	void Army::Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture)
 	{

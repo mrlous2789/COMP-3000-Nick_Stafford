@@ -13,6 +13,7 @@
 #include "GameMapController.h"
 #include<cmath>
 #include "BattleController.h"
+#include "Buildings.h"
 
 #include "AIController.h"
 
@@ -91,6 +92,14 @@ namespace Mer
 
 		bool isMakingPeace();
 		bool getNationChosen();
+
+		std::string getBuildingName(int id);
+		std::string getBuildingEffect(int id);
+		std::string getBuildingMaxAmount(int id);
+		std::string getBuildingAmount(int id);
+		std::string getBuildingCost(int id);
+
+		void ConstructBuilding(int id);
 	private:
 
 		bool nationChosen = false;
@@ -99,13 +108,19 @@ namespace Mer
 		Pathfinding PF;
 		AIController AIC;
 		Army army;
-		BattleController BC;
+		BattleController BC; 
+
+		bool newBuildings = false;
 
 		std::vector<Battle> finishedBattles;
 
 		bool AlreadyAtWar(int id);
 		int makingPeaceWith = -1;
 
+		void SetupBuildings();
+
+
+		std::vector<Building> buildings;
 		std::vector<Cell*> conqueredLand;
 
 		War* getWarWith(int id);
@@ -138,6 +153,8 @@ namespace Mer
 		int gameSpeed = 3;
 
 		float goldPerTurn = 0.0f;
+		float buildingsGold = 0.0f;
+		float goldMultiplier = 0.0f;
 		float prestigePerTurn = 0.0f;
 
 		float screenWidth = 0.0f, screenHeight = 0.0f;

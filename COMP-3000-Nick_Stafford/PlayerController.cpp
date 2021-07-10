@@ -49,6 +49,8 @@ namespace Mer
 		this->screenWidth = screenWidth;
 		this->screenHeight = screenHeight;
 
+		SetupBuildings();
+		
 	}
 
 	void PlayerController::HandleInput()
@@ -93,6 +95,17 @@ namespace Mer
 			army.Move(nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->capital->id);
 			GMC.getCells()->at(nation->capital->id).occupier = &army;
 			toggleSoldiers = false;
+		}
+
+		if (newBuildings)
+		{
+			army.attackMultiplier = (buildings[0].amount * 0.02f) + 1.0f;
+			army.diceRollAdvantage = buildings[1].amount;
+
+			goldMultiplier = (buildings[2].amount * 0.01f) + 1.0f;
+			buildingsGold = buildings[3].amount * 0.5f;
+
+			newBuildings = false;
 		}
 
 		if (gameSpeed == 0)
@@ -197,11 +210,11 @@ namespace Mer
 	{
 		if (soldiersRaised)
 		{
-			goldPerTurn = (nation->nationCells.size() / 10) - army.soldiersCost;
+			goldPerTurn = (((nation->nationCells.size() / 10) * goldMultiplier) + buildingsGold) - army.soldiersCost;
 		}
 		else
 		{
-			goldPerTurn = (nation->nationCells.size() / 10);
+			goldPerTurn = (((nation->nationCells.size() / 10) * goldMultiplier) + buildingsGold);
 		}
 	
 		gold += goldPerTurn;
@@ -441,6 +454,7 @@ namespace Mer
 			nation = GMC.getNationPointerById(GMC.getSelectedCellNationID());
 			nationChosen = true;
 			gameSpeed = 3;
+			newBuildings = true;
 			AIC.Initialise(GMC.getNations(), nation->id, GMC.getCells());
 			army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->id);
 		}
@@ -552,6 +566,105 @@ namespace Mer
 		return false;
 	}
 
+	void PlayerController::SetupBuildings()
+	{
+		Building temp;
+
+		temp.id = 0;
+		temp.name = "Barracks";
+		temp.effect = "+2\% Attack for Soldiers";
+		temp.cost = 500;
+		temp.baseAmount = 3;
+		temp.maxAmount = 20;
+		temp.amount = 0;
+		buildings.push_back(temp);
+
+		temp.id = 1;
+		temp.name = "Training Camp";
+		temp.effect = "+1 to Dicerolls in Battles";
+		temp.cost = 1000;
+		temp.baseAmount = 1;
+		temp.maxAmount = 3;
+		temp.amount = 0;
+		buildings.push_back(temp);
+
+		temp.id = 2;
+		temp.name = "Market";
+		temp.effect = "+1\% Gold Per Turn";
+		temp.cost = 1500;
+		temp.baseAmount = 5;
+		temp.maxAmount = 30;
+		temp.amount = 0;
+		buildings.push_back(temp);
+
+		temp.id = 3;
+		temp.name = "Gold Mine";
+		temp.effect = "+0.5 Gold Per Turn";
+		temp.cost = 250;
+		temp.baseAmount = 10;
+		temp.maxAmount = 40;
+		temp.amount = 0;
+		buildings.push_back(temp);
+
+	}
+
+	std::string PlayerController::getBuildingName(int id)
+	{
+		return buildings[id].name;
+	}
+	std::string PlayerController::getBuildingEffect(int id)
+	{
+		return buildings[id].effect;
+	}
+	std::string PlayerController::getBuildingMaxAmount(int id)
+	{
+		if (buildings[id].baseAmount * (nation->nationCells.size() / 18.0f) > buildings[id].maxAmount)
+		{
+			return std::to_string(buildings[id].maxAmount);
+		}
+		else
+		{
+			return std::to_string(buildings[id].baseAmount * (nation->nationCells.size() / 18));
+		}
+	}
+	std::string PlayerController::getBuildingAmount(int id)
+	{
+		return std::to_string(buildings[id].amount);
+	}
+	std::string PlayerController::getBuildingCost(int id)
+	{
+		return std::to_string(buildings[id].cost);
+	}
+
+
+	void PlayerController::ConstructBuilding(int id)
+	{
+		if (buildings[id].baseAmount * (nation->nationCells.size() / 18.0f) < buildings[id].maxAmount)
+		{
+			if (buildings[id].amount + 1 <= buildings[id].baseAmount * (nation->nationCells.size() / 18.0f))
+			{
+				if (buildings[id].cost <= gold)
+				{
+					buildings[id].amount++;
+					newBuildings = true;
+					gold -= buildings[id].cost;
+				}
+			}
+		}
+		else
+		{
+			if (buildings[id].amount + 1 <= buildings[id].maxAmount)
+			{
+				if (buildings[id].cost <= gold)
+				{
+					buildings[id].amount++;
+					newBuildings = true;
+					gold -= buildings[id].cost;
+				}
+			}
+		}
+	}
+
 	int PlayerController::getNationsCount()
 	{
 		return GMC.getNationCount();
@@ -635,8 +748,6 @@ namespace Mer
 				return &wars[i];
 			}
 		}
-
-		
 		return nullptr;
 	}
 
