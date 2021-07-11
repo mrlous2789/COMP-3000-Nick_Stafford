@@ -171,4 +171,29 @@ namespace Mer
 	{
 		armies.updateMaxSoldiers(nation->nationCells.size());
 	}
+
+	bool AIAgent::areSoldiersRaised()
+	{
+		return soldiersRaised;
+	}
+	float AIAgent::getGold()
+	{
+		return gold;
+	}
+	void AIAgent::setGold(float gold)
+	{
+		this->gold = gold;
+	}
+	void AIAgent::setArmyLocation(int id)
+	{
+		armies.locationID = id;
+	}
+	void AIAgent::setSoldiersRaised(int soldiersRaised)
+	{
+		this->soldiersRaised = soldiersRaised;
+		if (this->soldiersRaised)
+		{		
+			armies.Move(cells->at(armies.locationID).centre.x, cells->at(armies.locationID).centre.y, armies.locationID);
+		}
+	}
 }

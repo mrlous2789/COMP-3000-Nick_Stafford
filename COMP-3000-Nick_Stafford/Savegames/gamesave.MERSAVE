@@ -1,0 +1,195 @@
+{
+Nation ID: "3"
+Gold: "311.5"
+Army Location: "0"
+Soldiers Raised: "0"
+Buildings {
+Building ID: "0"
+Amount: "0"
+Building ID: "1"
+Amount: "0"
+Building ID: "2"
+Amount: "0"
+Building ID: "3"
+Amount: "1"
+}
+Wars { 
+}
+}
+{
+Nation ID: "0"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "1"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "2"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "4"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "5"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "6"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "7"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "8"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "9"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "10"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "11"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "12"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "13"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "14"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "15"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "16"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "17"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "18"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "19"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "20"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "21"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+{
+Nation ID: "22"
+Gold: "0"
+Army Location: "0"
+Soldiers Raised: "0"
+Wars { 
+}
+}
+Battles

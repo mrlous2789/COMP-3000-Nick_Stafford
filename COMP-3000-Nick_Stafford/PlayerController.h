@@ -25,6 +25,7 @@ namespace Mer
 		PlayerController();
 		void Initialise(int screenWidth, int screenHeight);
 		void Draw(GLuint texture);
+		void CleanUp();
 
 		void PlayAsNation();
 
@@ -93,6 +94,8 @@ namespace Mer
 		bool isMakingPeace();
 		bool getNationChosen();
 
+		bool isGamePaused();
+
 		std::string getBuildingName(int id);
 		std::string getBuildingEffect(int id);
 		std::string getBuildingMaxAmount(int id);
@@ -100,9 +103,18 @@ namespace Mer
 		std::string getBuildingCost(int id);
 
 		void ConstructBuilding(int id);
+
+		void SaveGame();
+		void LoadFromSave();
+		void UnPause();
 	private:
 
+		void LoadWarWith(int id);
+		void UpdateWarScore(int id, float score);
+
 		bool nationChosen = false;
+
+		bool gamePaused = false;
 
 		GameMapController GMC;
 		Pathfinding PF;
@@ -111,6 +123,8 @@ namespace Mer
 		BattleController BC; 
 
 		bool newBuildings = false;
+
+		bool escToggle = false;
 
 		std::vector<Battle> finishedBattles;
 

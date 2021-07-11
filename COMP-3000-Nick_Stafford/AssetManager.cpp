@@ -71,6 +71,12 @@ namespace Mer
 
 	void AssetManager::CleanUp()
 	{
-		//_textures.clear();
+		std::map<std::string, GLuint>::iterator it;
+
+		for (it = _textures.begin(); it != _textures.end(); it++)
+		{
+			glDeleteTextures(1, &it->second);
+		}
+		_textures.clear();
 	}
 }

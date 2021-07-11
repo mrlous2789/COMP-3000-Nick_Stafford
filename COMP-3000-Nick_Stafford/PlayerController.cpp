@@ -60,6 +60,23 @@ namespace Mer
 		if (isZoomOut)
 			GMC.SetZoomOut(); isZoomOut = false;
 
+		if (KeysPressed[GLFW_KEY_ESCAPE] && !escToggle)
+		{
+			gamePaused = !gamePaused;
+			escToggle = true;
+			if (gamePaused)
+			{
+				gameSpeed = 0;
+			}
+			else
+			{
+				gameSpeed = 3;
+			}
+		}
+		if (!KeysPressed[GLFW_KEY_ESCAPE] && escToggle)
+		{
+			escToggle = false;
+		}
 		GMC.ProcessKeyPresses(KeysPressed);
 	}
 
@@ -760,4 +777,207 @@ namespace Mer
 	{
 		return GMC.getNationName(makingPeaceWith);
 	}
+
+	bool PlayerController::isGamePaused()
+	{
+		return gamePaused;
+	}
+	void PlayerController::UnPause()
+	{
+		gamePaused = false;
+		gameSpeed = 3;
+	}
+
+	void PlayerController::SaveGame()
+	{
+		std::ofstream of;
+
+		std::string filename = ".\\Savegames\\gamesave.MERSAVE";
+
+		of.open(filename);
+		of.clear();
+
+		of << "{\n";
+		of << "Nation ID: " << "\"" << nation->id << "\"\n";
+		of << "Gold: " << "\"" << gold << "\"\n";
+		of << "Army Location: " << "\"" << army.locationID << "\"\n";
+		of << "Soldiers Raised: " << "\"" << soldiersRaised << "\"\n";
+		of << "Buildings {\n";
+		for (int i = 0; i < buildings.size(); i++)
+		{
+			of << "Building ID: " << "\"" << i << "\"\n";
+			of << "Amount: " << "\"" << buildings[i].amount << "\"\n";
+		}
+		of << "}\n";
+		of << "Wars { \n";
+		for (int i = 0; i < wars.size(); i++)
+		{
+			of << "With: " << "\"" << wars[i].nation->id << "\"\n";
+			of << "Score: " << "\"" << std::to_string(wars[i].warScore) << "\"\n";
+		}
+		of << "}\n";
+		of << "}\n";
+
+		for (int i = 0; i < AIC.getAgentsSize(); i++)
+		{
+			of << "{\n";
+			AIAgent* temp = AIC.getAgent(i);
+			of << "Nation ID: " << "\"" << temp->getNationID() << "\"\n";
+			of << "Gold: " << "\"" << temp->getGold() << "\"\n";
+			of << "Army Location: " << "\"" << temp->getArmyLocation() << "\"\n";
+			of << "Soldiers Raised: " << "\"" << temp->areSoldiersRaised() << "\"\n";
+			of << "Wars { \n";
+			for (int j = 0; j < temp->getWars()->size(); j++)
+			{
+				of << "With: " << "\"" << temp->getWars()->at(j).nation->id << "\"\n";
+				of << "Score: " << "\"" << std::to_string(temp->getWars()->at(j).warScore) << "\"\n";
+			}
+			of << "}\n";
+			of << "}\n";
+		}
+
+		of << "Battles\n";
+
+		for (int i = 0; i < BC.getBattlesSize(); i++)
+		{
+			Battle* temp = BC.getBattleInfoOf(i);
+			of << "Attacker ID: " << "\"" << temp->attacker->nationID << "\"\n";
+			of << "Attacker Morale: " << "\"" << temp->attacker->morale << "\"\n";
+			of << "Defender ID: " << "\"" << temp->defender->nationID << "\"\n";
+			of << "Defender Morale: " << "\"" << temp->defender->morale << "\"\n";
+		}
+		of.close();
+	}
+
+	void PlayerController::LoadWarWith(int id)
+	{
+		if (!AlreadyAtWar(id))
+		{
+			War temp;
+			temp.nation = GMC.getNationPointerById(id);
+			wars.push_back(temp);
+
+			War tempother;
+			tempother.nation = nation;
+			AIC.getWarsOfNation(id)->push_back(tempother);
+		}
+	}
+
+	void PlayerController::UpdateWarScore(int id, float score)
+	{
+		getWarWith(id)->warScore = score;
+		AIC.getWarOfWith(id, nation->id)->warScore = score;
+	}
+
+	void PlayerController::LoadFromSave()
+	{
+		std::ifstream file;
+
+		std::string filename = ".\\Savegames\\gamesave.MERSAVE";
+
+		file.open(filename);
+		Reader r;
+
+		std::string line;
+
+		bool player = true, ai = false, battles = false, wars = false;;
+		int closeCounter = 0;
+		int armyLocation = 0;
+
+		int warWithID = 0, score = 0, buildingID = 0;
+
+		int aiCounter = 0;
+
+		while (std::getline(file,line))
+		{
+			if (player)
+			{
+				if (line.find("Nation ID") != std::string::npos)
+				{
+					nation = GMC.getNationPointerById(r.ConvertToInt(r.GetProperty(line)));
+					army.Initialise(nation->colour[0], nation->colour[1], nation->colour[2], nation->nationCells.size(), nation->capital->centre.x + 1, nation->capital->centre.y + 1, nation->id);
+					AIC.Initialise(GMC.getNations(), nation->id, GMC.getCells());
+				}
+				else if (line.find("Gold") != std::string::npos) { gold = r.ConvertToFloat(r.GetProperty(line)); }
+				else if (line.find("Army Location") != std::string::npos) { army.locationID = r.ConvertToInt(r.GetProperty(line)); }
+				else if (line.find("Soldiers Raised") != std::string::npos) 
+				{ 
+					soldiersRaised = r.ConvertToInt(r.GetProperty(line)); 
+					if (soldiersRaised)
+					{
+						army.Move(GMC.getCells()->at(army.locationID).centre.x, GMC.getCells()->at(army.locationID).centre.y, army.locationID);
+					}
+				}
+				else if (line.find("Building ID") != std::string::npos) { buildingID = r.ConvertToInt(r.GetProperty(line)); }
+				else if (line.find("Amount") != std::string::npos)
+				{
+					buildings[buildingID].amount = r.ConvertToInt(r.GetProperty(line));
+				}
+				else if (line.find("Wars") != std::string::npos) { wars = true; }
+				if (wars)
+				{
+					if (line.find("With") != std::string::npos) { warWithID = r.ConvertToInt(r.GetProperty(line)); }
+					else if (line.find("Score") != std::string::npos)
+					{ 
+						score = r.ConvertToFloat(r.GetProperty(line)); 
+						WarWith(warWithID);
+						UpdateWarScore(warWithID, score);
+					}
+				}
+
+
+				if (line == "}")
+				{
+					closeCounter++;
+				}
+				if (closeCounter == 3)
+				{
+					player = false;
+					ai = true;
+
+					nationChosen = true;
+					newBuildings = true;
+					gameSpeed = 3;
+					
+					army.locationID = armyLocation;
+				}
+			}
+			else if (ai)
+			{
+				//if (line.find("NationID")) { AIC.getAgent(aiCounter)nation = GMC.getNationPointerById(r.ConvertToInt(r.GetProperty(line))); }
+				if (line.find("Gold") != std::string::npos) { AIC.getAgent(aiCounter)->setGold(r.ConvertToFloat(r.GetProperty(line))); }
+				else if (line.find("Army Location") != std::string::npos) { AIC.getAgent(aiCounter)->setArmyLocation(r.ConvertToInt(r.GetProperty(line))); }
+				else if (line.find("Soldiers Raised") != std::string::npos) { AIC.getAgent(aiCounter)->setSoldiersRaised(r.ConvertToInt(r.GetProperty(line))); }
+				else if (line.find("Wars") != std::string::npos) { wars = true; }
+				if (wars)
+				{
+
+				}
+
+				if (line == "}")
+				{
+					closeCounter++;
+				}
+				if (closeCounter == 2)
+				{
+					ai = false;
+					battles = true;
+					aiCounter++;
+				}
+			}
+			else if (battles)
+			{
+
+			}
+		}
+
+
+
+
+	}
+	void PlayerController::CleanUp()
+	{
+
+	}
+
 }

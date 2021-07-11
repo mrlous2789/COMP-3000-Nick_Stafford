@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "MainMenuState.h"
 namespace Mer
 {
 
@@ -40,9 +41,14 @@ namespace Mer
 		_data->assets.LoadTexture("acceptPeaceB", "Assets\\Game_UI\\game_ui_peace_accept.tga");
 		_data->assets.LoadTexture("cancelPeaceB", "Assets\\Game_UI\\game_ui_peace_cancel.tga");
 		_data->assets.LoadTexture("playB", "Assets\\Game_UI\\game_ui_play_button.tga");
+		_data->assets.LoadTexture("loadB", "Assets\\Game_UI\\game_ui_load_button.tga");
 		_data->assets.LoadTexture("raiseSoldiersB", "Assets\\Game_UI\\game_ui_raise_soldiers.tga");
 		_data->assets.LoadTexture("constructionB", "Assets\\Game_UI\\game_ui_construction_button.tga");
 		_data->assets.LoadTexture("constructionP", "Assets\\Game_UI\\game_ui_construction_panel.tga");
+		_data->assets.LoadTexture("resumeB", "Assets\\Game_UI\\game_ui_resume_game.tga");
+		_data->assets.LoadTexture("savegameB", "Assets\\Game_UI\\game_ui_save_game.tga");
+		_data->assets.LoadTexture("mainmenuB", "Assets\\Game_UI\\game_ui_main_menu.tga");
+		_data->assets.LoadTexture("exitGameB", "Assets\\Game_UI\\game_ui_exit_game.tga");
 
 		std::cout << "Loaded textures" << std::endl;
 
@@ -151,11 +157,35 @@ namespace Mer
 		}
 		else if (!PLC.getNationChosen())
 		{
-			if (GUI.Button(1620, 10, 300, 100, _data->assets.getTexture("playB"), "PlayB"))
+			if (GUI.Button(1610, 10, 300, 100, _data->assets.getTexture("playB"), "PlayB"))
 			{
 				PLC.PlayAsNation();
 			}
+			if (GUI.Button(1610, 110, 300, 100, _data->assets.getTexture("loadB"), "LoadB"))
+			{
+				PLC.LoadFromSave();
+			}
 			GUI.Panel(394, 10, 384, 144, _data->assets.getTexture("cellPanel"), "ChooseNationPanel");
+		}
+		else if (PLC.isGamePaused())
+		{
+			GUI.Panel(869, 400, 182, 280, _data->assets.getTexture("cellPanel"), "PauseMenuB");
+			if (GUI.Button(885, 614, 150, 50, _data->assets.getTexture("resumeB"), "ResumeB"))
+			{
+				PLC.UnPause();
+			}
+			if (GUI.Button(885, 548, 150, 50, _data->assets.getTexture("savegameB"), "SaveB"))
+			{
+				PLC.SaveGame();
+			}
+			if (GUI.Button(885, 482, 150, 50, _data->assets.getTexture("mainmenuB"), "MainMenuB"))
+			{
+				this->_data->machine.AddState(StateRef(new MainMenuState(_data)));
+			}
+			if (GUI.Button(885, 416, 150, 50, _data->assets.getTexture("exitGameB"), "ExitGameB"))
+			{
+				glfwSetWindowShouldClose(_data->window, GLFW_TRUE);
+			}
 		}
 		else
 		{
@@ -416,8 +446,9 @@ namespace Mer
 	}
 	void GameState::CleanUp()
 	{
-		//glDeleteBuffers(NumCells, cellBuffers);
-		//glDeleteBuffers(NumRivers, riverBuffers);
 		glDeleteVertexArrays(NumVAOs, VAOs);
+		GUI.CleanUp();
+		_data->assets.CleanUp();
+
 	}
 }

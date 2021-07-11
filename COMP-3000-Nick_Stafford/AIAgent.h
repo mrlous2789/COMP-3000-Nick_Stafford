@@ -31,6 +31,7 @@ namespace Mer
 		void Draw(float zoomLevel, float xOffset, float yOffset, GLuint texture);
 
 		int getArmyLocation();
+		void setArmyLocation(int id);
 		int getNationID();
 
 		std::vector<War>* getWars();
@@ -39,6 +40,13 @@ namespace Mer
 		void MakePeaceWith(int id);
 		void RemoveLand(std::vector<Cell*> conqueredLand);
 		void UpdateMaxSoldiers();
+
+		bool areSoldiersRaised();
+		void setSoldiersRaised(int soldiersRaised);
+
+		float getGold();
+		void setGold(float gold);
+		
 
 		Army* getArmy();
 	private:

@@ -109,4 +109,14 @@ namespace Mer
 			}
 		}
 	}
+
+	int AIController::getAgentsSize()
+	{
+		return agents.size();
+	}
+
+	AIAgent* AIController::getAgent(int id)
+	{
+		return &agents[id];
+	}
 }

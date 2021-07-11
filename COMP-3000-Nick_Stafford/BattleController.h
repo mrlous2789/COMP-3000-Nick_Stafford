@@ -17,6 +17,10 @@ namespace Mer
 		std::vector<Battle> Tick(float dt, int gameSpeed);
 
 		Battle* getBattleInfoOf(int id);
+
+		int getBattlesSize();
+
+		
 	private:
 		std::vector<Battle> battles;
 

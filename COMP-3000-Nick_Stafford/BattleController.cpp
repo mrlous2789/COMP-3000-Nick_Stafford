@@ -152,4 +152,9 @@ namespace Mer
 		}
 		return nullptr;
 	}
+
+	int BattleController::getBattlesSize()
+	{
+		return battles.size();
+	}
 }

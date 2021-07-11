@@ -25,15 +25,15 @@ namespace Mer
 		std::vector<Religion> ReadReligionFile(std::string filename);
 		std::vector<River> ReadRiversFile(std::string filename);
 
-	private:
-		bool reading = true;
-
-
 		//function used to get wanted data from files
 		std::pair<int, int>FindFirstAndLast(std::string line);
 		std::string GetProperty(std::string line);
 		int ConvertToInt(std::string property);
 		float ConvertToFloat(std::string property);
+
+	private:
+		bool reading = true;
+
 
 		//used to decied if the coords of the cells need to be normalised
 		float highestX = 0.0f;
