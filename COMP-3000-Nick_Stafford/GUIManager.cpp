@@ -161,7 +161,7 @@ namespace Mer
 				}
 				else
 				{
-					return false;
+
 				}
 				
 			}

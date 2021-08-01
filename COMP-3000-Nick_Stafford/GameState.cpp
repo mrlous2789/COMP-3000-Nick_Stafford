@@ -144,9 +144,10 @@ namespace Mer
 		GUI.Panel(0, 0, 1920, 1080, _data->assets.getTexture("mainPanel"), "MainPanel");
 		GUI.Panel(10, 10, 384, 144, _data->assets.getTexture("cellPanel"), "CellPanel");
 		if (PLC.isMakingPeace())
-		{
+		{			
 			if (GUI.Button(1710, 10, 100, 100, _data->assets.getTexture("cancelPeaceB"), "CancelPeaceB"))
 			{
+				
 				PLC.CancelPeaceDeal();
 			}
 			if (GUI.Button(1810, 10, 100, 100, _data->assets.getTexture("acceptPeaceB"), "AcceptPeaceB"))
@@ -352,7 +353,11 @@ namespace Mer
 		GUI.Text(PLC.getSelectedCellCultureName(), 57.0f, 43.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 		GUI.Text(PLC.getSelectedCellReligionName(), 57.0f, 19.0f, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-		if (PLC.isMakingPeace())
+		if (PLC.isGamePaused())
+		{
+		
+		}
+		else if (PLC.isMakingPeace())
 		{
 			GUI.Text("Making Peace With " + PLC.getMakingPeaceWithName(), 280.0f, 575.0f, 0.5f, glm::vec3(0.0f, 0.0f, 0.0f));
 			
@@ -381,8 +386,7 @@ namespace Mer
 					GUI.Text(PLC.getNationsName(i + diplomacyOffset), 42.0f, (512 - yOffset), 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 				}
 			}
-
-			if (showWarsPanel)
+			else if (showWarsPanel)
 			{
 				GUI.Text("War With", 42.0f, 520.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
 				GUI.Text("War Score", 128.0f, 520.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -406,8 +410,7 @@ namespace Mer
 					}
 				}
 			}
-
-			if (showConstructionPanel)
+			else if (showConstructionPanel)
 			{
 				GUI.Text("Construction", 42.0f, 525.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));		
 
@@ -420,7 +423,6 @@ namespace Mer
 					GUI.Text(PLC.getBuildingAmount(i) + "/" + PLC.getBuildingMaxAmount(i), 42.0f, (470.0f - yOffset), 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
 				}
 			}
-
 			if (PLC.areSoldiersSelected())
 			{
 				GUI.Text("Army", 10.0f, 140.0f, 0.2f, glm::vec3(0.0f, 0.0f, 0.0f));
