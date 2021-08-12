@@ -23,7 +23,7 @@ namespace Mer
 
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-		this->_data->window = glfwCreateWindow(1920, 1080, "Comp-3000", NULL, NULL);
+		this->_data->window = glfwCreateWindow(1366, 768, "Comp-3000", NULL, NULL);
 		glfwMakeContextCurrent(this->_data->window);
 		
 		glewInit();
