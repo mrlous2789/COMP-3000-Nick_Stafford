@@ -91,10 +91,10 @@ namespace Mer
 		{
 			_data->machine.AddState(StateRef(new GameState(_data)));
 		}
-		if (GUI.Button(50, 100, 320, 60, _data->assets.getTexture("settingsB"), "settings"))
-		{
-			std::cout << "Settings" << std::endl;
-		}
+		//if (GUI.Button(50, 100, 320, 60, _data->assets.getTexture("settingsB"), "settings"))
+		//{
+		//	std::cout << "Settings" << std::endl;
+		//}
 		if (GUI.Button(50, 20, 320, 60, _data->assets.getTexture("exitB"), "exit"))
 		{
 			glfwSetWindowShouldClose(_data->window, GLFW_TRUE);

@@ -6,5 +6,5 @@ int main(int argc, char* args[])
 {
 	Mer::Game game = Mer::Game();
 	
-	return EXIT_SUCCESS;
+	return 0;
 }
